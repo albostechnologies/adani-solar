@@ -31,7 +31,7 @@ export const aboutContent = {
       "Comprehensive waste management and recycling programs",
       "Carbon-neutral operations target by 2027",
     ],
-    image: m.whySolar.carbon,
+    image: m.home.plantAerial,
   },
 
   milestones: {
