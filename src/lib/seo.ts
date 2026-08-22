@@ -84,6 +84,11 @@ export const PAGE_SEO: Record<RouteName, PageSeo> = {
     description:
       "From silicon to finished modules , an overview of Adani Solar's integrated PV manufacturing process at Mundra, Gujarat.",
   },
+  "check-status": {
+    title: "Check Your Status | Adani Solar",
+    description:
+      "Track the status of your Adani Solar enquiry or application using your reference number and email address.",
+  },
 };
 
 export function buildMetadata(route: RouteName): Metadata {

@@ -13,7 +13,8 @@ export type RouteName =
   | "resources"
   | "sustainability"
   | "compare"
-  | "manufacturing";
+  | "manufacturing"
+  | "check-status";
 
 export const ROUTE_PATH_MAP: Record<RouteName, string> = {
   home: "/",
@@ -31,6 +32,7 @@ export const ROUTE_PATH_MAP: Record<RouteName, string> = {
   sustainability: "/sustainability",
   compare: "/compare",
   manufacturing: "/manufacturing",
+  "check-status": "/check-status",
 };
 
 export const LEGACY_HASH_PATH_MAP: Record<string, string> = {
@@ -49,6 +51,7 @@ export const LEGACY_HASH_PATH_MAP: Record<string, string> = {
   "#sustainability": "/sustainability",
   "#compare": "/compare",
   "#manufacturing": "/manufacturing",
+  "#check-status": "/check-status",
 };
 
 export function pathToRoute(pathname: string): RouteName {

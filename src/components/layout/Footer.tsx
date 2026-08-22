@@ -5,25 +5,29 @@ import { useRouter, type RouteName } from "@/lib/router";
 import { footerNavGroups, footerLegalLinks } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
 import { Linkedin, Youtube, Facebook, Twitter } from "lucide-react";
-import { EditorialHeading } from "@/components/editorial/EditorialHeading";
 import { ArrowLink } from "@/components/editorial/ArrowLink";
 
 export function Footer() {
   const { navigate } = useRouter();
 
-  const handleNavClick = (route: RouteName, section?: string) => {
-    navigate(route, section);
+  const handleNavClick = (route: RouteName) => {
+    navigate(route);
   };
 
   return (
     <footer className="bg-solar-dark text-white">
-      <div className="editorial-section border-b border-white/10">
+      <div className="border-b border-white/10 py-12 sm:py-14">
         <div className="editorial-section-inner">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-10 items-end">
-            <EditorialHeading as="h2" size="section" variant="dark" className="max-w-xl">
-              Let&apos;s build a cleaner energy future.
-            </EditorialHeading>
-            <div className="lg:justify-self-end">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.18em] text-white/45 mb-3">
+                Get in touch
+              </p>
+              <p className="font-[family-name:var(--font-poppins)] text-xl sm:text-2xl font-semibold text-white max-w-md leading-snug">
+                Let&apos;s build a cleaner energy future.
+              </p>
+            </div>
+            <div className="lg:shrink-0">
               <ArrowLink route="contact" variant="primary" className="on-dark">
                 Contact Us
               </ArrowLink>
@@ -48,7 +52,7 @@ export function Footer() {
                 {group.items.map((item) => (
                   <li key={item.label}>
                     <button
-                      onClick={() => item.route && handleNavClick(item.route, item.section)}
+                      onClick={() => item.route && handleNavClick(item.route)}
                       className="text-sm text-white/75 hover:text-white transition-colors text-left"
                     >
                       {item.label}
@@ -65,7 +69,7 @@ export function Footer() {
             {footerLegalLinks.map((link) => (
               <button
                 key={link.label}
-                onClick={() => link.route && handleNavClick(link.route, link.section)}
+                onClick={() => link.route && handleNavClick(link.route)}
                 className="text-sm text-white/55 hover:text-white transition-colors"
               >
                 {link.label}

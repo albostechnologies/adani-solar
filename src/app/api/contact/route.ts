@@ -1,20 +1,27 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-const contactSchema = z.object({
+const phonePattern = /^[+]?[\d\s()-]{7,15}$/;
+
+const partnershipSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
+  contactNo: z.string().min(10, "Please enter a valid contact number").regex(phonePattern),
+  alternateNo: z
+    .string()
+    .optional()
+    .refine((val) => !val || phonePattern.test(val), "Invalid alternate number"),
   email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(7, "Please enter a valid phone number"),
-  company: z.string().optional(),
-  subject: z.string().min(1, "Please select a subject"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  pinCode: z.string().regex(/^\d{6}$/, "Enter a valid 6-digit pin code"),
+  state: z.string().min(2, "Please enter your state"),
+  district: z.string().min(2, "Please enter your district"),
+  city: z.string().min(2, "Please enter your city"),
+  type: z.enum(["Dealership", "Distributorship"]),
 });
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-
-    const result = contactSchema.safeParse(body);
+    const result = partnershipSchema.safeParse(body);
 
     if (!result.success) {
       return NextResponse.json(
@@ -26,14 +33,13 @@ export async function POST(request: Request) {
       );
     }
 
-    // In production, you would send an email, save to DB, etc.
-    console.log("Contact form submission:", result.data);
+    const recipient = process.env.CONTACT_TO_EMAIL ?? "enquiries@example.com";
+    console.log("Partnership application:", { ...result.data, recipient });
 
     return NextResponse.json(
       {
         success: true,
-        message:
-          "Thank you for your inquiry. We will get back to you within 24 hours.",
+        message: "Thank you for your application. We will get back to you shortly.",
       },
       { status: 200 }
     );

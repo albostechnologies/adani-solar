@@ -427,7 +427,7 @@ export const homeContent = {
       {
         question: "How do I become a channel partner or EPC distributor?",
         answer:
-          "Adani Solar works with channel partners and EPC distributors across India. To explore partnership opportunities, visit our Contact page or call us at +91-79-2555 5555. Our team can guide you through enquiry and onboarding requirements.",
+          "Adani Solar works with channel partners and EPC distributors across India. To explore partnership opportunities, visit our Contact page. Our team can guide you through enquiry and onboarding requirements.",
       },
       {
         question: "Can Adani Solar modules withstand India's extreme weather?",

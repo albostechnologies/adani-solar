@@ -320,7 +320,7 @@ export const resourcesContent: ResourcesContent = {
     {
       question: "How do I request custom specifications for my project?",
       answer:
-        "You can request custom specifications by contacting our sales team through the Contact page or by emailing sales@adanisolar.com. Our engineering team will work with you to provide tailored datasheets and performance data specific to your project requirements, including site-specific yield estimates and configuration recommendations.",
+        "You can request custom specifications by contacting our sales team through the Contact page. Our engineering team will work with you to provide tailored datasheets and performance data specific to your project requirements, including site-specific yield estimates and configuration recommendations.",
     },
     {
       question: "Are datasheets available in languages other than English?",

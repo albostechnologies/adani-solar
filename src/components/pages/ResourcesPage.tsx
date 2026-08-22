@@ -143,8 +143,6 @@ export function ResourcesPage() {
   const stats = [
     { value: "15+", label: "Documents" },
     { value: "5", label: "Categories" },
-    { value: "Monthly", label: "Updated" },
-    { value: "Free", label: "Downloads" },
   ];
 
   const categoryPills = useMemo(() => {

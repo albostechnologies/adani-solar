@@ -19,14 +19,14 @@ export function ProductShowcaseSection() {
   return (
     <section className="editorial-section bg-solar-dark text-white">
       <div className="editorial-section-inner">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-10 sm:mb-14">
-          <div>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 mb-10 sm:mb-14">
+          <div className="flex-1 min-w-0 sm:pr-10">
             <SectionEyebrow number="05" label="Products" variant="dark" className="mb-6" />
-            <EditorialHeading size="section" variant="dark" className="max-w-3xl">
+            <EditorialHeading size="section" variant="dark" className="max-w-none lg:max-w-[85%]">
               Technology engineered for the next generation of solar power.
             </EditorialHeading>
           </div>
-          <p className="text-sm uppercase tracking-[0.16em] text-white/45">
+          <p className="shrink-0 text-sm uppercase tracking-[0.16em] text-white/45 sm:pt-10">
             {String(tabIndex).padStart(2, "0")} / {String(c.tabs.length).padStart(2, "0")}
           </p>
         </div>

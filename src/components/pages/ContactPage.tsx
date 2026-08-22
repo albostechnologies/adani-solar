@@ -1,59 +1,39 @@
 "use client";
 
-import { contactContent } from "@/content/contact";
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
-import { PageHero } from "@/components/editorial/PageHero";
-import { PageSection } from "@/components/editorial/PageSection";
-import { ContactFormSection } from "@/components/sections/ContactFormSection";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
-
-const iconMap = { MapPin, Phone, Mail, Clock };
+import { PartnershipApplicationForm } from "@/components/sections/PartnershipApplicationForm";
 
 export function ContactPage() {
-  const c = contactContent;
-
   return (
-    <main>
-      <PageHero
-        eyebrow="Contact"
-        title="Let's build a brighter energy future."
-        subtitle="For product enquiries, partnerships, technical support and more."
-        backgroundImage={c.hero.backgroundImage}
-        breadcrumbs={[{ label: "Home", route: "home" }, { label: "Contact" }]}
-      />
+    <main className="pt-24 sm:pt-28 pb-16 sm:pb-20 bg-[#f7f7f5] min-h-screen">
+      <div className="editorial-section-inner py-8 sm:py-12">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex justify-center mb-8 sm:mb-10">
+            <Image
+              src={siteConfig.brand.logo}
+              alt={siteConfig.brand.logoAlt}
+              width={220}
+              height={44}
+              className="h-10 sm:h-11 w-auto"
+              priority
+            />
+          </div>
 
-      <PageSection tone="muted">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {c.contactInfo.items.map((item) => {
-            const Icon = iconMap[item.icon as keyof typeof iconMap] ?? MapPin;
-            const isEmail = item.icon === "Mail";
-            const isPhone = item.icon === "Phone";
-            return (
-              <div key={item.label}>
-                <Icon className="w-5 h-5 text-solar-green mb-3" />
-                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground mb-2">{item.label}</p>
-                {isEmail ? (
-                  <a href={`mailto:${item.value}`} className="text-sm text-foreground hover:text-solar-green">{item.value}</a>
-                ) : isPhone ? (
-                  <a href={`tel:${siteConfig.contact.phone}`} className="text-sm text-foreground hover:text-solar-green">{item.value}</a>
-                ) : (
-                  <p className="text-sm text-foreground">{item.value}</p>
-                )}
-              </div>
-            );
-          })}
+          <div className="mb-8 text-center">
+            <h1 className="font-[family-name:var(--font-poppins)] text-2xl sm:text-3xl font-semibold text-foreground mb-2">
+              Partnership Application
+            </h1>
+            <p className="text-sm sm:text-base text-muted-foreground">
+              Apply for dealership or distributorship with Adani Solar.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-border/60 bg-white p-6 sm:p-8 shadow-sm">
+            <PartnershipApplicationForm />
+          </div>
         </div>
-      </PageSection>
-
-      <ContactFormSection
-        title={c.form.title}
-        subtitle={c.form.subtitle}
-        subjectOptions={c.form.fields.subject.options}
-        submitLabel={c.form.submitLabel}
-        successMessage={c.form.successMessage}
-        errorMessage={c.form.errorMessage}
-        variant="light"
-      />
+      </div>
     </main>
   );
 }

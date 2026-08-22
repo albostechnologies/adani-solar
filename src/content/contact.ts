@@ -1,3 +1,5 @@
+import { siteConfig } from "@/config/site";
+
 export const contactContent = {
   hero: {
     title: "Contact Us",
@@ -42,14 +44,9 @@ export const contactContent = {
         value: "Adani Corporate House, Shantigram, S.G. Highway, Ahmedabad, Gujarat 382421, India",
       },
       {
-        icon: "Phone",
-        label: "Phone",
-        value: "+91-79-2555 5555",
-      },
-      {
         icon: "Mail",
         label: "Email",
-        value: "info@adanisolar.com",
+        value: siteConfig.contact.email,
       },
       {
         icon: "Clock",

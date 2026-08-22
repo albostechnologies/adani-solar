@@ -16,7 +16,6 @@ import {
 } from "@/content/heroSlides";
 import { SectionEyebrow } from "@/components/editorial/SectionEyebrow";
 import { EditorialHeading } from "@/components/editorial/EditorialHeading";
-import { ArrowLink } from "@/components/editorial/ArrowLink";
 import { cn } from "@/lib/utils";
 
 function usePrefersReducedMotion() {
@@ -109,15 +108,12 @@ export function HomeHeroSection() {
                   variant="dark"
                   className="mb-6 sm:mb-8"
                 />
-                <EditorialHeading as="h1" size="hero" variant="dark" className="mb-5 sm:mb-6">
+                <EditorialHeading as="h1" size="statement" variant="dark" className="mb-5 sm:mb-6 max-w-2xl">
                   {slide.title}
                 </EditorialHeading>
-                <p className="editorial-body text-white/75 max-w-xl mb-8 sm:mb-10">
+                <p className="editorial-body text-white/75 max-w-xl">
                   {slide.subtitle}
                 </p>
-                <ArrowLink route={slide.ctaRoute} variant="primary" className="on-dark">
-                  {slide.cta}
-                </ArrowLink>
               </motion.div>
             </AnimatePresence>
           </div>

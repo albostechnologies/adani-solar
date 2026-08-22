@@ -18,11 +18,17 @@ export function MetricRow({ items, variant = "light" }: MetricRowProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const isDark = variant === "dark";
+  const columnClass =
+    items.length <= 2
+      ? "grid-cols-2"
+      : items.length === 3
+        ? "grid-cols-2 lg:grid-cols-3"
+        : "grid-cols-2 lg:grid-cols-4";
 
   return (
     <div
       ref={ref}
-      className="grid grid-cols-2 lg:grid-cols-4 gap-y-8 gap-x-6 lg:gap-x-10"
+      className={`grid ${columnClass} gap-y-8 gap-x-6 lg:gap-x-10`}
     >
       {items.map((item, index) => (
         <motion.div

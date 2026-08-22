@@ -6,6 +6,12 @@ export const siteConfig = {
   url: "https://www.adanisolar.com",
   ogImage: "/assets/og-image.webp",
 
+  brand: {
+    logo: "/assets/brand/adani-solar-official.png",
+    logoLight: "/assets/brand/adani-solar-official.png",
+    logoAlt: "Adani Solar",
+  },
+
   company: {
     name: "Adani Solar",
     parentGroup: "Adani Group",
@@ -19,9 +25,10 @@ export const siteConfig = {
   },
 
   contact: {
-    email: "info@adanisolar.com",
-    phone: "+91-79-2555 5555",
-    tollFree: "1800-200-334",
+    // Placeholder — replace with approved Adani Solar contact details from client
+    email: "enquiries@example.com",
+    phone: "+91-XXXXX-XXXXX",
+    tollFree: "1800-XXX-XXXX",
     address: {
       line1: "Adani Corporate House",
       line2: "Shantigram, S.G. Highway",

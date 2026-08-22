@@ -1,3 +1,11 @@
+import { siteConfig } from "@/config/site";
+
+const legalContactBlock = `Adani Solar Energy Private Limited
+Adani Corporate House, Shantigram
+S.G. Highway, Ahmedabad, Gujarat 382421
+India
+Email: ${siteConfig.contact.email}`;
+
 export const legalContent = {
   terms: {
     title: "Terms & Conditions",
@@ -49,7 +57,7 @@ export const legalContent = {
         number: 8,
         title: "Contact Information",
         content:
-          "If you have any questions about these Terms and Conditions, please contact us at:\n\nAdani Solar Energy Private Limited\nAdani Corporate House, Shantigram\nS.G. Highway, Ahmedabad, Gujarat 382421\nIndia\nEmail: info@adanisolar.com\nPhone: +91-79-2555 5555",
+          `If you have any questions about these Terms and Conditions, please contact us at:\n\n${legalContactBlock}`,
       },
     ],
   },
@@ -92,7 +100,7 @@ export const legalContent = {
         number: 6,
         title: "Your Rights",
         content:
-          "You have the following rights regarding your personal information:\n\n• Right to access: You can request a copy of the personal information we hold about you.\n• Right to correction: You can request that we correct any inaccurate or incomplete personal information.\n• Right to deletion: You can request that we delete your personal information, subject to certain legal obligations.\n• Right to opt-out: You can opt-out of receiving marketing communications from us at any time.\n\nTo exercise any of these rights, please contact us at info@adanisolar.com.",
+          `You have the following rights regarding your personal information:\n\n• Right to access: You can request a copy of the personal information we hold about you.\n• Right to correction: You can request that we correct any inaccurate or incomplete personal information.\n• Right to deletion: You can request that we delete your personal information, subject to certain legal obligations.\n• Right to opt-out: You can opt-out of receiving marketing communications from us at any time.\n\nTo exercise any of these rights, please contact us at ${siteConfig.contact.email}.`,
       },
       {
         number: 7,
@@ -110,7 +118,7 @@ export const legalContent = {
         number: 9,
         title: "Contact Us",
         content:
-          "If you have any questions or concerns about this Privacy Notice or our data practices, please contact us at:\n\nAdani Solar Energy Private Limited\nAdani Corporate House, Shantigram\nS.G. Highway, Ahmedabad, Gujarat 382421\nIndia\nEmail: info@adanisolar.com\nPhone: +91-79-2555 5555",
+          `If you have any questions or concerns about this Privacy Notice or our data practices, please contact us at:\n\n${legalContactBlock}`,
       },
     ],
   },
