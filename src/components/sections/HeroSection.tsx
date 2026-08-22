@@ -363,11 +363,11 @@ export function HeroSection({
               {secondaryCta && (
                 <Button
                   onClick={() => secondaryCtaRoute && navigate(secondaryCtaRoute)}
-                  variant="outline"
+                  variant={isDark ? "outlineOnDark" : "outline"}
                   size="lg"
-                  className={`rounded-lg w-full sm:w-auto px-8 sm:px-10 h-13 sm:h-14 text-base sm:text-lg font-semibold transition-all duration-300 backdrop-blur-sm ${
+                  className={`rounded-lg w-full sm:w-auto px-8 sm:px-10 h-13 sm:h-14 text-base sm:text-lg font-semibold transition-all duration-300 ${
                     isDark
-                      ? "border-2 border-white/40 bg-white/10 text-white hover:bg-white/20 hover:text-white hover:border-white/70 shadow-lg shadow-black/20"
+                      ? "border-2 shadow-lg shadow-black/20"
                       : "border-2 border-solar-green/40 text-solar-green hover:bg-solar-green/10 hover:border-solar-green"
                   }`}
                 >

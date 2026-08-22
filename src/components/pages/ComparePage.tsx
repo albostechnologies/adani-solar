@@ -4,6 +4,8 @@ import React, { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { compareContent } from "@/content/compare";
 import { useRouter } from "@/lib/router";
+import { PageHero } from "@/components/editorial/PageHero";
+import { ArrowLink } from "@/components/editorial/ArrowLink";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -20,62 +22,24 @@ import {
 
 // ─── Hero Section ───────────────────────────────────────────────
 function CompareHero() {
-  const { navigate } = useRouter();
   const { hero } = compareContent;
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-solar-dark via-solar-dark-secondary to-solar-dark min-h-[50vh] flex items-center">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-5" aria-hidden="true">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern
-              id="grid"
-              width="40"
-              height="40"
-              patternUnits="userSpaceOnUse"
-            >
-              <path
-                d="M 40 0 L 0 0 0 40"
-                fill="none"
-                stroke="white"
-                strokeWidth="0.5"
-              />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center w-full">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <Badge
-            variant="outline"
-            className="mb-4 border-solar-green/40 text-solar-green-light bg-solar-green/10 px-4 py-1"
-          >
-            TOPCon vs MonoPERC
-          </Badge>
-          <h1 className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 sm:mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-solar-green-light">
-            {hero.title}
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-white max-w-2xl mx-auto mb-8 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
-            {hero.subtitle}
-          </p>
-          <Button
-            onClick={() => navigate(hero.ctaRoute)}
-            size="lg"
-            className="bg-solar-green hover:bg-solar-green-dark text-white rounded-lg px-8 h-12 text-base font-semibold shadow-lg shadow-solar-green/30 hover:shadow-xl hover:shadow-solar-green/40 transition-all"
-          >
-            <Phone className="w-4 h-4 mr-2" />
-            {hero.cta}
-          </Button>
-        </motion.div>
-      </div>
-    </section>
+    <PageHero
+      eyebrow="Products / Compare"
+      title={hero.title}
+      subtitle={hero.subtitle}
+      backgroundImage="/assets/home/solar-products-modules.webp"
+      breadcrumbs={[
+        { label: "Home", route: "home" },
+        { label: "Products", route: "product-topcon" },
+        { label: "Compare" },
+      ]}
+    >
+      <ArrowLink route={hero.ctaRoute} variant="primary" className="on-dark">
+        {hero.cta}
+      </ArrowLink>
+    </PageHero>
   );
 }
 
@@ -697,9 +661,9 @@ function CTASection() {
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
             <Button
-              variant="outline"
+              variant="outlineOnDark"
               size="lg"
-              className="border-white/30 text-white hover:bg-white/10 hover:text-white rounded-lg px-8 h-12 text-base font-semibold backdrop-blur-sm w-full sm:w-auto"
+              className="rounded-lg px-8 h-12 text-base font-semibold w-full sm:w-auto"
             >
               <Download className="w-4 h-4 mr-2" />
               Download Datasheets

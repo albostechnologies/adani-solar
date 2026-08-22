@@ -13,6 +13,7 @@ import { useRouter } from "@/lib/router";
 import { SectionHeading } from "@/components/sections/SectionHeading";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { FacilityVideoSection } from "@/components/sections/FacilityVideoSection";
+import { PageHero } from "@/components/editorial/PageHero";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import {
@@ -199,7 +200,13 @@ export function ManufacturingPage() {
   return (
     <main>
       {/* ─── Hero Section ─── */}
-      <ManufacturingHero />
+      <PageHero
+        eyebrow="Manufacturing"
+        title="Precision engineering from sand to solar."
+        subtitle={c.hero.subtitle}
+        backgroundImage={c.hero.backgroundImage}
+        breadcrumbs={[{ label: "Home", route: "home" }, { label: "Manufacturing" }]}
+      />
 
       {/* ─── Facility Overview ─── */}
       <FacilityOverview />
@@ -229,156 +236,6 @@ export function ManufacturingPage() {
       {/* ─── CTA Section ─── */}
       <CTASection />
     </main>
-  );
-}
-
-// ─── Hero ─────────────────────────────────────────────────────────────
-function ManufacturingHero() {
-  const c = manufacturingContent;
-  const { navigate } = useRouter();
-
-  return (
-    <section className="relative min-h-[85vh] flex items-center justify-center bg-solar-dark overflow-hidden">
-      {c.hero.backgroundImage && (
-        <>
-          <Image
-            src={c.hero.backgroundImage}
-            alt="Adani Solar Mundra manufacturing facility"
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-solar-dark/70" />
-        </>
-      )}
-      {/* Animated factory SVG background */}
-      <div className="absolute inset-0 opacity-15">
-        <svg
-          className="w-full h-full"
-          viewBox="0 0 1200 600"
-          preserveAspectRatio="xMidYMid slice"
-          aria-hidden="true"
-        >
-          {/* Conveyor belt */}
-          <motion.line
-            x1="0" y1="400" x2="1200" y2="400"
-            stroke="#00a651" strokeWidth="2"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          />
-          {/* Factory buildings */}
-          <rect x="100" y="200" width="180" height="200" fill="none" stroke="#00a651" strokeWidth="1.5" rx="4" />
-          <rect x="340" y="150" width="200" height="250" fill="none" stroke="#00a651" strokeWidth="1.5" rx="4" />
-          <rect x="600" y="180" width="160" height="220" fill="none" stroke="#00a651" strokeWidth="1.5" rx="4" />
-          <rect x="820" y="160" width="220" height="240" fill="none" stroke="#00a651" strokeWidth="1.5" rx="4" />
-          {/* Roof details */}
-          <polygon points="100,200 190,140 280,200" fill="none" stroke="#00a651" strokeWidth="1" />
-          <polygon points="340,150 440,80 540,150" fill="none" stroke="#00a651" strokeWidth="1" />
-          <polygon points="600,180 680,120 760,180" fill="none" stroke="#00a651" strokeWidth="1" />
-          <polygon points="820,160 930,90 1040,160" fill="none" stroke="#00a651" strokeWidth="1" />
-          {/* Animated solar panels on roofs */}
-          {[190, 440, 680, 930].map((cx, i) => (
-            <motion.circle
-              key={i}
-              cx={cx}
-              cy={i % 2 === 0 ? 130 : 75}
-              r="8"
-              fill="#00a651"
-              initial={{ opacity: 0.2, scale: 0.5 }}
-              animate={{ opacity: [0.2, 0.8, 0.2], scale: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
-            />
-          ))}
-          {/* Gear cogs */}
-          {[
-            { cx: 150, cy: 300 },
-            { cx: 440, cy: 280 },
-            { cx: 680, cy: 300 },
-            { cx: 930, cy: 280 },
-          ].map((gear, i) => (
-            <motion.g key={i} animate={{ rotate: 360 }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} style={{ transformOrigin: `${gear.cx}px ${gear.cy}px` }}>
-              <circle cx={gear.cx} cy={gear.cy} r="25" fill="none" stroke="#00a651" strokeWidth="1.5" />
-              <circle cx={gear.cx} cy={gear.cy} r="8" fill="#00a651" opacity="0.3" />
-              {[0, 60, 120, 180, 240, 300].map((angle) => (
-                <line
-                  key={angle}
-                  x1={gear.cx + 20 * Math.cos((angle * Math.PI) / 180)}
-                  y1={gear.cy + 20 * Math.sin((angle * Math.PI) / 180)}
-                  x2={gear.cx + 30 * Math.cos((angle * Math.PI) / 180)}
-                  y2={gear.cy + 30 * Math.sin((angle * Math.PI) / 180)}
-                  stroke="#00a651"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                />
-              ))}
-            </motion.g>
-          ))}
-        </svg>
-      </div>
-
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-solar-dark via-transparent to-solar-dark/50" />
-      <div className="absolute inset-0 bg-gradient-to-r from-solar-dark/60 via-transparent to-solar-dark/60" />
-
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-solar-green/10 border border-solar-green/20 text-solar-green-light text-sm font-medium mb-6">
-            <Factory className="w-4 h-4" />
-            Mundra, Gujarat , India&apos;s Largest Solar PV Facility
-          </span>
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="font-[family-name:var(--font-poppins)] text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
-        >
-          {c.hero.title}
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-lg sm:text-xl text-white max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
-        >
-          {c.hero.subtitle}
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <Button
-            size="lg"
-            className="bg-solar-green hover:bg-solar-green-dark text-white font-semibold px-8 shadow-lg shadow-solar-green/25"
-            onClick={() => {
-              document.getElementById("process-stepper")?.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
-            Explore Process
-            <ChevronRight className="w-4 h-4 ml-1" />
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-white/20 text-white hover:bg-white/10 hover:text-white px-8"
-            onClick={() => navigate("contact")}
-          >
-            Download Brochure
-          </Button>
-        </motion.div>
-      </div>
-    </section>
   );
 }
 
@@ -917,8 +774,8 @@ function CTASection() {
           </Button>
           <Button
             size="lg"
-            variant="outline"
-            className="border-white/30 text-white hover:bg-white/10 hover:text-white px-8"
+            variant="outlineOnDark"
+            className="px-8"
             onClick={() => navigate("contact")}
           >
             <Download className="w-4 h-4 mr-2" />

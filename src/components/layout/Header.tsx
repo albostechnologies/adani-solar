@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, ChevronDown, Phone } from "lucide-react";
+import { Menu, ChevronDown, Phone, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -91,14 +91,14 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-md border-b border-border/50"
-          : "bg-solar-dark/80 backdrop-blur-sm"
+          ? "bg-white/92 backdrop-blur-xl border-b border-border/40"
+          : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+      <div className="editorial-section-inner !py-0">
+        <div className="flex items-center justify-between h-16 sm:h-[4.75rem]">
           {/* Logo */}
           <button
             onClick={() => handleNavClick("home")}
@@ -168,14 +168,14 @@ export function Header() {
                     }
                     aria-expanded={item.children ? isOpen : undefined}
                     aria-haspopup={item.children ? "true" : undefined}
-                    className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                    className={`flex items-center gap-1 px-3 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
                       isScrolled
                         ? currentRoute === item.route
-                          ? "text-solar-green bg-solar-green/10"
-                          : "text-foreground hover:text-solar-green hover:bg-solar-green/5"
+                          ? "text-solar-green"
+                          : "text-foreground/80 hover:text-foreground"
                         : currentRoute === item.route
-                          ? "text-solar-green-light bg-white/10"
-                          : "text-white/90 hover:text-white hover:bg-white/10"
+                          ? "text-white"
+                          : "text-white/80 hover:text-white"
                     }`}
                   >
                     {item.label}
@@ -196,7 +196,7 @@ export function Header() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
                         transition={{ duration: 0.18 }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-[560px] max-w-[calc(100vw-2rem)] rounded-xl shadow-xl border border-border bg-white overflow-hidden"
+                        className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[540px] max-w-[calc(100vw-2rem)] rounded-2xl shadow-lg border border-border/60 bg-white overflow-hidden"
                         onMouseEnter={() => {
                           if (closeTimer.current) {
                             clearTimeout(closeTimer.current);
@@ -302,11 +302,26 @@ export function Header() {
               </span>
             </a>
 
+            <button
+              type="button"
+              onClick={() => handleNavClick("resources")}
+              className={`hidden lg:inline-flex text-sm font-medium transition-colors ${
+                isScrolled ? "text-foreground/80 hover:text-foreground" : "text-white/80 hover:text-white"
+              }`}
+            >
+              Resources
+            </button>
+
             <Button
               onClick={() => handleNavClick("contact")}
-              className="hidden sm:flex bg-solar-green hover:bg-solar-green-dark text-white rounded-lg px-4 sm:px-5 h-9 sm:h-10 text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md"
+              className={`hidden sm:inline-flex rounded-full px-5 h-10 text-sm font-semibold transition-all duration-300 gap-1.5 ${
+                isScrolled
+                  ? "bg-solar-dark hover:bg-solar-dark-secondary text-white"
+                  : "bg-white text-solar-dark hover:bg-white/90"
+              }`}
             >
               Contact Us
+              <ArrowUpRight className="w-4 h-4" />
             </Button>
 
             {/* Mobile Menu */}
@@ -333,9 +348,9 @@ export function Header() {
                   <span className="sr-only">Menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0 data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right duration-300">
-                <SheetHeader className="p-4 border-b bg-solar-dark">
-                  <SheetTitle className="text-white font-[family-name:var(--font-poppins)]">
+              <SheetContent side="right" className="w-full sm:max-w-md p-0 bg-white">
+                <SheetHeader className="p-5 border-b">
+                  <SheetTitle className="font-[family-name:var(--font-poppins)] text-foreground">
                     {siteConfig.company.name}
                   </SheetTitle>
                 </SheetHeader>

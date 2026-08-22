@@ -3,8 +3,13 @@
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { resourcesContent, type Resource } from "@/content/resources";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { SectionHeading } from "@/components/sections/SectionHeading";
+import { PageHero } from "@/components/editorial/PageHero";
+import { PageSection } from "@/components/editorial/PageSection";
+import { SectionEyebrow } from "@/components/editorial/SectionEyebrow";
+import { EditorialHeading } from "@/components/editorial/EditorialHeading";
+import { ResourceRow } from "@/components/editorial/ResourceRow";
+import { MetricRow } from "@/components/editorial/MetricRow";
+import { FinalCTA } from "@/components/editorial/FinalCTA";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { useRouter } from "@/lib/router";
 import {
@@ -120,14 +125,28 @@ export function ResourcesPage() {
     });
   }, [c.resources, search, activeCategory]);
 
-  // Featured resources (only from non-filtered set)
-  const featuredResources = useMemo(() => {
-    return c.featuredResources
-      .map((id) => c.resources.find((r) => r.id === id))
-      .filter(Boolean) as Resource[];
-  }, [c.resources, c.featuredResources]);
+  // Group resources by category for editorial list layout
+  const groupedResources = useMemo(() => {
+    const categories =
+      activeCategory === "all"
+        ? c.categories
+        : c.categories.filter((cat) => cat.id === activeCategory);
 
-  // Category names for filter pills
+    return categories
+      .map((category) => ({
+        category,
+        resources: filteredResources.filter((r) => r.category === category.id),
+      }))
+      .filter((group) => group.resources.length > 0);
+  }, [c.categories, filteredResources, activeCategory]);
+
+  const stats = [
+    { value: "15+", label: "Documents" },
+    { value: "5", label: "Categories" },
+    { value: "Monthly", label: "Updated" },
+    { value: "Free", label: "Downloads" },
+  ];
+
   const categoryPills = useMemo(() => {
     return [
       { id: "all", name: "All", count: c.resources.length },
@@ -139,24 +158,37 @@ export function ResourcesPage() {
     ];
   }, [c.categories, c.resources]);
 
-  // Stats
-  const stats = [
-    { icon: FolderOpen, value: "15+", label: "Documents" },
-    { icon: Layers, value: "5", label: "Categories" },
-    { icon: RefreshCw, value: "Monthly", label: "Updated" },
-    { icon: Download, value: "Free", label: "Downloads" },
-  ];
+  function renderResourceRow(resource: Resource) {
+    const catData = c.categories.find((cat) => cat.id === resource.category);
+    const meta = [
+      catData?.name ?? resource.category,
+      resource.fileType,
+      resource.fileSize,
+      resource.featured ? "Featured" : null,
+    ]
+      .filter(Boolean)
+      .join(" · ");
+
+    return (
+      <ResourceRow
+        key={resource.id}
+        title={resource.title}
+        subtitle={resource.description}
+        meta={meta}
+        linkLabel="Download"
+      />
+    );
+  }
 
   return (
     <main>
       {/* ── Hero Section ────────────────────────────────────────────── */}
-      <HeroSection
-        variant="dark"
+      <PageHero
+        eyebrow="Resources"
         title={c.hero.title}
         subtitle={c.hero.subtitle}
-        cta={c.hero.cta}
-        ctaRoute={c.hero.ctaRoute}
-        fullViewport={false}
+        backgroundImage="/assets/home/solar-products-modules.webp"
+        breadcrumbs={[{ label: "Home", route: "home" }, { label: "Resources" }]}
       />
 
       {/* ── Search + Filter Bar ─────────────────────────────────────── */}
@@ -216,299 +248,72 @@ export function ResourcesPage() {
         </div>
       </section>
 
-      {/* ── Stats Bar ──────────────────────────────────────────────── */}
-      <section className="bg-gray-900 py-6 sm:py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            {stats.map((stat, i) => {
-              const Icon = stat.icon;
-              return (
-                <ScrollReveal key={i} delay={i * 0.1}>
-                  <div className="flex items-center gap-3 justify-center">
-                    <div className="w-10 h-10 rounded-lg bg-solar-green/10 flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-solar-green" />
-                    </div>
-                    <div>
-                      <p className="text-xl sm:text-2xl font-bold text-white">{stat.value}</p>
-                      <p className="text-xs sm:text-sm text-gray-400">{stat.label}</p>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      {/* ── Stats ──────────────────────────────────────────────────── */}
+      <PageSection tone="dark">
+        <MetricRow variant="dark" items={stats} />
+      </PageSection>
 
-      {/* ── Featured Resources ──────────────────────────────────────── */}
-      {activeCategory === "all" && !search && (
-        <section className="py-10 sm:py-14 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
-              <div className="flex items-center gap-2 mb-6">
-                <Star className="w-5 h-5 text-solar-green" />
-                <h3 className="text-lg sm:text-xl font-bold text-foreground">Featured Resources</h3>
+      {/* ── Document Library ─────────────────────────────────────────── */}
+      <PageSection>
+        <SectionEyebrow label="Library" className="mb-6" />
+        <EditorialHeading size="statement" className="mb-4">
+          All resources.
+        </EditorialHeading>
+        <p className="editorial-body text-muted-foreground max-w-2xl mb-10">
+          Browse and download from our complete document library.
+        </p>
+
+        {filteredResources.length === 0 ? (
+          <div className="text-center py-16 editorial-divider border-t">
+            <FolderOpen className="w-10 h-10 mx-auto mb-4 text-muted-foreground/40" />
+            <p className="text-lg font-semibold text-foreground mb-1">No resources found</p>
+            <p className="text-sm text-muted-foreground">
+              Try adjusting your search or category filter.
+            </p>
+          </div>
+        ) : search || activeCategory !== "all" ? (
+          <div>{filteredResources.map(renderResourceRow)}</div>
+        ) : (
+          <div className="space-y-12 sm:space-y-16">
+            {groupedResources.map(({ category, resources }) => (
+              <div key={category.id}>
+                <h2 className="text-xs uppercase tracking-[0.18em] text-muted-foreground mb-4">
+                  {category.name}
+                </h2>
+                <div>{resources.map(renderResourceRow)}</div>
               </div>
-            </ScrollReveal>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {featuredResources.map((resource, i) => {
-                const catConfig = categoryColorMap[resource.category];
-                const catData = c.categories.find((cat) => cat.id === resource.category);
-                return (
-                  <ScrollReveal key={resource.id} delay={i * 0.1}>
-                    <motion.div
-                      whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                      className="group relative bg-white rounded-xl border border-border overflow-hidden shadow-sm hover:shadow-lg hover:shadow-solar-green/10 transition-shadow duration-300"
-                    >
-                      {/* Shimmer border */}
-                      <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10"
-                        style={{
-                          background: "linear-gradient(135deg, transparent 40%, rgba(0,166,81,0.15) 50%, transparent 60%)",
-                          backgroundSize: "200% 200%",
-                          animation: "shimmer 2s infinite",
-                        }}
-                      />
-
-                      {/* Featured badge */}
-                      <div className="absolute top-3 right-3 z-20">
-                        <Badge className="bg-solar-green text-white border-0 text-[10px] px-2">
-                          <Star className="w-3 h-3 mr-0.5" /> Featured
-                        </Badge>
-                      </div>
-
-                      {/* Gradient thumbnail */}
-                      <div
-                        className="h-28 flex items-center justify-center"
-                        style={{
-                          background: `linear-gradient(135deg, ${resource.thumbnailGradient[0]}, ${resource.thumbnailGradient[1]})`,
-                        }}
-                      >
-                        <FileTypeIcon type={resource.fileType} />
-                        <span className="ml-2 text-white/90 text-sm font-semibold">
-                          {resource.fileType}
-                        </span>
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-4">
-                        <Badge variant="outline" className={`text-[10px] mb-2 ${catConfig?.badge}`}>
-                          {catData?.name}
-                        </Badge>
-                        <h4 className="font-semibold text-sm text-foreground mb-1 line-clamp-2 group-hover:text-solar-green transition-colors">
-                          {resource.title}
-                        </h4>
-                        <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
-                          {resource.description}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] text-muted-foreground">
-                            {resource.fileType} · {resource.fileSize}
-                          </span>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-7 text-xs gap-1 border-solar-green text-solar-green hover:bg-solar-green hover:text-white"
-                          >
-                            <Download className="w-3 h-3" /> Download
-                          </Button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </ScrollReveal>
-                );
-              })}
-            </div>
+            ))}
           </div>
-        </section>
-      )}
-
-      {/* ── Resource Grid ──────────────────────────────────────────── */}
-      <section className="py-10 sm:py-14 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <SectionHeading
-              title="All Resources"
-              subtitle="Browse and download from our complete document library"
-              alignment="left"
-            />
-          </ScrollReveal>
-
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <AnimatePresence mode="popLayout">
-              {filteredResources.map((resource) => {
-                const catConfig = categoryColorMap[resource.category];
-                const catData = c.categories.find((cat) => cat.id === resource.category);
-                const CatIcon = catData ? categoryIconMap[catData.icon] : FileText;
-
-                return (
-                  <motion.div
-                    key={resource.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.25 }}
-                    className={`group bg-white rounded-lg border border-border overflow-hidden shadow-sm hover:shadow-lg hover:shadow-solar-green/10 transition-shadow duration-300 border-l-4 ${catConfig?.border}`}
-                  >
-                    {/* Gradient icon area */}
-                    <div
-                      className="h-20 flex items-center justify-center relative"
-                      style={{
-                        background: `linear-gradient(135deg, ${resource.thumbnailGradient[0]}20, ${resource.thumbnailGradient[1]}30)`,
-                      }}
-                    >
-                      {CatIcon && (
-                        <CatIcon
-                          className="w-8 h-8 opacity-20"
-                          style={{ color: resource.thumbnailGradient[0] }}
-                        />
-                      )}
-                      <span className="absolute top-2 right-2 text-[10px] font-bold uppercase tracking-wider text-white/80 bg-black/30 px-1.5 py-0.5 rounded">
-                        {resource.fileType}
-                      </span>
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="outline" className={`text-[10px] ${catConfig?.badge}`}>
-                          {catData?.name}
-                        </Badge>
-                        {resource.featured && (
-                          <Badge className="text-[10px] bg-solar-green/10 text-solar-green border-solar-green/30">
-                            <Star className="w-3 h-3 mr-0.5" /> Featured
-                          </Badge>
-                        )}
-                      </div>
-
-                      <h4 className="font-semibold text-sm text-foreground mb-1.5 line-clamp-2 group-hover:text-solar-green transition-colors">
-                        {resource.title}
-                      </h4>
-
-                      <p className="text-xs text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
-                        {resource.description}
-                      </p>
-
-                      {/* Meta row */}
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground mb-3">
-                        <span className="inline-flex items-center gap-1">
-                          <FileTypeIcon type={resource.fileType} />
-                          {resource.fileType}
-                        </span>
-                        <span>·</span>
-                        <span>{resource.fileSize}</span>
-                        <span>·</span>
-                        <span>{resource.pages} pages</span>
-                      </div>
-
-                      {/* Version + date + download */}
-                      <div className="flex items-center justify-between pt-3 border-t border-border/60">
-                        <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                          <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4">
-                            {resource.version}
-                          </Badge>
-                          <span className="inline-flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {formatDate(resource.lastUpdated)}
-                          </span>
-                        </div>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-7 text-xs gap-1 border-solar-green text-solar-green hover:bg-solar-green hover:text-white"
-                        >
-                          <Download className="w-3 h-3" /> Download
-                        </Button>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </div>
-
-          {/* Empty state */}
-          {filteredResources.length === 0 && (
-            <div className="text-center py-16">
-              <FolderOpen className="w-12 h-12 mx-auto mb-4 text-muted-foreground/40" />
-              <p className="text-lg font-semibold text-foreground mb-1">No resources found</p>
-              <p className="text-sm text-muted-foreground">
-                Try adjusting your search or category filter.
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
+        )}
+      </PageSection>
 
       {/* ── FAQ Section ────────────────────────────────────────────── */}
-      <section className="py-12 sm:py-16 bg-gray-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <SectionHeading
-              title="Documentation FAQ"
-              subtitle="Common questions about our resource library"
-            />
-          </ScrollReveal>
+      <PageSection tone="muted">
+        <SectionEyebrow label="FAQ" className="mb-6" />
+        <EditorialHeading size="section" className="mb-8">
+          Documentation questions.
+        </EditorialHeading>
 
-          <ScrollReveal delay={0.2}>
-            <div className="mt-8">
-              <Accordion type="single" collapsible className="bg-white rounded-lg border border-border px-4 sm:px-6">
-                {c.faqs.map((faq, i) => (
-                  <AccordionItem key={i} value={`faq-${i}`}>
-                    <AccordionTrigger className="text-sm sm:text-base font-medium text-foreground text-left">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
+        <Accordion type="single" collapsible className="border-t border-border">
+          {c.faqs.map((faq, i) => (
+            <AccordionItem key={i} value={`faq-${i}`} className="border-b border-border px-0">
+              <AccordionTrigger className="text-base font-medium text-foreground text-left py-5 hover:no-underline">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </PageSection>
 
-      {/* ── CTA Section ────────────────────────────────────────────── */}
-      <section className="relative py-14 sm:py-20 overflow-hidden">
-        {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-solar-green via-solar-green-dark to-emerald-800" />
-        <div className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2) 0%, transparent 40%)",
-          }}
-        />
-
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <ScrollReveal>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
-              Need Custom Documentation?
-            </h2>
-            <p className="text-base sm:text-lg text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Our technical team can provide tailored specifications, performance data, and certification
-              documents specific to your project requirements.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                size="lg"
-                className="bg-white text-solar-green hover:bg-gray-100 font-semibold gap-2 shadow-lg"
-                onClick={() => navigate("contact")}
-              >
-                <PhoneCall className="w-4 h-4" /> Contact Sales
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/40 text-white hover:bg-white/10 font-semibold gap-2"
-                onClick={() => navigate("contact")}
-              >
-                Request Quote <ArrowRight className="w-4 h-4" />
-              </Button>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
+      <FinalCTA
+        eyebrow="Support"
+        title="Need custom documentation for your project?"
+        cta="Contact our technical team"
+        route="contact"
+      />
     </main>
   );
 }

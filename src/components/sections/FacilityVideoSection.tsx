@@ -49,8 +49,7 @@ export function FacilityVideoSection({
               </p>
               <Button
                 asChild
-                variant="outline"
-                className="border-white/30 text-white hover:bg-white/10 hover:text-white"
+                variant="outlineOnDark"
               >
                 <a href={youtubeUrl} target="_blank" rel="noopener noreferrer">
                   Watch on YouTube

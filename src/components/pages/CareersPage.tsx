@@ -3,9 +3,10 @@
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { careersContent, type JobOpening } from "@/content/careers";
-import { HeroSection } from "@/components/sections/HeroSection";
+import { PageHero } from "@/components/editorial/PageHero";
+import { MetricRow } from "@/components/editorial/MetricRow";
+import { FinalCTA } from "@/components/editorial/FinalCTA";
 import { SectionHeading } from "@/components/sections/SectionHeading";
-import { StatsSection } from "@/components/sections/StatsSection";
 import { CardGrid } from "@/components/sections/CardGrid";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { useRouter } from "@/lib/router";
@@ -74,24 +75,26 @@ export function CareersPage() {
   return (
     <main>
       {/* Hero */}
-      <HeroSection
-        variant="dark"
+      <PageHero
+        eyebrow="Careers"
         title={c.hero.title}
         subtitle={c.hero.subtitle}
-        cta={c.hero.cta}
-        ctaRoute="contact"
-        secondaryCta="Browse Internships"
-        secondaryCtaRoute="careers"
         backgroundImage={c.hero.backgroundImage}
-        fullViewport
+        breadcrumbs={[{ label: "Home", route: "home" }, { label: "Careers" }]}
       />
 
-      {/* Stats */}
-      <StatsSection
-        items={c.stats.items}
-        variant="dark"
-        sectionTitle={c.stats.sectionTitle}
-      />
+      <section className="editorial-section bg-solar-dark text-white">
+        <div className="editorial-section-inner">
+          <MetricRow
+            variant="dark"
+            items={c.stats.items.map((item) => ({
+              value: item.value,
+              unit: item.unit,
+              label: item.label,
+            }))}
+          />
+        </div>
+      </section>
 
       {/* Culture Pillars */}
       <CardGrid
@@ -199,7 +202,7 @@ export function CareersPage() {
           </div>
 
           {/* Job Listings */}
-          <div className="space-y-4">
+          <div className="divide-y divide-border border-t border-border">
             <AnimatePresence mode="popLayout">
               {filteredJobs.map((job) => {
                 const isExpanded = expandedJob === job.id;
@@ -226,54 +229,31 @@ export function CareersPage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.25 }}
-                    className="rounded-xl border border-border bg-white overflow-hidden shadow-sm hover:shadow-md hover:border-solar-green/30 transition-all duration-300 shimmer-border"
+                    className="bg-white"
                   >
                     <button
                       onClick={() => setExpandedJob(isExpanded ? null : job.id)}
-                      className="w-full text-left p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4"
+                      className="w-full text-left py-5 sm:py-6 flex flex-col sm:flex-row sm:items-center gap-4 group"
                       aria-expanded={isExpanded}
                     >
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                          <Badge variant="outline" className="text-[10px] uppercase tracking-wider border-solar-green/30 text-solar-green">
-                            {job.id}
-                          </Badge>
-                          <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Calendar className="w-3 h-3" /> {formattedPosted}
-                          </span>
-                        </div>
-                        <h3 className="font-[family-name:var(--font-poppins)] text-base sm:text-lg font-semibold text-foreground mb-2 group-hover:text-solar-green transition-colors">
+                        <h3 className="font-[family-name:var(--font-poppins)] text-lg sm:text-xl font-semibold text-foreground mb-2 group-hover:text-solar-green transition-colors">
                           {job.title}
                         </h3>
-                        <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Building2 className="w-3.5 h-3.5" /> {job.department}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5" /> {job.location}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Briefcase className="w-3.5 h-3.5" /> {job.type}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3.5 h-3.5" /> {job.experience}
-                          </span>
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+                          <span>{job.department}</span>
+                          <span>·</span>
+                          <span>{job.location}</span>
+                          <span>·</span>
+                          <span>{job.type}</span>
+                          <span className="hidden sm:inline">·</span>
+                          <span className="hidden sm:inline">{formattedPosted}</span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <Button
-                          size="sm"
-                          variant={isExpanded ? "default" : "outline"}
-                          className={`rounded-lg h-9 text-xs font-semibold transition-all ${
-                            isExpanded
-                              ? "bg-solar-green hover:bg-solar-green-dark text-white"
-                              : "border-solar-green/30 text-solar-green hover:bg-solar-green/5"
-                          }`}
-                        >
-                          {isExpanded ? "Hide Details" : "View Details"}
-                          <ArrowRight className={`w-3.5 h-3.5 ml-1 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
-                        </Button>
-                      </div>
+                      <span className="inline-flex items-center gap-1 text-sm font-medium text-solar-green shrink-0">
+                        {isExpanded ? "Hide role" : "View role"}
+                        <ArrowRight className={`w-4 h-4 transition-transform ${isExpanded ? "rotate-90" : "group-hover:translate-x-0.5"}`} />
+                      </span>
                     </button>
 
                     <AnimatePresence>
@@ -283,9 +263,9 @@ export function CareersPage() {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="overflow-hidden border-t border-border"
+                          className="overflow-hidden"
                         >
-                          <div className="p-5 sm:p-6 bg-solar-green/[0.02]">
+                          <div className="pb-6 pt-2 border-t border-border/60">
                             <p className="text-sm text-foreground leading-relaxed mb-5">
                               {job.summary}
                             </p>
@@ -438,6 +418,13 @@ export function CareersPage() {
           </div>
         </section>
       </ScrollReveal>
+
+      <FinalCTA
+        eyebrow="Join us"
+        title="Ready to build India's solar future?"
+        cta="Get in touch"
+        route="contact"
+      />
     </main>
   );
 }

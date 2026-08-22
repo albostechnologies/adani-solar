@@ -4,6 +4,8 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView, AnimatePresence, useMotionValue, animate } from "framer-motion";
 import { sustainabilityContent } from "@/content/sustainability";
 import { useRouter } from "@/lib/router";
+import { PageHero } from "@/components/editorial/PageHero";
+import { mediaAssets as m } from "@/lib/media";
 import { SectionHeading } from "@/components/sections/SectionHeading";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { Button } from "@/components/ui/button";
@@ -678,155 +680,16 @@ function InitiativeCard({
 export function SustainabilityPage() {
   const c = sustainabilityContent;
   const { navigate } = useRouter();
-  const heroRef = useRef<HTMLDivElement>(null);
-  const heroInView = useInView(heroRef, { once: true });
-
-  // Hero stat badges data
-  const heroStats = [
-    { value: 13.6, unit: "M Tonnes", label: "CO₂ Offset", icon: CloudOff, decimals: 1 },
-    { value: 340, unit: "M Trees", label: "Trees Equivalent", icon: TreePine, decimals: 0 },
-    { value: 10, unit: "GW", label: "Clean Energy", icon: Zap, decimals: 0 },
-  ];
 
   return (
     <main>
-      {/* ─── HERO SECTION ──────────────────────────────────────────── */}
-      <section
-        ref={heroRef}
-        className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-solar-dark via-solar-dark-secondary to-solar-dark"
-      >
-        {/* Animated particles */}
-        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-          {[
-            { size: "w-64 h-64", pos: "top-[-10%] left-[10%]", delay: 0, duration: 20 },
-            { size: "w-48 h-48", pos: "top-[60%] left-[80%]", delay: 3, duration: 25 },
-            { size: "w-56 h-56", pos: "top-[20%] left-[70%]", delay: 6, duration: 22 },
-            { size: "w-40 h-40", pos: "top-[70%] left-[5%]", delay: 2, duration: 18 },
-          ].map((p, i) => (
-            <motion.div
-              key={i}
-              className={`absolute ${p.size} ${p.pos} rounded-full bg-solar-green/8 blur-[80px]`}
-              animate={{
-                x: [0, 30, -20, 0],
-                y: [0, -25, 15, 0],
-                scale: [1, 1.1, 0.95, 1],
-              }}
-              transition={{
-                duration: p.duration,
-                delay: p.delay,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Grain overlay */}
-        <div className="absolute inset-0 grain-overlay opacity-30" aria-hidden="true" />
-
-        {/* Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          {/* Word-by-word title reveal */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-            {c.hero.title.split(" ").map((word, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-                animate={
-                  heroInView
-                    ? { opacity: 1, y: 0, filter: "blur(0px)" }
-                    : { opacity: 0, y: 20, filter: "blur(4px)" }
-                }
-                transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
-                className="inline-block bg-gradient-to-r from-white via-white to-solar-green-light bg-clip-text text-transparent mr-[0.3em]"
-              >
-                {word}
-              </motion.span>
-            ))}
-          </h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-            transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-            className="text-base sm:text-lg text-white max-w-2xl mx-auto mb-8 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
-          >
-            {c.hero.subtitle}
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-            transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-            className="flex flex-wrap justify-center gap-4 mb-10"
-          >
-            <Button
-              onClick={() => navigate(c.hero.primaryCta.route)}
-              className="bg-solar-green hover:bg-solar-green-dark text-white px-6 py-3 text-sm font-semibold shadow-lg shadow-solar-green/25 hover:shadow-xl hover:shadow-solar-green/30 transition-all duration-300"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              {c.hero.primaryCta.label}
-            </Button>
-            <Button
-              onClick={() => navigate(c.hero.secondaryCta.route)}
-              variant="outline"
-              className="border-2 border-white/40 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:border-white/60 px-6 py-3 text-sm font-semibold transition-all duration-300"
-            >
-              {c.hero.secondaryCta.label}
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </motion.div>
-
-          {/* Animated stat badges */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.9, ease: "easeOut" }}
-            className="flex flex-wrap justify-center gap-3 sm:gap-4"
-          >
-            {heroStats.map((stat) => {
-              const StatIcon = stat.icon;
-              return (
-                <div
-                  key={stat.label}
-                  className="flex items-center gap-2 bg-white/8 backdrop-blur-sm border border-white/15 rounded-full px-4 py-2"
-                >
-                  <StatIcon className="w-4 h-4 text-solar-green-light" />
-                  <span className="text-sm font-bold text-white">
-                    <AnimatedCounter
-                      target={stat.value}
-                      duration={2}
-                      decimals={stat.decimals}
-                    />
-                  </span>
-                  <span className="text-xs text-white/60">{stat.unit}</span>
-                  <span className="text-xs text-white/40 hidden sm:inline">
-                    {stat.label}
-                  </span>
-                </div>
-              );
-            })}
-          </motion.div>
-        </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-        >
-          <span className="text-xs text-white/40">Scroll to Explore</span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ChevronRight className="w-4 h-4 text-white/40 rotate-90" />
-          </motion.div>
-        </motion.div>
-      </section>
+      <PageHero
+        eyebrow="Sustainability"
+        title="Powering progress. Preserving tomorrow."
+        subtitle={c.hero.subtitle}
+        backgroundImage={m.whySolar.carbon}
+        breadcrumbs={[{ label: "Home", route: "home" }, { label: "Sustainability" }]}
+      />
 
       {/* ─── IMPACT METRICS GRID ────────────────────────────────────── */}
       <section className="py-16 sm:py-20 bg-solar-dark relative">
@@ -963,8 +826,8 @@ export function SustainabilityPage() {
               </Button>
               <Button
                 onClick={() => navigate("contact")}
-                variant="outline"
-                className="border-2 border-white/50 text-white hover:bg-white/10 hover:border-white/80 px-6 py-3 text-sm font-semibold transition-all duration-300"
+                variant="outlineOnDark"
+                className="border-2 px-6 py-3 text-sm font-semibold transition-all duration-300"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Download ESG Report

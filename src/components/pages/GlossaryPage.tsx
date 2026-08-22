@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { glossaryContent, type GlossaryTerm } from "@/content/glossary";
-import { HeroSection } from "@/components/sections/HeroSection";
+import { PageHero } from "@/components/editorial/PageHero";
 import { Search, Filter, BookOpen, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -59,16 +59,12 @@ export function GlossaryPage() {
 
   return (
     <main>
-      <HeroSection
-        variant="dark"
+      <PageHero
+        eyebrow="Glossary"
         title={c.hero.title}
         subtitle={c.hero.subtitle}
-        cta="Explore Terms"
-        ctaRoute="contact"
-        secondaryCta="Solar ROI Calculator"
-        secondaryCtaRoute="why-solar"
         backgroundImage={c.hero.backgroundImage}
-        fullViewport={false}
+        breadcrumbs={[{ label: "Home", route: "home" }, { label: "Glossary" }]}
       />
 
       {/* Search + Filter */}
