@@ -134,7 +134,7 @@ export function ContactFormSection({
       <div>
         <Label
           className={`mb-2 flex items-center gap-1.5 text-sm font-medium ${
-            isDark ? "text-white/85" : "text-foreground/85"
+            isDark ? "text-white" : "text-foreground/85"
           }`}
         >
           <Icon
@@ -205,7 +205,7 @@ export function ContactFormSection({
           {subtitle && (
             <p
               className={`text-base sm:text-lg max-w-xl mx-auto leading-relaxed ${
-                isDark ? "text-white/75" : "text-foreground/70"
+                isDark ? "text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.3)]" : "text-foreground/70"
               }`}
             >
               {subtitle}

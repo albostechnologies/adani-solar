@@ -124,7 +124,6 @@ export function HomePage() {
   return (
     <main>
       {/* 1. Hero */}
-      <div data-tour-id="tour-hero-section">
       <HeroSection
         variant="dark"
         title={c.hero.title}
@@ -136,7 +135,6 @@ export function HomePage() {
         backgroundImage={c.hero.backgroundImage}
         fullViewport
       />
-      </div>
 
       {/* 2. Stats Bar */}
       <StatsSection
@@ -245,17 +243,14 @@ export function HomePage() {
       </section>
 
       {/* 6. Our Products */}
-      <div data-tour-id="tour-products-section">
       <ProductTabs
         title={c.products.title}
         subtitle={c.products.subtitle}
         tabs={c.products.tabs}
         variant="light"
       />
-      </div>
 
       {/* Ask Our Expert */}
-      <div data-tour-id="tour-contact-form">
       <ContactFormSection
         title={c.askExpert.title}
         subtitle={c.askExpert.subtitle}
@@ -268,7 +263,6 @@ export function HomePage() {
         ]}
         variant="dark"
       />
-      </div>
 
       {/* Export Oriented Manufacturing */}
       <ScrollReveal>

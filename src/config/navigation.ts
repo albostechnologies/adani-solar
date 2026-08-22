@@ -74,7 +74,7 @@ export const headerNavItems: NavItem[] = [
     banner: {
       title: "Energising India's Solar Dream",
       subtitle:
-        "Vertically integrated solar PV manufacturing at Mundra, Gujarat — scaling toward a 10 GW campus vision.",
+        "Vertically integrated solar PV manufacturing at Mundra, Gujarat , scaling toward a 10 GW campus vision.",
       route: "about",
     },
   },
@@ -145,14 +145,14 @@ export const headerNavItems: NavItem[] = [
       },
       {
         label: "PV Value Chain",
-        description: "Polysilicon to modules — integrated manufacturing",
+        description: "Polysilicon to modules , integrated manufacturing",
         route: "home",
         section: "pv-value-chain",
         icon: Link2,
       },
       {
         label: "Manufacturing Process",
-        description: "From sand to solar — 8-step precision engineering",
+        description: "From sand to solar , 8-step precision engineering",
         route: "manufacturing" as RouteName,
         icon: Factory,
       },
@@ -170,7 +170,7 @@ export const headerNavItems: NavItem[] = [
     children: [
       {
         label: "Contact Us",
-        description: "Sales & general enquiries — we respond in 24 hours",
+        description: "Sales & general enquiries , we respond in 24 hours",
         route: "contact",
         icon: PhoneCall,
       },

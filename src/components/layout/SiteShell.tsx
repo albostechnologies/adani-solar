@@ -6,8 +6,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsent } from "@/components/CookieConsent";
 import { ScrollProgress } from "@/components/ScrollProgress";
-import { ChatWidget } from "@/components/ChatWidget";
-import { SiteTour } from "@/components/SiteTour";
 import { RouteScrollToTop } from "@/components/layout/RouteScrollToTop";
 import { LEGACY_HASH_PATH_MAP } from "@/lib/routes";
 import { AnimatePresence, motion } from "framer-motion";
@@ -30,7 +28,7 @@ function BackToTop() {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="fixed bottom-40 right-4 sm:bottom-28 sm:right-6 z-40 w-10 h-10 rounded-full bg-solar-green hover:bg-solar-green-dark text-white shadow-lg shadow-solar-green/25 flex items-center justify-center transition-colors duration-300"
+      className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 z-40 w-10 h-10 rounded-full bg-solar-green hover:bg-solar-green-dark text-white shadow-lg shadow-solar-green/25 flex items-center justify-center transition-colors duration-300"
       aria-label="Back to top"
     >
       <ArrowUp className="w-5 h-5" />
@@ -69,8 +67,6 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         <AnimatePresence>
           <BackToTop />
         </AnimatePresence>
-        <ChatWidget />
-        <SiteTour />
       </div>
     </>
   );

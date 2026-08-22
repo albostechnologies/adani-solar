@@ -1,3 +1,5 @@
+import { mediaAssets as m } from "@/lib/media";
+
 export interface GlossaryTerm {
   term: string;
   slug: string;
@@ -13,8 +15,8 @@ export const glossaryContent = {
   hero: {
     title: "Solar Energy Glossary",
     subtitle:
-      "A comprehensive reference of solar PV terminology — from cell architectures to financing structures. Whether you're new to solar or a seasoned professional, find clear definitions here.",
-    backgroundImage: "/assets/home/solar-plant-aerial.webp",
+      "A comprehensive reference of solar PV terminology , from cell architectures to financing structures. Whether you're new to solar or a seasoned professional, find clear definitions here.",
+    backgroundImage: m.home.valueChain,
   },
 
   categories: [
@@ -38,7 +40,7 @@ export const glossaryContent = {
     { term: "PERC (Passivated Emitter and Rear Cell)", slug: "perc", category: "Cell Technology", definition: "Cell architecture with a passivated rear surface that reflects unabsorbed light back through the cell for a second pass, boosting efficiency to 23-24%.", extended: "Developed at UNSW in the 1980s, commercialized in the 2010s. The rear passivation layer (typically Al₂O₃/SiNₓ) reduces rear surface recombination by 10-100x vs. standard Al-BSF cells.", relatedTerms: ["topcon", "hjt"] },
     { term: "TOPCon (Tunnel Oxide Passivated Contact)", slug: "topcon", category: "Cell Technology", definition: "N-type cell architecture with ultra-thin tunnel oxide layer and poly-Si passivated contacts. Eliminates direct metal-semiconductor contact, reducing recombination. Efficiencies reach 25-26.5%.", extended: "TOPCon was proposed by Fraunhofer ISE in 2013 and commercialized by JinkoSolar in 2019. The ~1-2 nm SiO₂ tunnel layer allows majority carriers to tunnel through while blocking minority carriers, enabling full-area passivated contacts without patterning.", relatedTerms: ["perc", "hjt", "n-type"] },
     { term: "HJT (Heterojunction Technology)", slug: "hjt", category: "Cell Technology", definition: "Cell architecture combining crystalline Si wafer with amorphous Si thin-film layers. Symmetric structure with intrinsic a-Si buffer layers. Potentially 27%+ efficient.", extended: "Sanyo (now Panasonic) pioneered HJT with their HIT cells. Advantages: excellent temperature coefficient (-0.26%/°C), high bifaciality (>90%), simple low-temperature processing (<200°C). Challenge: high cost of indium tin oxide (ITO) transparent conductor.", relatedTerms: ["topcon", "perc"] },
-    { term: "N-type Silicon", slug: "n-type", category: "Cell Technology", definition: "Silicon doped with phosphorus (5 valence electrons vs. Si's 4) providing excess electrons as majority carriers. Less prone to Light-Induced Degradation (LID) than p-type.", extended: "N-type wafers are the industry's future direction — all TOPCon and HJT cells use n-type. Adani Solar's 4 GW TOPCon line uses n-type Czochralski wafers.", relatedTerms: ["p-type", "topcon"] },
+    { term: "N-type Silicon", slug: "n-type", category: "Cell Technology", definition: "Silicon doped with phosphorus (5 valence electrons vs. Si's 4) providing excess electrons as majority carriers. Less prone to Light-Induced Degradation (LID) than p-type.", extended: "N-type wafers are the industry's future direction , all TOPCon and HJT cells use n-type. Adani Solar's 4 GW TOPCon line uses n-type Czochralski wafers.", relatedTerms: ["p-type", "topcon"] },
     { term: "P-type Silicon", slug: "p-type", category: "Cell Technology", definition: "Silicon doped with boron (3 valence electrons) creating holes as majority carriers. Susceptible to boron-oxygen LID (1-3% initial degradation). Historically dominant in PERC.", relatedTerms: ["n-type", "perc"] },
     { term: "Bifacial Module", slug: "bifacial", category: "Module Technology", definition: "PV module that generates power from both front and rear sides. Rear-side gain depends on ground albedo and mounting height: 5-30% additional yield vs. monofacial.", extended: "Bifaciality factor = rear-side efficiency / front-side efficiency. TOPCon bifaciality: 80-85%. HJT: 90-95%. Best with single-axis trackers or high-clearance fixed-tilt systems over reflective surfaces (white TPO, sand, snow).", relatedTerms: ["topcon", "albedo"] },
     { term: "Half-Cut Cells", slug: "half-cut", category: "Module Technology", definition: "Solar cells cut in half to reduce current by 50% and resistive (I²R) losses by 75%. Also improves shade tolerance since each half operates more independently.", relatedTerms: ["mbb"] },

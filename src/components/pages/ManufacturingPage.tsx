@@ -12,7 +12,9 @@ import { manufacturingContent } from "@/content/manufacturing";
 import { useRouter } from "@/lib/router";
 import { SectionHeading } from "@/components/sections/SectionHeading";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { FacilityVideoSection } from "@/components/sections/FacilityVideoSection";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
   Atom,
   Boxes,
@@ -202,6 +204,13 @@ export function ManufacturingPage() {
       {/* ─── Facility Overview ─── */}
       <FacilityOverview />
 
+      <FacilityVideoSection
+        title={c.facilityVideo.title}
+        subtitle={c.facilityVideo.subtitle}
+        poster={c.facilityVideo.poster}
+        youtubeUrl={c.facilityVideo.youtubeUrl}
+      />
+
       {/* ─── Manufacturing Process Steps ─── */}
       <ProcessStepper
         steps={c.processSteps}
@@ -230,6 +239,19 @@ function ManufacturingHero() {
 
   return (
     <section className="relative min-h-[85vh] flex items-center justify-center bg-solar-dark overflow-hidden">
+      {c.hero.backgroundImage && (
+        <>
+          <Image
+            src={c.hero.backgroundImage}
+            alt="Adani Solar Mundra manufacturing facility"
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-solar-dark/70" />
+        </>
+      )}
       {/* Animated factory SVG background */}
       <div className="absolute inset-0 opacity-15">
         <svg
@@ -308,7 +330,7 @@ function ManufacturingHero() {
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-solar-green/10 border border-solar-green/20 text-solar-green-light text-sm font-medium mb-6">
             <Factory className="w-4 h-4" />
-            Mundra, Gujarat — India&apos;s Largest Solar PV Facility
+            Mundra, Gujarat , India&apos;s Largest Solar PV Facility
           </span>
         </motion.div>
 
@@ -325,7 +347,7 @@ function ManufacturingHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="text-lg sm:text-xl text-white max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
         >
           {c.hero.subtitle}
         </motion.p>
@@ -463,7 +485,7 @@ function ProcessStepper({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionHeading
           title="The Manufacturing Journey"
-          subtitle="8 precision steps from raw polysilicon to export-ready solar modules — each step engineered for quality and efficiency."
+          subtitle="8 precision steps from raw polysilicon to export-ready solar modules , each step engineered for quality and efficiency."
           variant="dark"
         />
 
@@ -731,7 +753,7 @@ function QualityDashboard({ metrics }: { metrics: typeof manufacturingContent.qu
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <SectionHeading
             title="Quality Metrics Dashboard"
-            subtitle="Every module shipped meets the highest international quality standards — here are the numbers that prove it."
+            subtitle="Every module shipped meets the highest international quality standards , here are the numbers that prove it."
             variant="light"
           />
           <div className="mt-10 sm:mt-12 grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
@@ -792,7 +814,7 @@ function AutomationSection({ items }: { items: typeof manufacturingContent.autom
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <SectionHeading
             title="Automation & Smart Factory"
-            subtitle="Industry 4.0 technologies powering our next-generation manufacturing — AI, robotics, IoT and real-time analytics."
+            subtitle="Industry 4.0 technologies powering our next-generation manufacturing , AI, robotics, IoT and real-time analytics."
             variant="dark"
           />
           <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

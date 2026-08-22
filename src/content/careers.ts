@@ -1,3 +1,5 @@
+import { mediaAssets as m } from "@/lib/media";
+
 export interface JobOpening {
   id: string;
   title: string;
@@ -17,14 +19,14 @@ export const careersContent = {
     title: "Build the Future of Solar with Us",
     subtitle:
       "Join a team building India's solar manufacturing capabilities. Explore roles across engineering, operations, sales, and support.",
-    backgroundImage: "/assets/home/solar-plant-aerial.webp",
+    backgroundImage: m.about.facility,
     cta: "View Open Roles",
     ctaRoute: "careers" as const,
   },
 
   culture: {
     title: "Why Adani Solar?",
-    subtitle: "We don't just manufacture solar modules — we build careers, communities, and a cleaner tomorrow.",
+    subtitle: "We don't just manufacture solar modules , we build careers, communities, and a cleaner tomorrow.",
     pillars: [
       {
         icon: "TrendingUp",
@@ -130,7 +132,7 @@ export const careersContent = {
     },
     {
       id: "SAL-022",
-      title: "Key Account Manager — Utilities",
+      title: "Key Account Manager , Utilities",
       department: "Sales",
       location: "Bengaluru, Karnataka",
       type: "Full-time",
@@ -148,14 +150,14 @@ export const careersContent = {
       requirements: [
         "MBA from Tier-1/Tier-2 B-school, or B.Tech with 6+ years sales experience",
         "6-10 years B2B sales in solar/renewables, with utility customer exposure",
-        "Strong commercial acumen — P&L, contract structuring, hedging",
+        "Strong commercial acumen , P&L, contract structuring, hedging",
         "Willingness to travel 50%+ across India",
       ],
       niceToHave: ["Existing relationships with SECI/NTPC procurement teams", "Experience with module pricing models"],
     },
     {
       id: "RND-007",
-      title: "R&D Scientist — Perovskite Tandem Cells",
+      title: "R&D Scientist , Perovskite Tandem Cells",
       department: "R&D",
       location: "Hyderabad, Telangana",
       type: "Full-time",
@@ -205,7 +207,7 @@ export const careersContent = {
     },
     {
       id: "IT-019",
-      title: "Full-Stack Developer — Manufacturing IT",
+      title: "Full-Stack Developer , Manufacturing IT",
       department: "IT",
       location: "Remote",
       type: "Full-time",
@@ -230,7 +232,7 @@ export const careersContent = {
     },
     {
       id: "FIN-008",
-      title: "Financial Analyst — Capex & Project Finance",
+      title: "Financial Analyst , Capex & Project Finance",
       department: "Finance",
       location: "Ahmedabad, Gujarat",
       type: "Full-time",
@@ -255,7 +257,7 @@ export const careersContent = {
     },
     {
       id: "HR-011",
-      title: "Talent Acquisition Partner — Engineering",
+      title: "Talent Acquisition Partner , Engineering",
       department: "HR",
       location: "Mundra, Gujarat",
       type: "Full-time",

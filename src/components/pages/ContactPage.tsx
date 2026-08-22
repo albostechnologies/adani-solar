@@ -149,7 +149,7 @@ export function ContactPage() {
             <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Map placeholder */}
               <div className="lg:col-span-2 rounded-2xl overflow-hidden border border-border shadow-sm bg-gradient-to-br from-solar-green/10 via-emerald-50 to-solar-dark-secondary/30 aspect-[16/10] relative">
-                {/* Stylised map background — abstract grid + region */}
+                {/* Stylised map background , abstract grid + region */}
                 <div className="absolute inset-0 opacity-50">
                   <div
                     className="absolute inset-0"

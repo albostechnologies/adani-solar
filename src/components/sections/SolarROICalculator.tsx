@@ -157,7 +157,7 @@ export function SolarROICalculator() {
     };
   }, [roofArea, selectedState, selectedModule]);
 
-  // Payback progress — full bar at 10 years (anything beyond that is still good)
+  // Payback progress , full bar at 10 years (anything beyond that is still good)
   const paybackPct = Math.min((results.paybackYears / 10) * 100, 100);
   const paybackColor =
     results.paybackYears <= 4

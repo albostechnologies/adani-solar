@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, ChevronDown, Phone, Download, Search } from "lucide-react";
+import { Menu, ChevronDown, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -15,8 +15,6 @@ import { useRouter, type RouteName } from "@/lib/router";
 import { headerNavItems, type NavChild } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
 import { MobileNav } from "./MobileNav";
-import { SearchModal } from "@/components/SearchModal";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 const OPEN_DELAY = 120;
 const CLOSE_DELAY = 200;
@@ -26,7 +24,6 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
 
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const openTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -148,7 +145,6 @@ export function Header() {
 
           {/* Desktop Navigation with mega-menus */}
           <nav
-            data-tour-id="tour-header-nav"
             className="hidden lg:flex items-center gap-1"
             aria-label="Main navigation"
           >
@@ -289,26 +285,8 @@ export function Header() {
             })}
           </nav>
 
-          {/* Right side: Search + CTAs + Mobile */}
+          {/* Right side: CTAs + Mobile */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Search button */}
-            <button
-              onClick={() => setSearchOpen(true)}
-              className={`hidden md:flex items-center justify-center w-9 h-9 rounded-lg transition-colors duration-200 ${
-                isScrolled
-                  ? "text-muted-foreground hover:bg-solar-green/10 hover:text-solar-green"
-                  : "text-white/80 hover:bg-white/10 hover:text-white"
-              }`}
-              aria-label="Search"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-
-            {/* Theme toggle */}
-            <div className={`hidden md:flex ${isScrolled ? "" : "[&_button]:text-white/80 [&_button]:hover:bg-white/10"}`}>
-              <ThemeToggle />
-            </div>
-
             <a
               href={`tel:${siteConfig.contact.phone}`}
               className="hidden xl:flex items-center gap-1.5 text-xs transition-colors duration-200"
@@ -323,19 +301,6 @@ export function Header() {
                 {siteConfig.contact.phone}
               </span>
             </a>
-
-            {/* Secondary CTA - Download Brochure */}
-            <Button
-              variant="outline"
-              className={`hidden md:flex rounded-lg px-3 sm:px-4 h-9 text-xs sm:text-sm font-medium transition-all duration-300 ${
-                isScrolled
-                  ? "border-solar-green/30 text-solar-green hover:bg-solar-green/5"
-                  : "border-white/20 text-white/80 hover:bg-white/10 hover:text-white"
-              }`}
-            >
-              <Download className="w-3.5 h-3.5 mr-1.5" />
-              Brochure
-            </Button>
 
             <Button
               onClick={() => handleNavClick("contact")}
@@ -383,8 +348,6 @@ export function Header() {
           </div>
         </div>
       </div>
-
-      <SearchModal open={searchOpen} onOpenChange={setSearchOpen} />
     </header>
   );
 }

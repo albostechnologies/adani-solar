@@ -103,7 +103,7 @@ export function ImageTextSection({
               <p
                 key={i}
                 className={`text-sm sm:text-base leading-relaxed mb-3 ${
-                 ( isDark ? "text-white/70" : "text-muted-foreground" )
+                 ( isDark ? "text-white" : "text-muted-foreground" )
                 }`}
               >
                 {desc}

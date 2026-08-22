@@ -46,7 +46,7 @@ export function AboutPage() {
                   {c.sustainability.title}
                 </h2>
                 <div className="w-12 h-1 rounded-full bg-solar-green mb-4" />
-                <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-6">
+                <p className="text-sm sm:text-base text-white leading-relaxed mb-6 drop-shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
                   {c.sustainability.description}
                 </p>
                 <ul className="space-y-3">
@@ -143,7 +143,7 @@ export function AboutPage() {
               title={c.vision.title}
               variant="dark"
             />
-            <p className="text-center text-white/70 max-w-2xl mx-auto mt-4 text-sm sm:text-base leading-relaxed">
+            <p className="text-center text-white max-w-2xl mx-auto mt-4 text-sm sm:text-base leading-relaxed drop-shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
               {c.vision.description}
             </p>
             <div className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

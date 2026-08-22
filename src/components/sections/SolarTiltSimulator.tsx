@@ -92,12 +92,12 @@ const MODULE_DATA: Record<
   topcon: {
     label: "TOPCon",
     efficiency: 0.228,
-    description: "22.8% efficiency — latest Gen-N technology",
+    description: "22.8% efficiency , latest Gen-N technology",
   },
   monoperc: {
     label: "MonoPERC",
     efficiency: 0.213,
-    description: "21.3% efficiency — proven reliable technology",
+    description: "21.3% efficiency , proven reliable technology",
   },
 };
 
@@ -932,7 +932,7 @@ export function SolarTiltSimulator() {
   // Location preset handler
   const handleLocationPreset = useCallback((loc: LocationPreset) => {
     setLatitude(loc.latitude);
-    // Don't auto-set tilt — let user see the effect
+    // Don't auto-set tilt , let user see the effect
   }, []);
 
   return (

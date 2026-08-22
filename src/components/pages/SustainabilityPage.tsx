@@ -750,7 +750,7 @@ export function SustainabilityPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
             transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-            className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto mb-8 leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
+            className="text-base sm:text-lg text-white max-w-2xl mx-auto mb-8 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
           >
             {c.hero.subtitle}
           </motion.p>
@@ -834,7 +834,7 @@ export function SustainabilityPage() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
           <SectionHeading
             title="Environmental Impact Metrics"
-            subtitle="Real-time progress toward our sustainability targets — every number represents tangible environmental change."
+            subtitle="Real-time progress toward our sustainability targets , every number represents tangible environmental change."
             align="center"
             variant="dark"
           />
@@ -852,7 +852,7 @@ export function SustainabilityPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <SectionHeading
             title="Annual Growth Trends"
-            subtitle="Year-over-year progress across our key sustainability indicators — from CO₂ offset to investment in clean energy."
+            subtitle="Year-over-year progress across our key sustainability indicators , from CO₂ offset to investment in clean energy."
             align="center"
           />
 
@@ -891,7 +891,7 @@ export function SustainabilityPage() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
           <SectionHeading
             title="Sustainability Milestones"
-            subtitle="Key moments in our journey toward a greener future — from our first solar plant to our 20 GW ambition."
+            subtitle="Key moments in our journey toward a greener future , from our first solar plant to our 20 GW ambition."
             align="center"
             variant="dark"
           />
@@ -924,7 +924,7 @@ export function SustainabilityPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <SectionHeading
             title="Key Sustainability Initiatives"
-            subtitle="From zero-liquid-discharge manufacturing to rural electrification — concrete programs driving measurable change."
+            subtitle="From zero-liquid-discharge manufacturing to rural electrification , concrete programs driving measurable change."
             align="center"
           />
 
@@ -950,7 +950,7 @@ export function SustainabilityPage() {
               Join Our Sustainability Journey
             </h2>
             <p className="text-white/80 mb-8 max-w-xl mx-auto leading-relaxed">
-              Whether you&apos;re a partner, investor, or customer — there&apos;s a place for you in building a
+              Whether you&apos;re a partner, investor, or customer , there&apos;s a place for you in building a
               carbon-neutral future. Let&apos;s create impact together.
             </p>
             <div className="flex flex-wrap justify-center gap-4">

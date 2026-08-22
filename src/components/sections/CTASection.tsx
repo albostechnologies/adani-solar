@@ -38,7 +38,7 @@ export function CTASection({
         {subtitle && (
           <p
             className={`text-base sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto ${
-              isGreen ? "text-white/90" : "text-white/70"
+              isGreen ? "text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)]" : "text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)]"
             }`}
           >
             {subtitle}

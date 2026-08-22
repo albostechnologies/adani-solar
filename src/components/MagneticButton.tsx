@@ -14,7 +14,7 @@ interface MagneticButtonProps {
 }
 
 /**
- * Magnetic button — gently follows the cursor while hovered.
+ * Magnetic button , gently follows the cursor while hovered.
  * Respects prefers-reduced-motion (no transform applied).
  */
 export function MagneticButton({

@@ -24,7 +24,7 @@ export const whySolarContent = {
       id: "energy-independence",
       title: "Energy Independence",
       description:
-        "By generating electricity from the sun, nations can reduce their dependence on imported fossil fuels. India imports over 80% of its oil — solar power is key to achieving energy security and reducing import bills.",
+        "By generating electricity from the sun, nations can reduce their dependence on imported fossil fuels. India imports over 80% of its oil , solar power is key to achieving energy security and reducing import bills.",
       icon: "Shield",
     },
     {
@@ -97,7 +97,7 @@ export const whySolarContent = {
       {
         question: "What maintenance is required for solar panels?",
         answer:
-          "Solar systems have no moving parts and require minimal maintenance — typically a quarterly cleaning of panels to remove dust, bird droppings or pollen, plus an annual inspection of inverters, cabling and mounting structures. In dusty regions like Rajasthan, monthly cleaning may be optimal. Annual maintenance costs are usually 0.5–1% of system cost.",
+          "Solar systems have no moving parts and require minimal maintenance , typically a quarterly cleaning of panels to remove dust, bird droppings or pollen, plus an annual inspection of inverters, cabling and mounting structures. In dusty regions like Rajasthan, monthly cleaning may be optimal. Annual maintenance costs are usually 0.5–1% of system cost.",
       },
       {
         question: "Can I sell excess power back to the grid?",

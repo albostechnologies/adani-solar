@@ -72,7 +72,9 @@ export function RippleButton({
       )}
       {...rest}
     >
-      {children}
+      <span className="btn-premium-label relative z-[1] inline-flex items-center justify-center gap-2">
+        {children}
+      </span>
       {ripples.map((r) => (
         <span
           key={r.id}

@@ -1,32 +1,34 @@
+import { mediaAssets as m } from "@/lib/media";
+
 export const homeContent = {
   hero: {
     title: "Energising India's Solar Dream",
     subtitle:
-      "India's first and largest vertically integrated solar PV manufacturer — driving energy independence with Made in India solar solutions.",
+      "India's first and largest vertically integrated solar PV manufacturer , driving energy independence with Made in India solar solutions.",
     cta: "Explore Our Products",
     ctaRoute: "product-topcon" as const,
     secondaryCta: "Contact Us",
     secondaryCtaRoute: "contact" as const,
-    backgroundImage: "/assets/home/hero-solar-facility.webp",
+    backgroundImage: m.home.hero,
   },
 
   about: {
     sectionTitle: "About Adani Solar",
     title: "India's Largest Solar PV Manufacturer",
     description:
-      "Adani Solar is the solar PV manufacturing arm of Adani Group — India's first and largest vertically integrated solar PV manufacturer. With a vision to make India self-reliant in solar manufacturing, we produce high-quality solar cells and modules at our state-of-the-art facility in Mundra, Gujarat.",
+      "Adani Solar is the solar PV manufacturing arm of Adani Group , India's first and largest vertically integrated solar PV manufacturer. With a vision to make India self-reliant in solar manufacturing, we produce high-quality solar cells and modules at our state-of-the-art facility in Mundra, Gujarat.",
     highlight:
       "Our Mundra facility operates 4 GW of cells and modules and 2 GW of ingots and wafers, with a long-term vision for a 10 GW integrated solar manufacturing campus.",
     cta: "Know More",
     ctaRoute: "about" as const,
-    image: "/assets/home/about-solar-manufacturing.webp",
+    image: m.home.about,
   },
 
   valueChain: {
     sectionTitle: "PV Value Chain",
     title: "Complete PV Value Chain Integration",
     subtitle:
-      "From polysilicon to modules — our vertically integrated manufacturing ensures quality at every step.",
+      "From polysilicon to modules , our vertically integrated manufacturing ensures quality at every step.",
     steps: [
       {
         id: "polysilicon",
@@ -34,7 +36,7 @@ export const homeContent = {
         description:
           "High-purity polysilicon production forming the foundation of our solar manufacturing value chain.",
         icon: "Layers",
-        image: "/assets/home/pv-value-chain.webp",
+        image: m.home.valueChain,
       },
       {
         id: "ingot-wafer",
@@ -42,7 +44,7 @@ export const homeContent = {
         description:
           "Precision ingot casting and wafer slicing to produce ultra-thin silicon wafers with exceptional quality.",
         icon: "Circle",
-        image: "/assets/home/pv-value-chain.webp",
+        image: m.about.facility,
       },
       {
         id: "cells",
@@ -50,7 +52,7 @@ export const homeContent = {
         description:
           "Advanced cell manufacturing using TOPCon and MonoPERC technologies for maximum efficiency.",
         icon: "Sun",
-        image: "/assets/home/pv-value-chain.webp",
+        image: m.products.topcon,
       },
       {
         id: "modules",
@@ -58,7 +60,7 @@ export const homeContent = {
         description:
           "High-performance module assembly with cutting-edge technology for reliable, long-lasting solar power generation.",
         icon: "LayoutGrid",
-        image: "/assets/home/solar-products-modules.webp",
+        image: m.home.products,
       },
     ],
   },
@@ -73,31 +75,31 @@ export const homeContent = {
         title: "Aluminum Frames",
         description:
           "Precision-engineered aluminum frames for module structural integrity and longevity.",
-        image: "/assets/home/solar-plant-aerial.webp",
+        image: m.home.hero,
       },
       {
         title: "Solar Glass",
         description:
           "High-transmission, low-iron tempered solar glass for maximum light absorption.",
-        image: "/assets/home/solar-plant-aerial.webp",
+        image: m.home.products,
       },
       {
         title: "EVA Encapsulant",
         description:
           "Premium EVA encapsulant films ensuring superior cell protection and weather resistance.",
-        image: "/assets/home/solar-plant-aerial.webp",
+        image: m.home.valueChain,
       },
       {
         title: "Back Sheets",
         description:
           "High-performance back sheets providing critical moisture barrier and electrical insulation.",
-        image: "/assets/home/solar-plant-aerial.webp",
+        image: m.home.about,
       },
       {
         title: "Junction Boxes",
         description:
           "IP67-rated junction boxes with bypass diodes for safe and efficient power output.",
-        image: "/assets/home/solar-plant-aerial.webp",
+        image: m.products.topcon,
       },
     ],
   },
@@ -124,14 +126,14 @@ export const homeContent = {
         ],
         powerRange: "570W – 590W",
         efficiency: "Up to 22.5%",
-        image: "/assets/home/solar-products-modules.webp",
+        image: m.products.topcon,
       },
       {
         id: "monoperc",
         label: "MonoPERC",
         title: "MonoPERC Modules",
         subtitle:
-          "Passivated Emitter and Rear Cell technology — proven, reliable, and cost-effective solar solution.",
+          "Passivated Emitter and Rear Cell technology , proven, reliable, and cost-effective solar solution.",
         features: [
           "Up to 21.3% module efficiency",
           "Proven field performance",
@@ -142,7 +144,7 @@ export const homeContent = {
         ],
         powerRange: "390W – 545W",
         efficiency: "Up to 21.3%",
-        image: "/assets/home/solar-products-modules.webp",
+        image: m.products.monoperc,
       },
     ],
     details: {
@@ -150,8 +152,8 @@ export const homeContent = {
         type: "topcon" as const,
         name: "TOPCon Bifacial Modules",
         tagline:
-          "Tunnel Oxide Passivated Contact technology — engineered for maximum energy yield and 30-year bankable performance.",
-        heroImage: "/assets/home/solar-products-modules.webp",
+          "Tunnel Oxide Passivated Contact technology , engineered for maximum energy yield and 30-year bankable performance.",
+        heroImage: m.products.topcon,
         keySpecs: [
           { label: "Power Range", value: "570W – 590W" },
           { label: "Module Efficiency", value: "Up to 22.5%" },
@@ -173,7 +175,7 @@ export const homeContent = {
             icon: "Shield",
             title: "Lower Degradation",
             description:
-              "No LID and no LeTID — first-year degradation under 1% with only 0.4% annual degradation thereafter for bankable, predictable energy harvest.",
+              "No LID and no LeTID , first-year degradation under 1% with only 0.4% annual degradation thereafter for bankable, predictable energy harvest.",
           },
           {
             icon: "TrendingUp",
@@ -251,8 +253,8 @@ export const homeContent = {
         type: "monoperc" as const,
         name: "MonoPERC Modules",
         tagline:
-          "Passivated Emitter Rear Cell technology — a proven, reliable and cost-effective solar solution trusted across millions of rooftops.",
-        heroImage: "/assets/home/solar-products-modules.webp",
+          "Passivated Emitter Rear Cell technology , a proven, reliable and cost-effective solar solution trusted across millions of rooftops.",
+        heroImage: m.products.monoperc,
         keySpecs: [
           { label: "Power Range", value: "390W – 545W" },
           { label: "Module Efficiency", value: "Up to 21.3%" },
@@ -274,7 +276,7 @@ export const homeContent = {
             icon: "Shield",
             title: "Excellent Reliability",
             description:
-              "Rigorous PID, salt-mist, ammonia and hail testing per IEC standards — built for India's monsoon, coastal and desert environments.",
+              "Rigorous PID, salt-mist, ammonia and hail testing per IEC standards , built for India's monsoon, coastal and desert environments.",
           },
           {
             icon: "Wallet",
@@ -286,7 +288,7 @@ export const homeContent = {
             icon: "Layers",
             title: "Wide Power Range",
             description:
-              "Available from 390W to 545W across 60-cell, 72-cell and 144-half-cut formats — fits any rooftop or ground-mount design.",
+              "Available from 390W to 545W across 60-cell, 72-cell and 144-half-cut formats , fits any rooftop or ground-mount design.",
           },
         ],
         specGroups: [
@@ -368,7 +370,7 @@ export const homeContent = {
       { name: "Asia Pacific", countries: "Japan, Australia, South Korea" },
       { name: "Middle East & Africa", countries: "UAE, Saudi Arabia, South Africa" },
     ],
-    image: "/assets/home/export-world-map.webp",
+    image: m.home.exportMap,
   },
 
   trustBadges: {
@@ -390,12 +392,12 @@ export const homeContent = {
     sectionTitle: "FAQ",
     title: "Frequently Asked Questions",
     subtitle:
-      "Everything you need to know about Adani Solar — from products and manufacturing to installation and warranties.",
+      "Everything you need to know about Adani Solar , from products and manufacturing to installation and warranties.",
     items: [
       {
         question: "What types of solar modules does Adani Solar manufacture?",
         answer:
-          "Adani Solar manufactures two flagship product lines — TOPCon bifacial modules and MonoPERC modules. Both are produced at our integrated Mundra facility.",
+          "Adani Solar manufactures two flagship product lines , TOPCon bifacial modules and MonoPERC modules. Both are produced at our integrated Mundra facility.",
       },
       {
         question: "What makes TOPCon technology superior to PERC?",
@@ -405,12 +407,12 @@ export const homeContent = {
       {
         question: "Where is the Adani Solar manufacturing plant located?",
         answer:
-          "Our integrated solar PV manufacturing facility is located in Mundra, Gujarat, India — one of India's largest solar manufacturing locations, with 4 GW of cells and modules capacity and a roadmap toward a 10 GW integrated campus.",
+          "Our integrated solar PV manufacturing facility is located in Mundra, Gujarat, India , one of India's largest solar manufacturing locations, with 4 GW of cells and modules capacity and a roadmap toward a 10 GW integrated campus.",
       },
       {
         question: "Which countries does Adani Solar export to?",
         answer:
-          "Adani Solar exports to over 20 countries across four continents — including Germany, Spain, Netherlands, and Italy in Europe; USA, Brazil, and Canada in the Americas; Japan, Australia, and South Korea in Asia Pacific; and UAE, Saudi Arabia, and South Africa in the Middle East & Africa.",
+          "Adani Solar exports to over 20 countries across four continents , including Germany, Spain, Netherlands, and Italy in Europe; USA, Brazil, and Canada in the Americas; Japan, Australia, and South Korea in Asia Pacific; and UAE, Saudi Arabia, and South Africa in the Middle East & Africa.",
       },
       {
         question: "What certifications do Adani Solar modules carry?",
@@ -430,7 +432,7 @@ export const homeContent = {
       {
         question: "Can Adani Solar modules withstand India's extreme weather?",
         answer:
-          "Yes. Our modules undergo rigorous PID, salt-mist, ammonia, and hail testing per IEC standards. They are designed to perform in India's diverse climates — from the intense heat of Rajasthan and Gujarat to the high humidity and monsoon conditions of coastal regions, and the cold temperatures of Himalayan installations.",
+          "Yes. Our modules undergo rigorous PID, salt-mist, ammonia, and hail testing per IEC standards. They are designed to perform in India's diverse climates , from the intense heat of Rajasthan and Gujarat to the high humidity and monsoon conditions of coastal regions, and the cold temperatures of Himalayan installations.",
       },
       {
         question: "What is the typical payback period for a rooftop solar system?",
@@ -440,7 +442,7 @@ export const homeContent = {
       {
         question: "Does Adani Solar offer installation services?",
         answer:
-          "Adani Solar primarily manufactures and supplies solar modules. Installation is handled by our extensive network of certified EPC partners and channel partners across India. We can connect you with a trusted installer in your region — reach out through our Contact page or ask our expert chatbot for assistance.",
+          "Adani Solar primarily manufactures and supplies solar modules. Installation is handled by our extensive network of certified EPC partners and channel partners across India. We can connect you with a trusted installer in your region , reach out through our Contact page for assistance.",
       },
     ],
   },
@@ -454,22 +456,22 @@ export const homeContent = {
       {
         title: "Solar Manufacturing",
         description: "India's largest integrated solar PV manufacturer",
-        image: "/assets/home/solar-plant-aerial.webp",
+        image: m.home.plantAerial,
       },
       {
         title: "Wind Energy",
         description: "Comprehensive wind energy solutions across India",
-        image: "/assets/home/solar-plant-aerial.webp",
+        image: m.whySolar.grid,
       },
       {
         title: "Green Hydrogen",
         description: "Pioneering green hydrogen production in India",
-        image: "/assets/home/solar-plant-aerial.webp",
+        image: m.whySolar.carbon,
       },
       {
         title: "Battery Storage",
         description: "Advanced energy storage for grid stability",
-        image: "/assets/home/solar-plant-aerial.webp",
+        image: m.whySolar.savings,
       },
     ],
   },

@@ -215,7 +215,7 @@ export function HeroSection({
   const statsInView = useInView(statsRef, { once: true, margin: "-50px" });
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Subtle parallax — background translateY as user scrolls past hero
+  // Subtle parallax , background translateY as user scrolls past hero
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -295,13 +295,13 @@ export function HeroSection({
 
           {subtitle && (
             <p
-              className={`relative text-base sm:text-lg md:text-xl leading-relaxed mb-6 sm:mb-8 max-w-2xl ${isSplit ? "" : "mx-auto"} ${
-                isDark ? "text-white/90" : "text-muted-foreground"
+              className={`text-base sm:text-lg md:text-xl leading-relaxed mb-6 sm:mb-8 max-w-2xl ${isSplit ? "" : "mx-auto"} ${
+                isDark
+                  ? "text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+                  : "text-muted-foreground"
               }`}
             >
-              <span className="relative inline-block drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)] before:absolute before:inset-x-0 before:-inset-y-2 before:bg-gradient-to-r before:from-black/40 before:via-black/30 before:to-black/40 before:-z-10 before:backdrop-blur-[1px]">
-                <WordReveal text={subtitle} />
-              </span>
+              <WordReveal text={subtitle} />
             </p>
           )}
 
@@ -353,7 +353,7 @@ export function HeroSection({
               {cta && (
                 <RippleButton
                   onClick={() => ctaRoute && navigate(ctaRoute)}
-                  className="btn-premium text-white rounded-lg w-full sm:w-auto px-8 sm:px-10 h-13 sm:h-14 text-base sm:text-lg font-semibold shadow-lg shadow-solar-green/30 hover:shadow-xl hover:shadow-solar-green/40"
+                  className="btn-premium text-white hover:text-white rounded-lg w-full sm:w-auto px-8 sm:px-10 h-13 sm:h-14 text-base sm:text-lg font-semibold shadow-lg shadow-solar-green/30 hover:shadow-xl hover:shadow-solar-green/40"
                   rippleColor="rgba(255,255,255,0.5)"
                   aria-label={cta}
                 >

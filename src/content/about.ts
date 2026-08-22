@@ -1,20 +1,22 @@
+import { mediaAssets as m } from "@/lib/media";
+
 export const aboutContent = {
   hero: {
     title: "About Adani Solar",
     subtitle:
-      "India's first and largest vertically integrated solar PV manufacturer — driving the nation's energy independence through Make in India solar solutions.",
-    backgroundImage: "/assets/about/manufacturing-facility.webp",
+      "India's first and largest vertically integrated solar PV manufacturer , driving the nation's energy independence through Make in India solar solutions.",
+    backgroundImage: m.about.facility,
   },
 
   aboutSection: {
     sectionTitle: "About Adani Solar",
     title: "Powering India's Energy Independence",
     paragraphs: [
-      "Adani Solar is the solar PV manufacturing arm of Adani Group — India's first and largest vertically integrated solar PV manufacturer. We are committed to making India self-reliant in solar manufacturing, driving the nation's energy independence through world-class, Made in India solar solutions.",
+      "Adani Solar is the solar PV manufacturing arm of Adani Group , India's first and largest vertically integrated solar PV manufacturer. We are committed to making India self-reliant in solar manufacturing, driving the nation's energy independence through world-class, Made in India solar solutions.",
       "Established in 2016, Adani Solar has expanded its manufacturing footprint at Mundra, Gujarat to 4 GW of cells and modules and 2 GW of ingots and wafers, with a long-term vision for a 10 GW integrated campus.",
-      "As part of the Adani Group's commitment to sustainability, we play a pivotal role in India's ambitious goal of achieving 500 GW of renewable energy capacity by 2030. Our vertically integrated manufacturing — from polysilicon to modules — ensures complete quality control and supply chain independence.",
+      "As part of the Adani Group's commitment to sustainability, we play a pivotal role in India's ambitious goal of achieving 500 GW of renewable energy capacity by 2030. Our vertically integrated manufacturing , from polysilicon to modules , ensures complete quality control and supply chain independence.",
     ],
-    image: "/assets/about/manufacturing-facility.webp",
+    image: m.about.facility,
   },
 
   sustainability: {
@@ -25,11 +27,11 @@ export const aboutContent = {
     highlights: [
       "Zero liquid discharge manufacturing facility",
       "Rainwater harvesting across all operations",
-      "Solar-powered manufacturing — we practice what we preach",
+      "Solar-powered manufacturing , we practice what we preach",
       "Comprehensive waste management and recycling programs",
       "Carbon-neutral operations target by 2027",
     ],
-    image: "/assets/home/solar-plant-aerial.webp",
+    image: m.whySolar.carbon,
   },
 
   milestones: {
@@ -88,7 +90,7 @@ export const aboutContent = {
       {
         title: "Technology Leadership",
         description:
-          "Bringing the most advanced solar technologies to India — from TOPCon to heterojunction and beyond.",
+          "Bringing the most advanced solar technologies to India , from TOPCon to heterojunction and beyond.",
       },
       {
         title: "Global Scale",
@@ -107,10 +109,10 @@ export const aboutContent = {
     sectionTitle: "MD's Message",
     title: "A Message from Our Leadership",
     message:
-      "At Adani Solar, we believe solar manufacturing is central to India's energy independence. Building production capacity within India reduces import dependence and strengthens the domestic supply chain for cells, modules, and related components.\n\nOur Mundra facility represents a significant step in that direction — with integrated manufacturing, quality systems, and a long-term vision for a 10 GW campus. Every cell and module we produce supports India's renewable energy goals and the broader transition to cleaner power.\n\nWe will continue investing in advanced PV technology, operational excellence, and responsible manufacturing as India develops as a global solar manufacturing hub.",
+      "At Adani Solar, we believe solar manufacturing is central to India's energy independence. Building production capacity within India reduces import dependence and strengthens the domestic supply chain for cells, modules, and related components.\n\nOur Mundra facility represents a significant step in that direction , with integrated manufacturing, quality systems, and a long-term vision for a 10 GW campus. Every cell and module we produce supports India's renewable energy goals and the broader transition to cleaner power.\n\nWe will continue investing in advanced PV technology, operational excellence, and responsible manufacturing as India develops as a global solar manufacturing hub.",
     name: "Jawahar Vadivelu",
     designation: "Managing Director, Adani Solar",
-    image: "/assets/about/md-portrait.webp",
+    image: m.about.leadership,
   },
 
   stats: {

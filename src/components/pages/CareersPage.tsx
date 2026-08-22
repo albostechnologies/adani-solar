@@ -150,7 +150,7 @@ export function CareersPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             title="Open Positions"
-            subtitle={`${c.jobs.length} active roles across ${departmentOptions.length} departments — find your fit`}
+            subtitle={`${c.jobs.length} active roles across ${departmentOptions.length} departments , find your fit`}
             variant="light"
           />
 

@@ -35,7 +35,7 @@ export const compareContent = {
       color: "Black / Black",
       certifications: ["IEC 61215", "IEC 61730", "IEC 62941", "BIS", "CE"],
       featureHighlights: [
-        "Bifacial technology — up to 30% additional energy yield",
+        "Bifacial technology , up to 30% additional energy yield",
         "Lowest temperature coefficient for hot climate performance",
         "Highest efficiency in its class",
         "Better low-light & shading response",
@@ -387,7 +387,7 @@ export const compareContent = {
       useCase: "Best for High-Temperature Climates",
       winner: "topcon" as const,
       reason:
-        "With a -0.29%/°C temperature coefficient vs -0.35%/°C, TOPCon retains significantly more power in hot climates — up to 2% more energy yield at 45°C.",
+        "With a -0.29%/°C temperature coefficient vs -0.35%/°C, TOPCon retains significantly more power in hot climates , up to 2% more energy yield at 45°C.",
       icon: Thermometer as LucideIcon,
     },
     {

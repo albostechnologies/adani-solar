@@ -2,9 +2,9 @@ export const siteConfig = {
   name: "Adani Solar",
   legalName: "Adani Solar Energy Private Limited",
   description:
-    "Adani Solar is the solar PV manufacturing arm of Adani Group — India's first and largest vertically integrated solar PV manufacturer.",
+    "Adani Solar is the solar PV manufacturing arm of Adani Group , India's first and largest vertically integrated solar PV manufacturer.",
   url: "https://www.adanisolar.com",
-  ogImage: "/assets/home/hero-solar-facility.webp",
+  ogImage: "/assets/og-image.webp",
 
   company: {
     name: "Adani Solar",

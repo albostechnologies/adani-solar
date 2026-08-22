@@ -180,7 +180,7 @@ export const resourcesContent: ResourcesContent = {
       title: "Manufacturing Capabilities",
       category: "brochures",
       description:
-        "Detailed overview of our 10 GW integrated manufacturing facility at Mundra, Gujarat — from polysilicon to modules with world-class quality controls.",
+        "Detailed overview of our 10 GW integrated manufacturing facility at Mundra, Gujarat , from polysilicon to modules with world-class quality controls.",
       fileType: "PDF",
       fileSize: "6.2 MB",
       version: "v2.3",

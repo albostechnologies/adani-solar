@@ -84,7 +84,7 @@ export function SectionHeading({
           transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
           className={`text-base sm:text-lg leading-relaxed max-w-2xl ${
             alignment === "center" ? "mx-auto" : ""
-          } ${isDark ? "text-white/70" : "text-muted-foreground"}`}
+          } ${isDark ? "text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.35)]" : "text-muted-foreground"}`}
         >
           {subtitle}
         </motion.p>

@@ -62,7 +62,7 @@ export const contactContent = {
   visitUs: {
     title: "Visit Our Mundra Facility",
     subtitle:
-      "Our state-of-the-art 10 GW integrated solar PV manufacturing facility is located at Mundra, Gujarat — India's largest single-location solar plant.",
+      "Our state-of-the-art 10 GW integrated solar PV manufacturing facility is located at Mundra, Gujarat , India's largest single-location solar plant.",
     addressLines: [
       "Adani Solar Manufacturing Facility",
       "Mundra Special Economic Zone (SEZ)",

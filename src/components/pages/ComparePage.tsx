@@ -62,7 +62,7 @@ function CompareHero() {
           <h1 className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 sm:mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-solar-green-light">
             {hero.title}
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-white max-w-2xl mx-auto mb-8 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
             {hero.subtitle}
           </p>
           <Button
@@ -97,7 +97,7 @@ function ProductCards() {
             Side-by-Side Overview
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            At a glance — key specifications and efficiency metrics for our two
+            At a glance , key specifications and efficiency metrics for our two
             flagship module technologies.
           </p>
         </motion.div>
@@ -466,7 +466,7 @@ function VisualChart() {
             Visual Comparison
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Key metrics compared at a glance — bar lengths represent relative
+            Key metrics compared at a glance , bar lengths represent relative
             performance.
           </p>
         </motion.div>

@@ -1,3 +1,5 @@
+import { mediaAssets as m } from "@/lib/media";
+
 export interface ImpactMetric {
   id: string;
   label: string;
@@ -44,7 +46,7 @@ export const sustainabilityContent = {
   hero: {
     title: "Sustainability Impact Dashboard",
     subtitle:
-      "Tracking our environmental commitment with real data — every solar module we manufacture drives India closer to a carbon-neutral future.",
+      "Tracking our environmental commitment with real data , every solar module we manufacture drives India closer to a carbon-neutral future.",
     primaryCta: { label: "Download ESG Report", route: "contact" as const },
     secondaryCta: { label: "Contact Us", route: "contact" as const },
   },
@@ -249,7 +251,7 @@ export const sustainabilityContent = {
       title: "Zero Liquid Discharge Manufacturing",
       description:
         "Our Mundra facility operates a zero-liquid-discharge (ZLD) system, recovering and reusing 100% of process water. No industrial effluent is discharged into the environment.",
-      image: "/assets/home/solar-plant-aerial.webp",
+      image: m.home.plantAerial,
       stats: [
         { label: "Water Recovery", value: "100%", progress: 100 },
         { label: "Groundwater Savings", value: "2.8B L/yr", progress: 72 },
@@ -260,7 +262,7 @@ export const sustainabilityContent = {
       title: "Circular Economy & Waste Recycling",
       description:
         "Our 94% waste recycling rate covers silicon kerf, glass cullet, aluminum scrap, and packaging materials. We aim for 100% by 2027 through new recycling partnerships.",
-      image: "/assets/home/solar-products-modules.webp",
+      image: m.products.monoperc,
       stats: [
         { label: "Waste Recycled", value: "94%", progress: 94 },
         { label: "Zero Waste Target", value: "2027", progress: 94 },
@@ -271,7 +273,7 @@ export const sustainabilityContent = {
       title: "Biodiversity & Land Restoration",
       description:
         "We restore degraded land around solar parks with native vegetation, creating wildlife corridors. 12,000 hectares restored with 85+ native plant species planted.",
-      image: "/assets/home/about-solar-manufacturing.webp",
+      image: m.whySolar.carbon,
       stats: [
         { label: "Land Restored", value: "12K ha", progress: 60 },
         { label: "Native Species", value: "85+", progress: 70 },
@@ -282,7 +284,7 @@ export const sustainabilityContent = {
       title: "Community Solar & Rural Electrification",
       description:
         "Through our community solar programs, we've brought clean electricity to 500+ villages, 200+ schools, and 50+ health centers in rural India that previously had no grid access.",
-      image: "/assets/home/solar-products-modules.webp",
+      image: m.whySolar.savings,
       stats: [
         { label: "Villages Powered", value: "500+", progress: 65 },
         { label: "Schools Electrified", value: "200+", progress: 55 },

@@ -245,7 +245,7 @@ export function ProductTabs({
             <DialogContent className="sm:max-w-2xl">
               <DialogHeader>
                 <DialogTitle className="font-[family-name:var(--font-poppins)] text-xl">
-                  TOPCon vs MonoPERC — Side by Side
+                  TOPCon vs MonoPERC , Side by Side
                 </DialogTitle>
                 <DialogDescription>
                   Compare our two flagship module technologies across the metrics

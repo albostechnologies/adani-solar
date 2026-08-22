@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { SectionHeading } from "@/components/sections/SectionHeading";
+import Image from "next/image";
 
 type ProductType = "topcon" | "monoperc";
 
@@ -97,7 +98,7 @@ export function ProductDetailPage({ productType }: ProductDetailPageProps) {
               <h1 className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 bg-gradient-to-r from-white via-white to-solar-green-light text-transparent bg-clip-text">
                 {detail.name}
               </h1>
-              <p className="text-base sm:text-lg leading-relaxed text-white/75 max-w-xl mb-8">
+              <p className="text-base sm:text-lg leading-relaxed text-white max-w-xl mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
                 {detail.tagline}
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -125,13 +126,16 @@ export function ProductDetailPage({ productType }: ProductDetailPageProps) {
               transition={{ duration: 0.6, delay: 0.15 }}
               className="relative"
             >
-              <div className="rounded-2xl overflow-hidden aspect-[4/3] shadow-2xl border border-white/10 relative bg-gradient-to-br from-solar-green/20 to-solar-dark-secondary flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 mx-auto mb-3 rounded-2xl bg-solar-green/20 flex items-center justify-center">
-                    <SunIcon className="w-12 h-12 text-solar-green-light" />
-                  </div>
-                  <p className="text-sm text-white/60">{detail.name}</p>
-                </div>
+              <div className="rounded-2xl overflow-hidden aspect-[4/3] shadow-2xl border border-white/10 relative bg-gradient-to-br from-solar-green/20 to-solar-dark-secondary">
+                <Image
+                  src={detail.heroImage}
+                  alt={detail.name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 560px"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-solar-dark/50 via-transparent to-transparent" />
                 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between bg-solar-dark/60 backdrop-blur-sm rounded-lg px-3 py-2 border border-white/10">
                   <span className="text-xs text-white/70">Cell Type</span>
                   <span className="text-xs font-semibold text-solar-green-light">
@@ -169,7 +173,7 @@ export function ProductDetailPage({ productType }: ProductDetailPageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             title="Feature Highlights"
-            subtitle="Engineered for Indian conditions — built for 25+ years of reliable performance."
+            subtitle="Engineered for Indian conditions , built for 25+ years of reliable performance."
             variant="light"
           />
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
@@ -205,7 +209,7 @@ export function ProductDetailPage({ productType }: ProductDetailPageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <SectionHeading
             title="Performance Warranty Curve"
-            subtitle={`Power output guarantee over ${isTopCon ? "30" : "25"} years — bankable, predictable energy harvest.`}
+            subtitle={`Power output guarantee over ${isTopCon ? "30" : "25"} years , bankable, predictable energy harvest.`}
             variant="dark"
           />
           <div className="mt-10 rounded-2xl bg-white/5 border border-white/10 p-6 sm:p-8 backdrop-blur-sm">
@@ -298,7 +302,7 @@ export function ProductDetailPage({ productType }: ProductDetailPageProps) {
                       Warranty Summary
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                      Backed by Adani Solar's bankable warranty terms — independently verified by Kiwa PVEL and certified under BIS & IEC standards.
+                      Backed by Adani Solar's bankable warranty terms , independently verified by Kiwa PVEL and certified under BIS & IEC standards.
                     </p>
                     <ul className="space-y-2.5">
                       {detail.specGroups[3].specs.map((s) => (

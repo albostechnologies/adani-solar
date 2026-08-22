@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { mediaAssets as m } from "@/lib/media";
 
 // ─── Types ───────────────────────────────────────────────────────────
 export interface ProcessStep {
@@ -28,15 +29,24 @@ export const manufacturingContent = {
   hero: {
     title: "Manufacturing Excellence",
     subtitle:
-      "From sand to solar — a journey of precision engineering at the world's largest solar PV manufacturing facility",
+      "From sand to solar , a journey of precision engineering at the world's largest solar PV manufacturing facility",
     primaryCta: { label: "Explore Process", route: "manufacturing" as const },
     secondaryCta: { label: "Download Brochure", route: "contact" as const },
+    backgroundImage: m.about.facility,
+  },
+
+  facilityVideo: {
+    title: "Inside the Mundra Campus",
+    subtitle:
+      "See how integrated solar PV manufacturing comes together at our Gujarat facility.",
+    poster: m.home.hero,
+    youtubeUrl: "https://www.youtube.com/user/AdaniGroup",
   },
 
   overview: {
     title: "World-Class Facility at a Glance",
     subtitle:
-      "Our Mundra integrated manufacturing complex is India's largest solar PV facility — spanning the entire value chain from polysilicon to modules.",
+      "Our Mundra integrated manufacturing complex is India's largest solar PV facility , spanning the entire value chain from polysilicon to modules.",
     stats: [
       {
         value: 10,
@@ -81,7 +91,7 @@ export const manufacturingContent = {
     {
       title: "Polysilicon Production",
       description:
-        "Purifying metallurgical-grade silicon to 99.9999% (6N) solar-grade polysilicon through the Siemens deposition process — the critical first step in the PV value chain.",
+        "Purifying metallurgical-grade silicon to 99.9999% (6N) solar-grade polysilicon through the Siemens deposition process , the critical first step in the PV value chain.",
       icon: "Atom",
       details: [
         "6N purity (99.9999%) achieved via Siemens process",
@@ -94,7 +104,7 @@ export const manufacturingContent = {
     {
       title: "Ingot Casting",
       description:
-        "Directional solidification produces multicrystalline ingots, while the Czochralski (CZ) process grows single-crystal mono ingots — each method optimized for different cell technologies.",
+        "Directional solidification produces multicrystalline ingots, while the Czochralski (CZ) process grows single-crystal mono ingots , each method optimized for different cell technologies.",
       icon: "Boxes",
       details: [
         "CZ process for mono-crystalline ingots",
@@ -107,7 +117,7 @@ export const manufacturingContent = {
     {
       title: "Wafer Slicing",
       description:
-        "Multi-wire saw cutting slices ingots into ultra-thin wafers at 180μm — balancing mechanical strength with maximum light absorption efficiency.",
+        "Multi-wire saw cutting slices ingots into ultra-thin wafers at 180μm , balancing mechanical strength with maximum light absorption efficiency.",
       icon: "Scissors",
       details: [
         "180μm wafer thickness for optimal efficiency",
@@ -120,7 +130,7 @@ export const manufacturingContent = {
     {
       title: "Cell Processing",
       description:
-        "Wafers undergo texturing, phosphorus doping, anti-reflective coating and metallization — producing TOPCon and MonoPERC cells with industry-leading efficiency.",
+        "Wafers undergo texturing, phosphorus doping, anti-reflective coating and metallization , producing TOPCon and MonoPERC cells with industry-leading efficiency.",
       icon: "Cpu",
       details: [
         "TOPCon: tunnel oxide passivated contact",
@@ -133,7 +143,7 @@ export const manufacturingContent = {
     {
       title: "Cell Testing & Binning",
       description:
-        "Every cell undergoes IV curve measurement under simulated AM1.5G sunlight and is binned by efficiency class — ensuring consistent module performance.",
+        "Every cell undergoes IV curve measurement under simulated AM1.5G sunlight and is binned by efficiency class , ensuring consistent module performance.",
       icon: "Gauge",
       details: [
         "AM1.5G standard solar simulator testing",
@@ -146,7 +156,7 @@ export const manufacturingContent = {
     {
       title: "Module Assembly",
       description:
-        "Cells are interconnected in strings, sandwiched between EVA encapsulant and tempered glass/backsheet, then laminated under vacuum — creating durable, weather-resistant modules.",
+        "Cells are interconnected in strings, sandwiched between EVA encapsulant and tempered glass/backsheet, then laminated under vacuum , creating durable, weather-resistant modules.",
       icon: "LayoutGrid",
       details: [
         "String interconnection with 5BB / MBB design",
@@ -159,7 +169,7 @@ export const manufacturingContent = {
     {
       title: "Quality Testing",
       description:
-        "Comprehensive QA including electroluminescence (EL) imaging, flash testing, mechanical load testing and thermal cycling — ensuring zero-defect delivery.",
+        "Comprehensive QA including electroluminescence (EL) imaging, flash testing, mechanical load testing and thermal cycling , ensuring zero-defect delivery.",
       icon: "ShieldCheck",
       details: [
         "EL imaging: zero micro-crack tolerance",
@@ -189,14 +199,14 @@ export const manufacturingContent = {
       label: "Yield Rate",
       value: 99.2,
       unit: "%",
-      description: "Overall line yield — among the highest in the industry",
+      description: "Overall line yield , among the highest in the industry",
       percentage: 99.2,
     },
     {
       label: "Cell Efficiency",
       value: 22.8,
       unit: "%",
-      description: "TOPCon cell efficiency — best-in-class for Indian manufacturing",
+      description: "TOPCon cell efficiency , best-in-class for Indian manufacturing",
       percentage: 91.2,
     },
     {
@@ -217,7 +227,7 @@ export const manufacturingContent = {
       label: "Mechanical Load",
       value: 5400,
       unit: "Pa",
-      description: "Front-load pressure rating — exceeds IEC 61215 requirements",
+      description: "Front-load pressure rating , exceeds IEC 61215 requirements",
       percentage: 90,
     },
     {
@@ -233,7 +243,7 @@ export const manufacturingContent = {
     {
       title: "AI-Powered Defect Detection",
       description:
-        "Deep learning models analyze EL images in real-time, detecting micro-cracks, shunts and inactive areas with 99.7% accuracy — replacing manual inspection.",
+        "Deep learning models analyze EL images in real-time, detecting micro-cracks, shunts and inactive areas with 99.7% accuracy , replacing manual inspection.",
       icon: "Brain",
     },
     {
@@ -245,13 +255,13 @@ export const manufacturingContent = {
     {
       title: "Automated IV Testing",
       description:
-        "High-throughput IV testing stations measure 3,600 cells per hour with class AAA solar simulators — real-time statistical process control ensures consistency.",
+        "High-throughput IV testing stations measure 3,600 cells per hour with class AAA solar simulators , real-time statistical process control ensures consistency.",
       icon: "Activity",
     },
     {
       title: "Smart Factory IoT",
       description:
-        "2,500+ IoT sensors monitor equipment health, ambient conditions and process parameters — predictive maintenance reduces unplanned downtime by 85%.",
+        "2,500+ IoT sensors monitor equipment health, ambient conditions and process parameters , predictive maintenance reduces unplanned downtime by 85%.",
       icon: "Wifi",
     },
   ],
@@ -259,7 +269,7 @@ export const manufacturingContent = {
   ctaSection: {
     title: "Experience Our Manufacturing Firsthand",
     subtitle:
-      "Schedule a virtual or on-site tour of our Mundra facility — see precision engineering in action.",
+      "Schedule a virtual or on-site tour of our Mundra facility , see precision engineering in action.",
     primaryCta: { label: "Visit Our Facility", route: "contact" as const },
     secondaryCta: { label: "Download Manufacturing Brochure", route: "contact" as const },
   },

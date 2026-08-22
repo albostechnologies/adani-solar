@@ -103,7 +103,7 @@ export function WhySolarPage() {
               {c.indiaStats.title}
             </h2>
             <div className="w-16 h-1 rounded-full bg-solar-green mx-auto mb-4" />
-            <p className="text-white/70 max-w-xl mx-auto text-sm sm:text-base mb-10">
+            <p className="text-white max-w-xl mx-auto text-sm sm:text-base mb-10 drop-shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
               {c.indiaStats.subtitle}
             </p>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
@@ -128,9 +128,7 @@ export function WhySolarPage() {
       </ScrollReveal>
 
       {/* Solar ROI Calculator */}
-      <div data-tour-id="tour-roi-calculator">
       <SolarROICalculator />
-      </div>
 
       {/* Interactive Energy Production Chart */}
       <EnergyProductionChart />

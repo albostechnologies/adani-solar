@@ -14,7 +14,7 @@ export const PAGE_SEO: Record<RouteName, PageSeo> = {
   home: {
     title: "Solar PV Manufacturing | Adani Solar",
     description:
-      "Adani Solar manufactures high-efficiency TOPCon and MonoPERC solar cells and modules at Mundra, Gujarat — India's vertically integrated solar PV manufacturer.",
+      "Adani Solar manufactures high-efficiency TOPCon and MonoPERC solar cells and modules at Mundra, Gujarat , India's vertically integrated solar PV manufacturer.",
   },
   about: {
     title: "About Adani Solar | Integrated PV Manufacturer",
@@ -24,12 +24,12 @@ export const PAGE_SEO: Record<RouteName, PageSeo> = {
   "about-what-we-do": {
     title: "What We Do | Adani Solar Manufacturing",
     description:
-      "Explore Adani Solar's vertically integrated manufacturing — from polysilicon to cells and modules at our Mundra facility in Gujarat.",
+      "Explore Adani Solar's vertically integrated manufacturing , from polysilicon to cells and modules at our Mundra facility in Gujarat.",
   },
   "why-solar": {
     title: "Why Solar Energy | Adani Solar",
     description:
-      "Understand the economic and environmental case for solar energy in India — clean power, energy security, and long-term savings.",
+      "Understand the economic and environmental case for solar energy in India , clean power, energy security, and long-term savings.",
   },
   contact: {
     title: "Contact Adani Solar | Sales & Support",
@@ -47,12 +47,12 @@ export const PAGE_SEO: Record<RouteName, PageSeo> = {
   "product-topcon": {
     title: "TOPCon Solar Modules | Adani Solar",
     description:
-      "High-efficiency TOPCon bifacial solar modules from Adani Solar — specifications, performance data, and warranty details.",
+      "High-efficiency TOPCon bifacial solar modules from Adani Solar , specifications, performance data, and warranty details.",
   },
   "product-monoperc": {
     title: "MonoPERC Solar Modules | Adani Solar",
     description:
-      "Proven MonoPERC solar modules from Adani Solar — power range, reliability, and certification details for rooftop and utility projects.",
+      "Proven MonoPERC solar modules from Adani Solar , power range, reliability, and certification details for rooftop and utility projects.",
   },
   careers: {
     title: "Careers | Adani Solar",
@@ -62,7 +62,7 @@ export const PAGE_SEO: Record<RouteName, PageSeo> = {
   glossary: {
     title: "Solar Glossary | Adani Solar",
     description:
-      "Definitions of common solar PV terms — cells, modules, inverters, efficiency, warranties, and installation concepts.",
+      "Definitions of common solar PV terms , cells, modules, inverters, efficiency, warranties, and installation concepts.",
   },
   resources: {
     title: "Resource Center | Adani Solar",
@@ -72,17 +72,17 @@ export const PAGE_SEO: Record<RouteName, PageSeo> = {
   sustainability: {
     title: "Sustainability | Adani Solar",
     description:
-      "Adani Solar's environmental commitments — responsible manufacturing, resource efficiency, and community initiatives.",
+      "Adani Solar's environmental commitments , responsible manufacturing, resource efficiency, and community initiatives.",
   },
   compare: {
     title: "Compare Solar Modules | Adani Solar",
     description:
-      "Side-by-side comparison of Adani Solar TOPCon and MonoPERC modules — efficiency, warranty, and application fit.",
+      "Side-by-side comparison of Adani Solar TOPCon and MonoPERC modules , efficiency, warranty, and application fit.",
   },
   manufacturing: {
     title: "Manufacturing Process | Adani Solar",
     description:
-      "From silicon to finished modules — an overview of Adani Solar's integrated PV manufacturing process at Mundra, Gujarat.",
+      "From silicon to finished modules , an overview of Adani Solar's integrated PV manufacturing process at Mundra, Gujarat.",
   },
 };
 
