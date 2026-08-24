@@ -21,25 +21,15 @@ import { partnershipContent } from "@/content/partnership";
 
 const phonePattern = /^[+]?[\d\s()-]{7,15}$/;
 
-const partnershipSchema = z.object({
-  formType: z.literal("partnership-application"),
+const enquirySchema = z.object({
+  formType: z.literal("partnership-enquiry"),
   name: z.string().min(2, "Please enter your full name"),
-  contactNo: z
+  phone: z
     .string()
-    .min(10, "Please enter a valid contact number")
-    .regex(phonePattern, "Invalid contact number"),
-  alternateNo: z
-    .string()
-    .optional()
-    .refine((val) => !val || phonePattern.test(val), "Invalid alternate number"),
+    .min(10, "Please enter a valid phone number")
+    .regex(phonePattern, "Invalid phone number"),
   email: z.string().email("Please enter a valid email address"),
-  pinCode: z
-    .string()
-    .min(6, "Pin code must be 6 digits")
-    .max(6, "Pin code must be 6 digits")
-    .regex(/^\d{6}$/, "Enter a valid 6-digit pin code"),
   state: z.string().min(2, "Please enter your state"),
-  district: z.string().min(2, "Please enter your district"),
   city: z.string().min(2, "Please enter your city"),
   businessType: z.string().min(1, "Please select business type"),
   availableSpace: z.string().min(1, "Please select available space"),
@@ -49,31 +39,27 @@ const partnershipSchema = z.object({
   message: z.string().optional(),
 });
 
-type PartnershipFormData = z.infer<typeof partnershipSchema>;
+type EnquiryFormData = z.infer<typeof enquirySchema>;
 
 const inputClass =
   "h-11 rounded-lg border-border bg-white focus:border-solar-green focus:ring-solar-green/20";
 
-export function PartnershipApplicationForm() {
+export function PartnershipEnquiryForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-
   const {
     register,
     handleSubmit,
     setValue,
     reset,
     formState: { errors },
-  } = useForm<PartnershipFormData>({
-    resolver: zodResolver(partnershipSchema),
+  } = useForm<EnquiryFormData>({
+    resolver: zodResolver(enquirySchema),
     defaultValues: {
-      formType: "partnership-application",
+      formType: "partnership-enquiry",
       name: "",
-      contactNo: "",
-      alternateNo: "",
+      phone: "",
       email: "",
-      pinCode: "",
       state: "",
-      district: "",
       city: "",
       businessType: "",
       availableSpace: "",
@@ -84,7 +70,7 @@ export function PartnershipApplicationForm() {
     },
   });
 
-  const onSubmit = async (data: PartnershipFormData) => {
+  const onSubmit = async (data: EnquiryFormData) => {
     setStatus("submitting");
     try {
       const response = await fetch("/api/contact", {
@@ -94,7 +80,7 @@ export function PartnershipApplicationForm() {
       });
       if (!response.ok) throw new Error("Failed");
       setStatus("success");
-      reset({ formType: "partnership-application" });
+      reset({ formType: "partnership-enquiry" });
       setTimeout(() => setStatus("idle"), 6000);
     } catch {
       setStatus("error");
@@ -106,9 +92,9 @@ export function PartnershipApplicationForm() {
     return (
       <div className="text-center py-12 px-6 rounded-2xl border border-solar-green/20 bg-solar-green/5">
         <CheckCircle className="w-12 h-12 text-solar-green mx-auto mb-4" />
-        <p className="text-lg font-semibold text-foreground mb-2">Application submitted</p>
+        <p className="text-lg font-semibold text-foreground mb-2">Enquiry submitted</p>
         <p className="text-sm text-muted-foreground">
-          Thank you. Our partnership team will review your application and contact you shortly.
+          Thank you. Our partnership team will contact you shortly.
         </p>
       </div>
     );
@@ -116,40 +102,23 @@ export function PartnershipApplicationForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-      <input type="hidden" {...register("formType")} value="partnership-application" />
+      <input type="hidden" {...register("formType")} value="partnership-enquiry" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label="Full Name" required error={errors.name?.message} className="sm:col-span-2">
           <Input {...register("name")} className={inputClass} placeholder="Full name" autoComplete="name" />
         </Field>
 
-        <Field label="Phone" required error={errors.contactNo?.message}>
-          <Input {...register("contactNo")} type="tel" className={inputClass} placeholder="+91 98765 43210" />
+        <Field label="Phone" required error={errors.phone?.message}>
+          <Input {...register("phone")} type="tel" className={inputClass} placeholder="+91 98765 43210" />
         </Field>
 
-        <Field label="Alternate No." error={errors.alternateNo?.message}>
-          <Input {...register("alternateNo")} type="tel" className={inputClass} placeholder="Optional" />
-        </Field>
-
-        <Field label="Email Address" required error={errors.email?.message} className="sm:col-span-2">
+        <Field label="Email" required error={errors.email?.message}>
           <Input {...register("email")} type="email" className={inputClass} placeholder="you@example.com" />
-        </Field>
-
-        <Field label="Pin Code" required error={errors.pinCode?.message}>
-          <Input
-            {...register("pinCode")}
-            className={inputClass}
-            placeholder="6-digit pin code"
-            inputMode="numeric"
-          />
         </Field>
 
         <Field label="State" required error={errors.state?.message}>
           <Input {...register("state")} className={inputClass} placeholder="State" />
-        </Field>
-
-        <Field label="District" required error={errors.district?.message}>
-          <Input {...register("district")} className={inputClass} placeholder="District" />
         </Field>
 
         <Field label="City" required error={errors.city?.message}>
@@ -216,21 +185,14 @@ export function PartnershipApplicationForm() {
           </Select>
         </Field>
 
-        <Field
-          label="GST Available?"
-          required
-          error={errors.gstAvailable?.message}
-          className="sm:col-span-2"
-        >
+        <Field label="GST Available?" required error={errors.gstAvailable?.message} className="sm:col-span-2">
           <RadioGroup
-            onValueChange={(v) =>
-              setValue("gstAvailable", v as "Yes" | "No", { shouldValidate: true })
-            }
+            onValueChange={(v) => setValue("gstAvailable", v as "Yes" | "No", { shouldValidate: true })}
             className="flex flex-wrap gap-4 pt-1"
           >
             {(["Yes", "No"] as const).map((option) => (
               <label key={option} className="inline-flex items-center gap-2 min-h-11 cursor-pointer">
-                <RadioGroupItem value={option} id={`contact-gst-${option}`} />
+                <RadioGroupItem value={option} id={`gst-${option}`} />
                 <span className="text-sm text-foreground">{option}</span>
               </label>
             ))}
@@ -264,7 +226,7 @@ export function PartnershipApplicationForm() {
             Submitting...
           </>
         ) : (
-          "Submit Partnership Application ↗"
+          "Submit Partnership Enquiry ↗"
         )}
       </Button>
     </form>

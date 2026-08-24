@@ -9,6 +9,7 @@ import { AncillaryListSection } from "@/components/home/AncillaryListSection";
 import { ProductShowcaseSection } from "@/components/home/ProductShowcaseSection";
 import { WhyAdaniSection } from "@/components/home/WhyAdaniSection";
 import { GlobalPresenceSection } from "@/components/home/GlobalPresenceSection";
+import { PartnershipCommercialBlock } from "@/components/partnership/PartnershipCommercialBlock";
 import { SustainabilityEditorialSection } from "@/components/home/SustainabilityEditorialSection";
 import { TechnicalResourcesSection } from "@/components/home/TechnicalResourcesSection";
 import { HomeFAQSection } from "@/components/home/HomeFAQSection";
@@ -26,6 +27,7 @@ export function HomePage() {
       <ProductShowcaseSection />
       <WhyAdaniSection />
       <GlobalPresenceSection />
+      <PartnershipCommercialBlock />
       <SustainabilityEditorialSection />
       <TechnicalResourcesSection />
       <HomeFAQSection />

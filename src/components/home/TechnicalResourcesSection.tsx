@@ -11,7 +11,7 @@ export function TechnicalResourcesSection() {
   return (
     <section className="editorial-section bg-white">
       <div className="editorial-section-inner">
-        <SectionEyebrow number="09" label="Technical Resources" className="mb-6" />
+        <SectionEyebrow number="22" label="Technical Resources" className="mb-6" />
         <EditorialHeading size="statement" className="max-w-3xl mb-10 sm:mb-12">
           Documentation for engineers and partners.
         </EditorialHeading>

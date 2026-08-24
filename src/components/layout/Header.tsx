@@ -35,8 +35,8 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [currentRoute]);
 
-  const handleNavClick = (route: RouteName) => {
-    navigate(route);
+  const handleNavClick = (route: RouteName, section?: string) => {
+    navigate(route, section);
     setMobileOpen(false);
   };
 
@@ -68,14 +68,15 @@ export function Header() {
 
           <nav className="hidden lg:flex items-center gap-2" aria-label="Main navigation">
             {headerNavItems.map((item) => {
-              const isActive = currentRoute === item.route;
+              const isActive =
+                !item.section && currentRoute === item.route;
               const variant = item.variant ?? "link";
 
               if (variant === "button") {
                 return (
                   <Button
                     key={item.label}
-                    onClick={() => handleNavClick(item.route)}
+                    onClick={() => handleNavClick(item.route, item.section)}
                     className={cn(
                       "rounded-full px-5 h-10 text-sm font-semibold transition-all duration-300",
                       useSolidHeader
@@ -93,7 +94,7 @@ export function Header() {
                   <Button
                     key={item.label}
                     variant={useSolidHeader ? "outline" : "outlineOnDark"}
-                    onClick={() => handleNavClick(item.route)}
+                    onClick={() => handleNavClick(item.route, item.section)}
                     className={cn(
                       "rounded-full px-5 h-10 text-sm font-semibold",
                       useSolidHeader && "border-border hover:bg-muted"
@@ -107,7 +108,7 @@ export function Header() {
               return (
                 <button
                   key={item.label}
-                  onClick={() => handleNavClick(item.route)}
+                  onClick={() => handleNavClick(item.route, item.section)}
                   className={cn(
                     "px-3 py-2 rounded-full text-sm font-medium transition-colors duration-200",
                     useSolidHeader

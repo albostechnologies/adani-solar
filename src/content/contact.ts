@@ -41,7 +41,7 @@ export const contactContent = {
       {
         icon: "MapPin",
         label: "Address",
-        value: "Adani Corporate House, Shantigram, S.G. Highway, Ahmedabad, Gujarat 382421, India",
+        value: "Adani Corporate House, Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad – 382421, Gujarat, India",
       },
       {
         icon: "Mail",

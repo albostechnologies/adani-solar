@@ -31,8 +31,8 @@ export const siteConfig = {
     tollFree: "1800-XXX-XXXX",
     address: {
       line1: "Adani Corporate House",
-      line2: "Shantigram, S.G. Highway",
-      line3: "Ahmedabad, Gujarat 382421",
+      line2: "Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar",
+      line3: "Ahmedabad – 382421, Gujarat",
       country: "India",
     },
   },

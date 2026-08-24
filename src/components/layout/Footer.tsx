@@ -10,8 +10,8 @@ import { ArrowLink } from "@/components/editorial/ArrowLink";
 export function Footer() {
   const { navigate } = useRouter();
 
-  const handleNavClick = (route: RouteName) => {
-    navigate(route);
+  const handleNavClick = (route: RouteName, section?: string) => {
+    navigate(route, section);
   };
 
   return (
@@ -52,7 +52,7 @@ export function Footer() {
                 {group.items.map((item) => (
                   <li key={item.label}>
                     <button
-                      onClick={() => item.route && handleNavClick(item.route)}
+                      onClick={() => item.route && handleNavClick(item.route, item.section)}
                       className="text-sm text-white/75 hover:text-white transition-colors text-left"
                     >
                       {item.label}

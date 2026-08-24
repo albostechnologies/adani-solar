@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 interface MobileNavProps {
   currentRoute: RouteName;
-  onNavigate: (route: RouteName) => void;
+  onNavigate: (route: RouteName, section?: string) => void;
 }
 
 export function MobileNav({ currentRoute, onNavigate }: MobileNavProps) {
@@ -17,18 +17,21 @@ export function MobileNav({ currentRoute, onNavigate }: MobileNavProps) {
   return (
     <nav className="flex flex-col h-full">
       <div className="flex-1 py-2">
-        {linkItems.map((item) => (
-          <button
-            key={item.label}
-            onClick={() => onNavigate(item.route)}
-            className={cn(
-              "w-full text-left px-4 py-4 text-base font-medium transition-colors min-h-12 border-b border-border/50",
-              currentRoute === item.route ? "text-solar-green" : "text-foreground"
-            )}
-          >
-            {item.label}
-          </button>
-        ))}
+        {linkItems.map((item) => {
+          const isActive = !item.section && currentRoute === item.route;
+          return (
+            <button
+              key={item.label}
+              onClick={() => onNavigate(item.route, item.section)}
+              className={cn(
+                "w-full text-left px-4 py-4 text-base font-medium transition-colors min-h-12 border-b border-border/50",
+                isActive ? "text-solar-green" : "text-foreground"
+              )}
+            >
+              {item.label}
+            </button>
+          );
+        })}
       </div>
 
       {buttonItems.length > 0 && (
@@ -37,7 +40,7 @@ export function MobileNav({ currentRoute, onNavigate }: MobileNavProps) {
             <Button
               key={item.label}
               variant={item.variant === "button-secondary" ? "outline" : "default"}
-              onClick={() => onNavigate(item.route)}
+              onClick={() => onNavigate(item.route, item.section)}
               className={cn(
                 "w-full rounded-full h-11 text-sm font-semibold",
                 item.variant === "button" && "bg-solar-dark hover:bg-solar-dark-secondary text-white"

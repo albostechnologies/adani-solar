@@ -7,8 +7,21 @@ function scrollToHashTarget(): boolean {
   const hash = window.location.hash.replace(/^#/, "");
   if (!hash) return false;
 
+  const tryScroll = () => {
+    const el = document.getElementById(hash);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      return true;
+    }
+    return false;
+  };
+
   requestAnimationFrame(() => {
-    document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+    if (!tryScroll()) {
+      // Content may mount after client navigation
+      setTimeout(tryScroll, 120);
+      setTimeout(tryScroll, 400);
+    }
   });
   return true;
 }
