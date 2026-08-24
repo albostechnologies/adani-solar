@@ -16,19 +16,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
+import { AlertCircle, CheckCircle, Loader2, Copy } from "lucide-react";
 import { partnershipContent } from "@/content/partnership";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 const phonePattern = /^[+]?[\d\s()-]{7,15}$/;
 
+const INTEREST_MAP: Record<string, string> = {
+  Dealership: "DEALERSHIP",
+  Distributorship: "DISTRIBUTORSHIP",
+  "Solar Project": "SOLAR_PROJECT",
+  "Product Purchase": "PRODUCT_PURCHASE",
+  Other: "OTHER",
+};
+
 const enquirySchema = z.object({
-  formType: z.literal("partnership-enquiry"),
   name: z.string().min(2, "Please enter your full name"),
   phone: z
     .string()
     .min(10, "Please enter a valid phone number")
     .regex(phonePattern, "Invalid phone number"),
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Please enter a valid email address").optional().or(z.literal("")),
   state: z.string().min(2, "Please enter your state"),
   city: z.string().min(2, "Please enter your city"),
   businessType: z.string().min(1, "Please select business type"),
@@ -46,6 +55,9 @@ const inputClass =
 
 export function PartnershipEnquiryForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [applicationNumber, setApplicationNumber] = useState<string>("");
+  const [copied, setCopied] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -55,7 +67,6 @@ export function PartnershipEnquiryForm() {
   } = useForm<EnquiryFormData>({
     resolver: zodResolver(enquirySchema),
     defaultValues: {
-      formType: "partnership-enquiry",
       name: "",
       phone: "",
       email: "",
@@ -73,37 +84,81 @@ export function PartnershipEnquiryForm() {
   const onSubmit = async (data: EnquiryFormData) => {
     setStatus("submitting");
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(`${API_URL}/api/v1/partners`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          fullName: data.name,
+          phone: data.phone,
+          email: data.email || undefined,
+          state: data.state,
+          city: data.city,
+          businessType: data.businessType,
+          investmentRange: data.investmentRange,
+          interestedIn: INTEREST_MAP[data.interestedIn] ?? "OTHER",
+          gstAvailable: data.gstAvailable === "Yes" ? true : false,
+          message: data.message || undefined,
+        }),
       });
-      if (!response.ok) throw new Error("Failed");
+      const result = await response.json();
+      if (!response.ok) throw new Error(result?.error?.message ?? "Failed");
+      setApplicationNumber(result.data.applicationNumber);
       setStatus("success");
-      reset({ formType: "partnership-enquiry" });
-      setTimeout(() => setStatus("idle"), 6000);
+      reset();
     } catch {
       setStatus("error");
       setTimeout(() => setStatus("idle"), 5000);
     }
   };
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(applicationNumber);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   if (status === "success") {
     return (
-      <div className="text-center py-12 px-6 rounded-2xl border border-solar-green/20 bg-solar-green/5">
-        <CheckCircle className="w-12 h-12 text-solar-green mx-auto mb-4" />
-        <p className="text-lg font-semibold text-foreground mb-2">Enquiry submitted</p>
-        <p className="text-sm text-muted-foreground">
-          Thank you. Our partnership team will contact you shortly.
+      <div className="rounded-2xl border border-solar-green/20 bg-solar-green/5 p-8">
+        <CheckCircle className="w-10 h-10 text-solar-green mb-4" />
+        <p className="text-lg font-semibold text-foreground mb-1">Application submitted successfully.</p>
+        <p className="text-sm text-muted-foreground mb-6">
+          Please save your application number. You can track your request using this number and your registered phone number.
         </p>
+        <div className="bg-white border border-solar-green/30 rounded-xl p-5 mb-5 inline-block">
+          <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Application Number</p>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl font-mono font-semibold text-foreground tracking-wide">{applicationNumber}</span>
+            <button
+              onClick={handleCopy}
+              className="p-1.5 rounded-lg hover:bg-solar-green/10 text-muted-foreground hover:text-solar-green transition-colors"
+              title="Copy application number"
+            >
+              <Copy className="w-4 h-4" />
+            </button>
+          </div>
+          {copied && <p className="text-xs text-solar-green mt-1">Copied!</p>}
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <a
+            href="/check-status"
+            className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-solar-green hover:bg-solar-green-dark text-white text-sm font-semibold transition-colors"
+          >
+            Check Status
+          </a>
+          <button
+            onClick={() => { setStatus("idle"); setApplicationNumber(""); }}
+            className="inline-flex items-center gap-2 h-10 px-5 rounded-full border border-border text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Submit Another
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-      <input type="hidden" {...register("formType")} value="partnership-enquiry" />
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label="Full Name" required error={errors.name?.message} className="sm:col-span-2">
           <Input {...register("name")} className={inputClass} placeholder="Full name" autoComplete="name" />
