@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { partnershipContent } from "@/content/partnership";
-import { PartnershipApplicationForm } from "@/components/sections/PartnershipApplicationForm";
+import { PartnershipEnquiryForm } from "@/components/partnership/PartnershipEnquiryForm";
 
 export function ContactPage() {
   const office = partnershipContent.enquire.office;
@@ -35,7 +35,7 @@ export function ContactPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 lg:gap-10 items-start">
             <div className="rounded-2xl border border-border/60 bg-white p-6 sm:p-8 shadow-sm">
-              <PartnershipApplicationForm />
+              <PartnershipEnquiryForm />
             </div>
 
             <aside className="rounded-2xl border border-border/60 bg-white p-6 sm:p-7 shadow-sm lg:sticky lg:top-28">
