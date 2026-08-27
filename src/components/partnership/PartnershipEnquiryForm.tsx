@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -15,37 +14,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { AlertCircle, CheckCircle, Loader2, Copy } from "lucide-react";
 import { partnershipContent } from "@/content/partnership";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
-const phonePattern = /^[+]?[\d\s()-]{7,15}$/;
+const BUSINESS_TYPE_MAP = {
+  Partnership: "PARTNERSHIP",
+  Proprietorship: "PROPRIETORSHIP",
+} as const;
 
-const INTEREST_MAP: Record<string, string> = {
+const INTEREST_MAP = {
   Dealership: "DEALERSHIP",
   Distributorship: "DISTRIBUTORSHIP",
-  "Solar Project": "SOLAR_PROJECT",
-  "Product Purchase": "PRODUCT_PURCHASE",
-  Other: "OTHER",
-};
+} as const;
 
 const enquirySchema = z.object({
-  name: z.string().min(2, "Please enter your full name"),
-  phone: z
+  name: z.string().trim().min(2, "Please enter your name."),
+  fatherOrHusbandName: z.string().trim().optional().or(z.literal("")),
+  email: z
     .string()
-    .min(10, "Please enter a valid phone number")
-    .regex(phonePattern, "Invalid phone number"),
-  email: z.string().email("Please enter a valid email address").optional().or(z.literal("")),
-  state: z.string().min(2, "Please enter your state"),
-  city: z.string().min(2, "Please enter your city"),
-  businessType: z.string().min(1, "Please select business type"),
-  availableSpace: z.string().min(1, "Please select available space"),
-  investmentRange: z.string().min(1, "Please select investment range"),
-  interestedIn: z.string().min(1, "Please select an interest"),
-  gstAvailable: z.enum(["Yes", "No"], { message: "Please select GST availability" }),
-  message: z.string().optional(),
+    .trim()
+    .min(1, "Please enter your email.")
+    .email("Enter a valid email address."),
+  state: z.string().trim().min(2, "Select your state."),
+  district: z.string().trim().min(2, "Please enter your district."),
+  pinCode: z
+    .string()
+    .trim()
+    .regex(/^\d{6}$/, "Enter a valid 6-digit PIN code."),
+  businessType: z.enum(["Partnership", "Proprietorship"], {
+    message: "Select your business type.",
+  }),
+  interestedIn: z.enum(["Dealership", "Distributorship"], {
+    message: "Select what you are interested in.",
+  }),
 });
 
 type EnquiryFormData = z.infer<typeof enquirySchema>;
@@ -55,8 +58,9 @@ const inputClass =
 
 export function PartnershipEnquiryForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [applicationNumber, setApplicationNumber] = useState<string>("");
+  const [applicationNumber, setApplicationNumber] = useState("");
   const [copied, setCopied] = useState(false);
+  const formId = useId();
 
   const {
     register,
@@ -68,18 +72,18 @@ export function PartnershipEnquiryForm() {
     resolver: zodResolver(enquirySchema),
     defaultValues: {
       name: "",
-      phone: "",
+      fatherOrHusbandName: "",
       email: "",
       state: "",
-      city: "",
-      businessType: "",
-      availableSpace: "",
-      investmentRange: "",
-      interestedIn: "",
-      gstAvailable: undefined,
-      message: "",
+      district: "",
+      pinCode: "",
+      businessType: undefined,
+      interestedIn: undefined,
     },
   });
+
+  const [businessType, setBusinessType] = useState<EnquiryFormData["businessType"] | undefined>();
+  const [interestedIn, setInterestedIn] = useState<EnquiryFormData["interestedIn"] | undefined>();
 
   const onSubmit = async (data: EnquiryFormData) => {
     setStatus("submitting");
@@ -88,22 +92,22 @@ export function PartnershipEnquiryForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          fullName: data.name,
-          phone: data.phone,
-          email: data.email || undefined,
-          state: data.state,
-          city: data.city,
-          businessType: data.businessType,
-          investmentRange: data.investmentRange,
-          interestedIn: INTEREST_MAP[data.interestedIn] ?? "OTHER",
-          gstAvailable: data.gstAvailable === "Yes" ? true : false,
-          message: data.message || undefined,
+          fullName: data.name.trim(),
+          fatherOrHusbandName: data.fatherOrHusbandName?.trim() || undefined,
+          email: data.email.trim().toLowerCase(),
+          state: data.state.trim(),
+          district: data.district.trim(),
+          pinCode: data.pinCode.trim(),
+          businessType: BUSINESS_TYPE_MAP[data.businessType],
+          interestedIn: INTEREST_MAP[data.interestedIn],
         }),
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result?.error?.message ?? "Failed");
       setApplicationNumber(result.data.applicationNumber);
       setStatus("success");
+      setBusinessType(undefined);
+      setInterestedIn(undefined);
       reset();
     } catch {
       setStatus("error");
@@ -123,15 +127,19 @@ export function PartnershipEnquiryForm() {
         <CheckCircle className="w-10 h-10 text-solar-green mb-4" />
         <p className="text-lg font-semibold text-foreground mb-1">Application submitted successfully.</p>
         <p className="text-sm text-muted-foreground mb-6">
-          Please save your application number. You can track your request using this number and your registered phone number.
+          Please save this number. You can use your application number and registered email to check
+          your application status.
         </p>
         <div className="bg-white border border-solar-green/30 rounded-xl p-5 mb-5 inline-block">
           <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Application Number</p>
           <div className="flex items-center gap-3">
-            <span className="text-2xl font-mono font-semibold text-foreground tracking-wide">{applicationNumber}</span>
+            <span className="text-2xl font-mono font-semibold text-foreground tracking-wide">
+              {applicationNumber}
+            </span>
             <button
+              type="button"
               onClick={handleCopy}
-              className="p-1.5 rounded-lg hover:bg-solar-green/10 text-muted-foreground hover:text-solar-green transition-colors"
+              className="p-1.5 rounded-lg hover:bg-solar-green/10 text-muted-foreground hover:text-solar-green transition-colors min-h-11 min-w-11 inline-flex items-center justify-center"
               title="Copy application number"
             >
               <Copy className="w-4 h-4" />
@@ -142,13 +150,17 @@ export function PartnershipEnquiryForm() {
         <div className="flex flex-wrap gap-3">
           <a
             href="/check-status"
-            className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-solar-green hover:bg-solar-green-dark text-white text-sm font-semibold transition-colors"
+            className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-solar-green hover:bg-solar-green-dark text-white text-sm font-semibold transition-colors"
           >
             Check Status
           </a>
           <button
-            onClick={() => { setStatus("idle"); setApplicationNumber(""); }}
-            className="inline-flex items-center gap-2 h-10 px-5 rounded-full border border-border text-sm text-muted-foreground hover:text-foreground transition-colors"
+            type="button"
+            onClick={() => {
+              setStatus("idle");
+              setApplicationNumber("");
+            }}
+            className="inline-flex items-center gap-2 h-11 px-5 rounded-full border border-border text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             Submit Another
           </button>
@@ -160,29 +172,92 @@ export function PartnershipEnquiryForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <Field label="Full Name" required error={errors.name?.message} className="sm:col-span-2">
-          <Input {...register("name")} className={inputClass} placeholder="Full name" autoComplete="name" />
+        <Field id={`${formId}-name`} label="Name" required error={errors.name?.message}>
+          <Input
+            id={`${formId}-name`}
+            {...register("name")}
+            className={inputClass}
+            autoComplete="name"
+            aria-invalid={Boolean(errors.name)}
+          />
         </Field>
 
-        <Field label="Phone" required error={errors.phone?.message}>
-          <Input {...register("phone")} type="tel" className={inputClass} placeholder="+91 98765 43210" />
+        <Field
+          id={`${formId}-father`}
+          label="Father / Husband Name"
+          optional
+          error={errors.fatherOrHusbandName?.message}
+        >
+          <Input
+            id={`${formId}-father`}
+            {...register("fatherOrHusbandName")}
+            className={inputClass}
+            autoComplete="additional-name"
+          />
         </Field>
 
-        <Field label="Email" required error={errors.email?.message}>
-          <Input {...register("email")} type="email" className={inputClass} placeholder="you@example.com" />
+        <Field id={`${formId}-email`} label="Email" required error={errors.email?.message}>
+          <Input
+            id={`${formId}-email`}
+            {...register("email")}
+            type="email"
+            className={inputClass}
+            autoComplete="email"
+            aria-invalid={Boolean(errors.email)}
+          />
         </Field>
 
-        <Field label="State" required error={errors.state?.message}>
-          <Input {...register("state")} className={inputClass} placeholder="State" />
+        <Field id={`${formId}-state`} label="State" required error={errors.state?.message}>
+          <Input
+            id={`${formId}-state`}
+            {...register("state")}
+            className={inputClass}
+            autoComplete="address-level1"
+            aria-invalid={Boolean(errors.state)}
+          />
         </Field>
 
-        <Field label="City" required error={errors.city?.message}>
-          <Input {...register("city")} className={inputClass} placeholder="City" />
+        <Field id={`${formId}-district`} label="District" required error={errors.district?.message}>
+          <Input
+            id={`${formId}-district`}
+            {...register("district")}
+            className={inputClass}
+            autoComplete="address-level2"
+            aria-invalid={Boolean(errors.district)}
+          />
         </Field>
 
-        <Field label="Business Type" required error={errors.businessType?.message}>
-          <Select onValueChange={(v) => setValue("businessType", v, { shouldValidate: true })}>
-            <SelectTrigger className={inputClass}>
+        <Field id={`${formId}-pin`} label="PIN Code" required error={errors.pinCode?.message}>
+          <Input
+            id={`${formId}-pin`}
+            {...register("pinCode")}
+            inputMode="numeric"
+            maxLength={6}
+            className={inputClass}
+            autoComplete="postal-code"
+            aria-invalid={Boolean(errors.pinCode)}
+            onInput={(e) => {
+              const target = e.currentTarget;
+              target.value = target.value.replace(/\D/g, "").slice(0, 6);
+            }}
+          />
+        </Field>
+
+        <Field
+          id={`${formId}-business`}
+          label="Business Type"
+          required
+          error={errors.businessType?.message}
+        >
+          <Select
+            value={businessType}
+            onValueChange={(v) => {
+              const next = v as EnquiryFormData["businessType"];
+              setBusinessType(next);
+              setValue("businessType", next, { shouldValidate: true });
+            }}
+          >
+            <SelectTrigger id={`${formId}-business`} className={inputClass} aria-invalid={Boolean(errors.businessType)}>
               <SelectValue placeholder="Select business type" />
             </SelectTrigger>
             <SelectContent>
@@ -195,39 +270,21 @@ export function PartnershipEnquiryForm() {
           </Select>
         </Field>
 
-        <Field label="Available Space" required error={errors.availableSpace?.message}>
-          <Select onValueChange={(v) => setValue("availableSpace", v, { shouldValidate: true })}>
-            <SelectTrigger className={inputClass}>
-              <SelectValue placeholder="Select space range" />
-            </SelectTrigger>
-            <SelectContent>
-              {partnershipContent.availableSpaceOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </Field>
-
-        <Field label="Investment Range" required error={errors.investmentRange?.message}>
-          <Select onValueChange={(v) => setValue("investmentRange", v, { shouldValidate: true })}>
-            <SelectTrigger className={inputClass}>
-              <SelectValue placeholder="Select investment range" />
-            </SelectTrigger>
-            <SelectContent>
-              {partnershipContent.investmentRangeOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </Field>
-
-        <Field label="Interested In" required error={errors.interestedIn?.message}>
-          <Select onValueChange={(v) => setValue("interestedIn", v, { shouldValidate: true })}>
-            <SelectTrigger className={inputClass}>
+        <Field
+          id={`${formId}-interest`}
+          label="Interested In"
+          required
+          error={errors.interestedIn?.message}
+        >
+          <Select
+            value={interestedIn}
+            onValueChange={(v) => {
+              const next = v as EnquiryFormData["interestedIn"];
+              setInterestedIn(next);
+              setValue("interestedIn", next, { shouldValidate: true });
+            }}
+          >
+            <SelectTrigger id={`${formId}-interest`} className={inputClass} aria-invalid={Boolean(errors.interestedIn)}>
               <SelectValue placeholder="Select interest" />
             </SelectTrigger>
             <SelectContent>
@@ -239,32 +296,10 @@ export function PartnershipEnquiryForm() {
             </SelectContent>
           </Select>
         </Field>
-
-        <Field label="GST Available?" required error={errors.gstAvailable?.message} className="sm:col-span-2">
-          <RadioGroup
-            onValueChange={(v) => setValue("gstAvailable", v as "Yes" | "No", { shouldValidate: true })}
-            className="flex flex-wrap gap-4 pt-1"
-          >
-            {(["Yes", "No"] as const).map((option) => (
-              <label key={option} className="inline-flex items-center gap-2 min-h-11 cursor-pointer">
-                <RadioGroupItem value={option} id={`gst-${option}`} />
-                <span className="text-sm text-foreground">{option}</span>
-              </label>
-            ))}
-          </RadioGroup>
-        </Field>
-
-        <Field label="Message" error={errors.message?.message} className="sm:col-span-2">
-          <Textarea
-            {...register("message")}
-            className="min-h-28 rounded-lg border-border bg-white focus:border-solar-green focus:ring-solar-green/20"
-            placeholder="Tell us about your location, goals or timeline (optional)"
-          />
-        </Field>
       </div>
 
       {status === "error" && (
-        <p className="text-sm text-destructive flex items-center gap-2">
+        <p className="text-sm text-destructive flex items-center gap-2" role="alert">
           <AlertCircle className="w-4 h-4 shrink-0" />
           Something went wrong. Please try again.
         </p>
@@ -281,7 +316,7 @@ export function PartnershipEnquiryForm() {
             Submitting...
           </>
         ) : (
-          "Submit Partnership Enquiry ↗"
+          "Submit Application →"
         )}
       </Button>
     </form>
@@ -289,27 +324,35 @@ export function PartnershipEnquiryForm() {
 }
 
 function Field({
+  id,
   label,
   required,
+  optional,
   error,
   className,
   children,
 }: {
+  id: string;
   label: string;
   required?: boolean;
+  optional?: boolean;
   error?: string;
   className?: string;
   children: React.ReactNode;
 }) {
+  const errorId = `${id}-error`;
   return (
     <div className={className}>
-      <Label className="mb-2 block text-sm font-medium text-foreground">
+      <Label htmlFor={id} className="mb-2 block text-sm font-medium text-foreground">
         {label}
         {required && <span className="text-solar-green ml-0.5">*</span>}
+        {optional && (
+          <span className="ml-2 text-xs font-normal text-muted-foreground">Optional</span>
+        )}
       </Label>
       {children}
       {error && (
-        <p className="text-xs text-destructive mt-1.5 flex items-center gap-1">
+        <p id={errorId} className="text-xs text-destructive mt-1.5 flex items-center gap-1" role="alert">
           <AlertCircle className="w-3 h-3 shrink-0" />
           {error}
         </p>

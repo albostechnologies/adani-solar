@@ -16,15 +16,14 @@ interface FooterNavGroup {
 }
 
 /** Pages that start on a light background — header uses solid styling immediately */
-export const LIGHT_HEADER_ROUTES: RouteName[] = ["contact", "privacy", "terms"];
+export const LIGHT_HEADER_ROUTES: RouteName[] = ["contact", "privacy", "terms", "check-status"];
 
-/** Primary navbar — Home, About, Partnership, Contact Us, Check Your Status */
+/** Primary navbar — Home, About, Check Status, Contact Us only */
 export const headerNavItems: NavItem[] = [
   { label: "Home", route: "home", variant: "link" },
   { label: "About", route: "about", variant: "link" },
-  { label: "Partnership", route: "home", section: "business-partnership", variant: "link" },
+  { label: "Check Status", route: "check-status", variant: "link" },
   { label: "Contact Us", route: "contact", variant: "button" },
-  { label: "Check Your Status", route: "check-status", variant: "button-secondary" },
 ];
 
 export const footerNavGroups: FooterNavGroup[] = [
@@ -33,8 +32,7 @@ export const footerNavGroups: FooterNavGroup[] = [
     items: [
       { label: "Home", route: "home" },
       { label: "About Adani Solar", route: "about" },
-      { label: "Partnership", route: "home", section: "business-partnership" },
-      { label: "Check Your Status", route: "check-status" },
+      { label: "Check Status", route: "check-status" },
     ],
   },
   {

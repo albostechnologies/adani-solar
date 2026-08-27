@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 interface SectionEyebrowProps {
-  number: string;
+  number?: string;
   label: string;
   variant?: "light" | "dark";
   className?: string;
@@ -23,10 +23,14 @@ export function SectionEyebrow({
         className
       )}
     >
-      <span className={isDark ? "text-solar-green-light" : "text-solar-green"}>
-        {number}
-      </span>
-      <span className="h-px w-8 bg-current opacity-30" aria-hidden="true" />
+      {number ? (
+        <>
+          <span className={isDark ? "text-solar-green-light" : "text-solar-green"}>
+            {number}
+          </span>
+          <span className="h-px w-8 bg-current opacity-30" aria-hidden="true" />
+        </>
+      ) : null}
       <span>{label}</span>
     </p>
   );

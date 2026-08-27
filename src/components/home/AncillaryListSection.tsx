@@ -16,7 +16,7 @@ export function AncillaryListSection() {
   return (
     <section className="editorial-section bg-[#f7f7f5]">
       <div className="editorial-section-inner">
-        <SectionEyebrow number="04B" label="Ancillary Manufacturing" className="mb-6" />
+        <SectionEyebrow number="04" label="Ancillary Manufacturing" className="mb-6" />
         <EditorialHeading size="statement" className="max-w-3xl mb-10 sm:mb-14">
           Everything a module needs. Built together.
         </EditorialHeading>

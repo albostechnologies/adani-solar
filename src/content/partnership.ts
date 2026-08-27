@@ -6,7 +6,7 @@ export const partnershipContent = {
   intro: {
     id: "business-partnership",
     eyebrow: "Business Partnership",
-    number: "08",
+    number: "07",
     title: "Build your solar business with confidence.",
     subtitle:
       "Explore dealership and distributorship opportunities with structured investment, product pricing, business support and long-term growth potential.",
@@ -21,8 +21,9 @@ export const partnershipContent = {
   requirements: {
     id: "partnership-requirements",
     eyebrow: "Business Requirements",
-    number: "09",
+    number: "08",
     title: "What you need to get started.",
+    subtitle: "Clear space and infrastructure requirements for dealership and distributorship partners.",
     items: [
       {
         number: "01",
@@ -54,8 +55,9 @@ export const partnershipContent = {
   registration: {
     id: "partnership-registration",
     eyebrow: "Registration",
-    number: "10",
+    number: "09",
     title: "Simple onboarding. Clear requirements.",
+    subtitle: "Registration fees and documents required to begin the partnership process.",
     fees: [
       { label: "Dealer Registration", amount: "₹24,900" },
       { label: "Distributor Registration", amount: "₹39,500" },
@@ -74,25 +76,33 @@ export const partnershipContent = {
 
   support: {
     id: "partnership-support",
-    eyebrow: "Company Support",
-    number: "11",
-    title: "Support designed to help partners grow faster.",
+    eyebrow: "Business Support",
+    number: "10",
+    title: "Support built around your growth.",
+    subtitle: "Staffing, showroom and marketing support designed to help partners scale with confidence.",
     staffing: {
-      title: "Staffing Support",
+      number: "01",
+      label: "Skilled Staff",
       highlight: "3 skilled staff",
-      amount: "₹25,000 / month",
+      value: "₹22,400",
+      unit: "/ month",
       detail: "Per person · Company paid",
     },
     showroom: {
-      title: "Showroom Setup",
-      description: "Complete interior and exterior setup",
+      number: "02",
+      label: "Showroom Setup",
+      value: "Interior + Exterior",
+      detail: "Complete showroom setup support",
     },
     marketing: {
-      title: "Marketing & Branding",
-      items: [
-        "Television Advertising",
-        "Radio Advertising",
-        "Newspaper Advertising",
+      number: "03",
+      label: "Marketing Support",
+      value: "Digital + Offline",
+      detail: "Campaign support across major channels",
+      channels: [
+        "Television",
+        "Radio",
+        "Newspaper",
         "Hoardings",
         "Glow Sign Boards",
         "Google Campaigns",
@@ -103,26 +113,12 @@ export const partnershipContent = {
     },
   },
 
-  productRange: {
-    id: "partnership-products",
-    eyebrow: "Product Range",
-    number: "12",
-    title: "Solutions across every scale of solar.",
-    subtitle: "Business portfolio overview for partners — complementary to our detailed product pages.",
-    items: [
-      { number: "01", title: "Mono Crystalline", detail: "High efficiency" },
-      { number: "02", title: "Poly Crystalline", detail: "Cost effective" },
-      { number: "03", title: "Bifacial", detail: "Dual-side power generation" },
-      { number: "04", title: "Half-Cut", detail: "Improved performance in shade" },
-      { number: "05", title: "Mega-Watt Projects", detail: "Large-scale solar solutions" },
-    ],
-  },
-
   investment: {
     id: "partnership-investment",
     eyebrow: "Investment & Margin",
-    number: "13",
+    number: "11",
     title: "Structured investment. Clear commercial upside.",
+    subtitle: "Investment ranges and expected margins for dealership and distributorship partners.",
     plans: [
       {
         type: "Dealership",
@@ -147,8 +143,9 @@ export const partnershipContent = {
   payment: {
     id: "partnership-payment",
     eyebrow: "Payment Terms",
-    number: "14",
+    number: "12",
     title: "Flexible commercial terms.",
+    subtitle: "Advance, credit and EMI options subject to agreement and approval.",
     metrics: [
       { value: "50%", label: "Advance" },
       { value: "50%", label: "Credit" },
@@ -161,8 +158,9 @@ export const partnershipContent = {
   pricing: {
     id: "partnership-pricing",
     eyebrow: "Pricing",
-    number: "15",
-    title: "Transparent partner and customer pricing.",
+    number: "13",
+    title: "Transparent partner pricing.",
+    subtitle: "Dealer and distributor panel and system pricing with tax and transportation included.",
     panel: {
       title: "DCR Solar Panel Price List",
       subtitle: "Dealer / Distributor · Tax + Transportation Included",
@@ -205,18 +203,6 @@ export const partnershipContent = {
         },
       ],
     },
-    turnkey: {
-      title: "Customer Turnkey Pricing",
-      subtitle: "Tax + Transportation + Installation Included",
-      rows: [
-        { power: "350W–400W", technology: "Mono PERC", price: "₹8,500–₹10,000" },
-        { power: "440W–450W", technology: "Mono PERC Half-Cut", price: "₹9,600–₹10,500" },
-        { power: "520W–550W", technology: "Mono Bifacial", price: "₹11,000–₹12,500" },
-        { power: "575W–600W", technology: "N-Type TOPCon", price: "₹12,000–₹14,000" },
-        { power: "610W–630W", technology: "TOPCon Bifacial", price: "₹12,200–₹13,800" },
-        { power: "650W+", technology: "TOPCon Latest", price: "₹13,650" },
-      ],
-    },
     systems: {
       title: "Solar System Price List",
       subtitle: "Dealer / Distributor · Tax + Transportation Included",
@@ -238,7 +224,7 @@ export const partnershipContent = {
   savings: {
     id: "partnership-savings",
     eyebrow: "Solar Savings",
-    number: "16",
+    number: "14",
     title: "Turn sunlight into long-term savings.",
     highlights: [
       { label: "Government Subsidy", value: "Available" },
@@ -261,8 +247,9 @@ export const partnershipContent = {
   components: {
     id: "partnership-components",
     eyebrow: "Complete Solar System",
-    number: "17",
+    number: "15",
     title: "Everything needed for a reliable installation.",
+    subtitle: "Core system components partners supply as part of a complete solar solution.",
     items: [
       {
         number: "01",
@@ -294,18 +281,13 @@ export const partnershipContent = {
         title: "Earthing & Lightning Protection",
         brands: "Earthing kit · Lightning arrestor",
       },
-      {
-        number: "07",
-        title: "MC4 Connectors",
-        brands: "Industry-standard connectors",
-      },
     ],
   },
 
   warranty: {
     id: "partnership-warranty",
     eyebrow: "Long-Term Assurance",
-    number: "18",
+    number: "16",
     title: "Warranty built for lasting confidence.",
     items: [
       { value: "25–30", unit: "Years", label: "Solar Panel Warranty" },
@@ -317,8 +299,9 @@ export const partnershipContent = {
   terms: {
     id: "partnership-terms",
     eyebrow: "Terms & Conditions",
-    number: "19",
+    number: "17",
     title: "Important partnership information.",
+    subtitle: "Key commercial and operational terms for dealership and distributorship partners.",
     items: [
       "Registration fee is refundable after onboarding process initiation.",
       "Prices may vary by 10–12% depending on location, logistics and market conditions.",
@@ -334,7 +317,7 @@ export const partnershipContent = {
   cta: {
     id: "partnership-cta",
     eyebrow: "Ready to Partner?",
-    number: "20",
+    number: "18",
     title: "Build your solar business with us.",
     subtitle:
       "For dealership, distributorship, custom quotations or onboarding, connect with our team.",
@@ -347,8 +330,8 @@ export const partnershipContent = {
   enquire: {
     id: "partnership-enquire",
     eyebrow: "Partnership Enquiry",
-    number: "20B",
-    title: "Submit your partnership enquiry.",
+    number: "18B",
+    title: "Submit your partnership application.",
     subtitle: "Share a few details and our team will guide you through the next steps.",
     office: {
       title: "Registered / Corporate Office",
@@ -369,36 +352,15 @@ export const partnershipContent = {
   anchorNav: [
     { label: "Overview", href: "#business-partnership" },
     { label: "Requirements", href: "#partnership-requirements" },
+    { label: "Support", href: "#partnership-support" },
     { label: "Investment", href: "#partnership-investment" },
     { label: "Pricing", href: "#partnership-pricing" },
-    { label: "Savings", href: "#partnership-savings" },
-    { label: "Components", href: "#partnership-components" },
-    { label: "Warranty", href: "#partnership-warranty" },
     { label: "Terms", href: "#partnership-terms" },
-    { label: "Enquire", href: "#partnership-enquire" },
+    { label: "Apply", href: "#partnership-enquire" },
   ],
 
-  interestedInOptions: [
-    "Dealership",
-    "Distributorship",
-    "Solar Project",
-    "Product Purchase",
-    "Other",
-  ] as const,
-
-  businessTypeOptions: ["Individual", "Proprietorship", "Partnership", "Private Limited", "Other"] as const,
-  investmentRangeOptions: [
-    "Under ₹3 Lakhs",
-    "₹3–₹5 Lakhs",
-    "₹5–₹8 Lakhs",
-    "Above ₹8 Lakhs",
-  ] as const,
-  availableSpaceOptions: [
-    "Under 300 sq. ft.",
-    "300–500 sq. ft.",
-    "500–800 sq. ft.",
-    "Above 800 sq. ft.",
-  ] as const,
+  interestedInOptions: ["Dealership", "Distributorship"] as const,
+  businessTypeOptions: ["Partnership", "Proprietorship"] as const,
 } as const;
 
 export type PartnershipContent = typeof partnershipContent;

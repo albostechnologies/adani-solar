@@ -68,12 +68,14 @@ const INTEREST_LABELS: Record<string, string> = {
 function formatDate(d: string) {
   try {
     return new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
-  } catch { return d; }
+  } catch {
+    return d;
+  }
 }
 
 export function CheckStatusPage() {
   const [applicationNumber, setApplicationNumber] = useState("");
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [statusData, setStatusData] = useState<StatusData | null>(null);
@@ -88,6 +90,11 @@ export function CheckStatusPage() {
       return;
     }
 
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError("Enter a valid email address.");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/api/v1/partners/check-status`, {
@@ -95,12 +102,14 @@ export function CheckStatusPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           applicationNumber: applicationNumber.trim().toUpperCase(),
-          phone: phone.trim(),
+          email: email.trim().toLowerCase(),
         }),
       });
       const result = await response.json();
       if (!response.ok) {
-        setError("We could not verify an application using the provided details. Please check your application number and phone number.");
+        setError(
+          "We could not verify an application using the provided details."
+        );
         return;
       }
       setStatusData(result.data);
@@ -118,7 +127,7 @@ export function CheckStatusPage() {
       <PageHero
         eyebrow="Partnership"
         title="Check application status."
-        subtitle="Track the progress of your partnership application using your application number and registered phone number."
+        subtitle="Track the progress of your partnership application using your application number and registered email."
         breadcrumbs={[
           { label: "Home", route: "home" },
           { label: "Check Application Status" },
@@ -132,10 +141,10 @@ export function CheckStatusPage() {
             Track your<br />partnership request.
           </EditorialHeading>
           <p className="editorial-body text-muted-foreground mb-8">
-            Enter the application number you received at submission along with your registered phone number.
+            Enter the application number you received at submission along with your registered email.
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-5 mb-8">
+          <form onSubmit={handleSubmit} className="space-y-5 mb-8" noValidate>
             <div className="space-y-2">
               <Label htmlFor="app-number">Application Number</Label>
               <Input
@@ -148,14 +157,15 @@ export function CheckStatusPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="status-phone">Registered Phone Number</Label>
+              <Label htmlFor="status-email">Registered Email</Label>
               <Input
-                id="status-phone"
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+91 98765 43210"
+                id="status-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
                 required
+                autoComplete="email"
                 className="h-11 rounded-lg border-border bg-white"
               />
             </div>
@@ -183,7 +193,6 @@ export function CheckStatusPage() {
             </Button>
           </form>
 
-          {/* Status result */}
           {statusData && statusConfig && (
             <div className="rounded-2xl border border-border bg-[#f7f7f5] p-6 space-y-5">
               <div>
@@ -191,18 +200,15 @@ export function CheckStatusPage() {
                 <p className="font-mono text-sm text-muted-foreground">{statusData.applicationNumber}</p>
               </div>
 
-              {/* Status badge */}
               <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold ${statusConfig.color}`}>
                 {statusConfig.icon}
                 {statusConfig.label}
               </div>
 
-              {/* Public message */}
               {statusData.publicMessage && (
                 <p className="text-sm text-foreground">{statusData.publicMessage}</p>
               )}
 
-              {/* Status-specific messages */}
               {statusData.status === "APPROVED" && (
                 <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-emerald-800">
                   Your partnership request has been approved. Our team will contact you using your registered contact information regarding the next steps.
@@ -214,7 +220,6 @@ export function CheckStatusPage() {
                 </div>
               )}
 
-              {/* Meta */}
               <div className="grid grid-cols-2 gap-4 pt-3 border-t border-border text-sm">
                 <div>
                   <p className="text-xs text-muted-foreground mb-0.5">Interest</p>
@@ -230,7 +235,6 @@ export function CheckStatusPage() {
                 </div>
               </div>
 
-              {/* Simple progress steps */}
               <div className="flex items-center gap-0 pt-2">
                 {["Application Received", "Under Review", "Final Decision"].map((step, i) => {
                   const stepStatuses = [

@@ -23,7 +23,6 @@ export function PartnershipCommercialBlock() {
       <RequirementsSection />
       <RegistrationSection />
       <SupportSection />
-      <ProductRangeSection />
       <InvestmentSection />
       <PaymentSection />
       <PricingSection />
@@ -86,30 +85,51 @@ function PartnershipIntroSection() {
 
 function RequirementsSection() {
   const section = c.requirements;
+  const [dealership, distributorship, ...shared] = section.items;
+
   return (
     <PageSection id={section.id} tone="white" className="scroll-mt-36">
-      <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
-      <EditorialHeading size="statement" className="mb-10 sm:mb-14 max-w-2xl">
-        {section.title}
-      </EditorialHeading>
-      <div className="divide-y divide-border/70">
-        {section.items.map((item) => (
+      <div className="max-w-3xl mb-12 sm:mb-16">
+        <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
+        <EditorialHeading size="statement" className="mb-4">
+          {section.title}
+        </EditorialHeading>
+        <p className="editorial-body text-muted-foreground max-w-xl">{section.subtitle}</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-0 border-y border-border/70">
+        {[dealership, distributorship].map((item, index) => (
           <div
             key={item.label}
-            className="editorial-list-row grid grid-cols-1 sm:grid-cols-[72px_1fr] gap-3 sm:gap-8 py-7 sm:py-9"
+            className={cn(
+              "py-8 sm:py-10",
+              index === 0 ? "md:pr-10 md:border-r border-border/70" : "md:pl-10",
+              index > 0 && "border-t md:border-t-0 border-border/70"
+            )}
           >
-            <p className="text-sm tabular-nums text-muted-foreground">{item.number}</p>
-            <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-2 md:gap-8">
-              <h3 className="font-[family-name:var(--font-poppins)] text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground pt-1">
-                {item.label}
-              </h3>
-              <div>
-                <p className="font-[family-name:var(--font-poppins)] text-2xl sm:text-3xl font-semibold text-foreground">
-                  {item.value}
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">{item.detail}</p>
-              </div>
-            </div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-5">
+              <span className="text-solar-green mr-2 tabular-nums">{item.number}</span>
+              {item.label}
+            </p>
+            <p className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold tracking-tight text-foreground leading-none">
+              {item.value}
+            </p>
+            <p className="mt-3 text-sm sm:text-base text-muted-foreground">{item.detail}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12">
+        {shared.map((item) => (
+          <div key={item.label} className="border-t border-border/70 pt-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-3">
+              <span className="text-solar-green mr-2 tabular-nums">{item.number}</span>
+              {item.label}
+            </p>
+            <p className="font-[family-name:var(--font-poppins)] text-xl sm:text-2xl font-semibold text-foreground">
+              {item.value}
+            </p>
+            <p className="mt-1.5 text-sm text-muted-foreground">{item.detail}</p>
           </div>
         ))}
       </div>
@@ -119,38 +139,57 @@ function RequirementsSection() {
 
 function RegistrationSection() {
   const section = c.registration;
+
   return (
     <PageSection id={section.id} tone="muted" className="scroll-mt-36">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] gap-12 lg:gap-20">
         <div>
           <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
-          <EditorialHeading size="statement" className="mb-10 max-w-md">
+          <EditorialHeading size="statement" className="mb-4 max-w-md">
             {section.title}
           </EditorialHeading>
-          <div className="space-y-8">
-            {section.fees.map((fee) => (
-              <div key={fee.label} className="border-t border-border/70 pt-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-2">
+          <p className="editorial-body text-muted-foreground mb-10 max-w-md">{section.subtitle}</p>
+
+          <div className="space-y-0">
+            {section.fees.map((fee, index) => (
+              <div
+                key={fee.label}
+                className={cn(
+                  "py-7 sm:py-8",
+                  index === 0 ? "border-t border-border/70" : "",
+                  "border-b border-border/70"
+                )}
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-3">
                   {fee.label}
                 </p>
-                <p className="editorial-stat-value font-[family-name:var(--font-poppins)] font-semibold tabular-nums text-foreground">
+                <p className="font-[family-name:var(--font-poppins)] text-4xl sm:text-5xl font-semibold tabular-nums tracking-tight text-foreground">
                   {fee.amount}
                 </p>
               </div>
             ))}
           </div>
         </div>
-        <div>
-          <h3 className="font-[family-name:var(--font-poppins)] text-lg font-semibold mb-6">
-            {section.documentsTitle}
-          </h3>
-          <ol className="divide-y divide-border/60">
+
+        <div className="lg:pt-2">
+          <div className="flex items-baseline justify-between gap-4 mb-6 pb-4 border-b border-border/70">
+            <h3 className="font-[family-name:var(--font-poppins)] text-lg sm:text-xl font-semibold">
+              {section.documentsTitle}
+            </h3>
+            <p className="text-xs tabular-nums text-muted-foreground shrink-0">
+              {String(section.documents.length).padStart(2, "0")} items
+            </p>
+          </div>
+          <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-0">
             {section.documents.map((doc, index) => (
-              <li key={doc} className="flex gap-4 py-4">
-                <span className="text-sm tabular-nums text-solar-green font-medium shrink-0">
+              <li
+                key={doc}
+                className="flex gap-3 py-3.5 border-b border-border/50"
+              >
+                <span className="text-sm tabular-nums text-solar-green font-semibold shrink-0 w-7">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <span className="text-sm sm:text-base text-foreground">{doc}</span>
+                <span className="text-sm sm:text-[15px] text-foreground leading-snug">{doc}</span>
               </li>
             ))}
           </ol>
@@ -162,79 +201,70 @@ function RegistrationSection() {
 
 function SupportSection() {
   const section = c.support;
+  const staffing = section.staffing;
+  const showroom = section.showroom;
+  const marketing = section.marketing;
+
+  if (!staffing || !showroom || !marketing) {
+    return null;
+  }
+
   return (
     <PageSection id={section.id} tone="dark" className="scroll-mt-36">
-      <SectionEyebrow number={section.number} label={section.eyebrow} variant="dark" className="mb-6" />
-      <EditorialHeading size="section" variant="dark" className="mb-12 sm:mb-16 max-w-3xl">
-        {section.title}
-      </EditorialHeading>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 mb-12">
-        <div className="border-t border-white/15 pt-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/50 mb-4">
-            {section.staffing.title}
-          </p>
-          <p className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl font-semibold text-white mb-3">
-            {section.staffing.highlight}
-          </p>
-          <p className="text-2xl font-semibold text-solar-green-light tabular-nums">
-            {section.staffing.amount}
-          </p>
-          <p className="mt-2 text-sm text-white/60">{section.staffing.detail}</p>
-        </div>
-        <div className="border-t border-white/15 pt-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/50 mb-4">
-            {section.showroom.title}
-          </p>
-          <p className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl font-semibold text-white">
-            {section.showroom.description}
-          </p>
-        </div>
+      <div className="max-w-3xl mb-12 sm:mb-16">
+        <SectionEyebrow number={section.number} label={section.eyebrow} variant="dark" className="mb-6" />
+        <EditorialHeading size="section" variant="dark" className="mb-4">
+          {section.title}
+        </EditorialHeading>
+        <p className="editorial-body text-white/60 max-w-xl">{section.subtitle}</p>
       </div>
 
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/50 mb-4">
-          {section.marketing.title}
-        </p>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8">
-          {section.marketing.items.map((item) => (
-            <li
-              key={item}
-              className="border-t border-white/10 py-4 text-sm sm:text-base text-white/80 hover:text-white transition-colors"
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </PageSection>
-  );
-}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 border-t border-white/15">
+        <div className="py-8 sm:py-10 lg:pr-10 border-b lg:border-b-0 lg:border-r border-white/15">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/45 mb-6">
+            <span className="text-solar-green-light mr-2 tabular-nums">{staffing.number}</span>
+            {staffing.label}
+          </p>
+          <p className="font-[family-name:var(--font-poppins)] text-lg text-white/70 mb-3">
+            {staffing.highlight}
+          </p>
+          <p className="font-[family-name:var(--font-poppins)] text-4xl sm:text-5xl font-semibold text-white tracking-tight leading-none">
+            {staffing.value}
+            <span className="ml-2 text-base sm:text-lg font-medium text-solar-green-light">
+              {staffing.unit}
+            </span>
+          </p>
+          <p className="mt-4 text-sm text-white/50">{staffing.detail}</p>
+        </div>
 
-function ProductRangeSection() {
-  const section = c.productRange;
-  return (
-    <PageSection id={section.id} tone="white" className="scroll-mt-36">
-      <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
-      <EditorialHeading size="statement" className="mb-3 max-w-2xl">
-        {section.title}
-      </EditorialHeading>
-      <p className="editorial-body text-muted-foreground mb-10 max-w-xl">{section.subtitle}</p>
-      <div className="divide-y divide-border/70">
-        {section.items.map((item) => (
-          <div
-            key={item.title}
-            className="editorial-list-row grid grid-cols-[56px_1fr] sm:grid-cols-[72px_220px_1fr] gap-3 sm:gap-6 py-6 sm:py-8"
-          >
-            <p className="text-sm tabular-nums text-muted-foreground">{item.number}</p>
-            <h3 className="font-[family-name:var(--font-poppins)] text-lg sm:text-xl font-semibold">
-              {item.title}
-            </h3>
-            <p className="text-sm sm:text-base text-muted-foreground sm:col-start-3 col-start-2">
-              {item.detail}
-            </p>
-          </div>
-        ))}
+        <div className="py-8 sm:py-10 lg:px-10 border-b lg:border-b-0 lg:border-r border-white/15">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/45 mb-6">
+            <span className="text-solar-green-light mr-2 tabular-nums">{showroom.number}</span>
+            {showroom.label}
+          </p>
+          <p className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl font-semibold text-white tracking-tight leading-snug">
+            {showroom.value}
+          </p>
+          <p className="mt-4 text-sm text-white/50">{showroom.detail}</p>
+        </div>
+
+        <div className="py-8 sm:py-10 lg:pl-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/45 mb-6">
+            <span className="text-solar-green-light mr-2 tabular-nums">{marketing.number}</span>
+            {marketing.label}
+          </p>
+          <p className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl font-semibold text-white tracking-tight leading-snug">
+            {marketing.value}
+          </p>
+          <p className="mt-4 text-sm text-white/50 mb-6">{marketing.detail}</p>
+          <ul className="flex flex-wrap gap-x-4 gap-y-2">
+            {marketing.channels.map((channel) => (
+              <li key={channel} className="text-xs text-white/40 tracking-wide">
+                {channel}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </PageSection>
   );
@@ -242,29 +272,47 @@ function ProductRangeSection() {
 
 function InvestmentSection() {
   const section = c.investment;
-  return (
-    <PageSection id={section.id} tone="muted" className="scroll-mt-36">
-      <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
-      <EditorialHeading size="statement" className="mb-10 sm:mb-14 max-w-2xl">
-        {section.title}
-      </EditorialHeading>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-12">
-        {section.plans.map((plan) => (
-          <div key={plan.type} className="border-t border-border/70 pt-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-6">
+  return (
+    <PageSection id={section.id} tone="white" className="scroll-mt-36">
+      <div className="max-w-3xl mb-12 sm:mb-16">
+        <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
+        <EditorialHeading size="statement" className="mb-4">
+          {section.title}
+        </EditorialHeading>
+        <p className="editorial-body text-muted-foreground max-w-xl">{section.subtitle}</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 border-y border-border/70">
+        {section.plans.map((plan, index) => (
+          <div
+            key={plan.type}
+            className={cn(
+              "py-9 sm:py-11",
+              index === 0 ? "md:pr-10 md:border-r border-border/70" : "md:pl-10",
+              index > 0 && "border-t md:border-t-0 border-border/70"
+            )}
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-8">
+              <span className="text-solar-green mr-2 tabular-nums">
+                {String(index + 1).padStart(2, "0")}
+              </span>
               {plan.type}
             </p>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-7">
               <div>
-                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground mb-2">Investment</p>
-                <p className="font-[family-name:var(--font-poppins)] text-2xl sm:text-3xl font-semibold tabular-nums">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground mb-2">
+                  Investment
+                </p>
+                <p className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl font-semibold tabular-nums tracking-tight">
                   {plan.investment}
                 </p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground mb-2">Profit Margin</p>
-                <p className="font-[family-name:var(--font-poppins)] text-2xl sm:text-3xl font-semibold text-solar-green tabular-nums">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground mb-2">
+                  Profit Margin
+                </p>
+                <p className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl font-semibold text-solar-green tabular-nums tracking-tight">
                   {plan.margin}
                 </p>
               </div>
@@ -273,17 +321,21 @@ function InvestmentSection() {
         ))}
       </div>
 
-      <div className="border-t border-border/70 pt-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-3">
-          {section.monthlyIncome.label}
-        </p>
-        <p className="font-[family-name:var(--font-poppins)] text-3xl sm:text-5xl font-semibold tabular-nums text-foreground mb-2">
-          {section.monthlyIncome.range}
-        </p>
-        <p className="text-sm text-muted-foreground mb-4">{section.monthlyIncome.note}</p>
-        <p className="text-xs sm:text-sm text-muted-foreground max-w-2xl leading-relaxed">
-          {section.disclaimer}
-        </p>
+      <div className="mt-12 sm:mt-14 pt-10 border-t border-border/70 grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-6 lg:gap-16 items-end">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-4">
+            {section.monthlyIncome.label}
+          </p>
+          <p className="font-[family-name:var(--font-poppins)] text-4xl sm:text-5xl lg:text-6xl font-semibold tabular-nums tracking-tight text-foreground leading-[1.05]">
+            {section.monthlyIncome.range}
+          </p>
+        </div>
+        <div className="lg:pb-1">
+          <p className="text-sm text-muted-foreground mb-3">{section.monthlyIncome.note}</p>
+          <p className="text-xs sm:text-sm text-muted-foreground/80 leading-relaxed max-w-lg">
+            {section.disclaimer}
+          </p>
+        </div>
       </div>
     </PageSection>
   );
@@ -291,14 +343,47 @@ function InvestmentSection() {
 
 function PaymentSection() {
   const section = c.payment;
+
   return (
-    <PageSection id={section.id} tone="white" className="scroll-mt-36">
-      <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
-      <EditorialHeading size="statement" className="mb-10 max-w-xl">
-        {section.title}
-      </EditorialHeading>
-      <MetricRow items={[...section.metrics]} />
-      <p className="mt-8 text-sm text-muted-foreground max-w-xl">{section.note}</p>
+    <PageSection id={section.id} tone="muted" className="scroll-mt-36">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-10 lg:gap-16 items-start">
+        <div>
+          <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
+          <EditorialHeading size="statement" className="mb-4 max-w-md">
+            {section.title}
+          </EditorialHeading>
+          <p className="editorial-body text-muted-foreground max-w-md mb-6">{section.subtitle}</p>
+          <p className="text-sm text-muted-foreground max-w-md leading-relaxed border-l-2 border-solar-green/40 pl-4">
+            {section.note}
+          </p>
+        </div>
+
+        <div className="border border-border/70 bg-white/70 px-6 py-8 sm:px-8 sm:py-10">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10">
+            {section.metrics.map((metric, index) => {
+              const unit = "unit" in metric ? metric.unit : undefined;
+              return (
+                <div
+                  key={metric.label}
+                  className={cn(index >= 2 && "border-t border-border/60 pt-8")}
+                >
+                  <p className="font-[family-name:var(--font-poppins)] text-3xl sm:text-4xl font-semibold tabular-nums tracking-tight text-foreground">
+                    {metric.value}
+                    {unit && (
+                      <span className="text-solar-green text-xl sm:text-2xl font-semibold">
+                        {unit}
+                      </span>
+                    )}
+                  </p>
+                  <p className="mt-2 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                    {metric.label}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </PageSection>
   );
 }
@@ -306,18 +391,18 @@ function PaymentSection() {
 function PricingSection() {
   const section = c.pricing;
   return (
-    <PageSection id={section.id} tone="muted" className="scroll-mt-36">
+    <PageSection id={section.id} tone="white" className="scroll-mt-36">
       <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
-      <EditorialHeading size="statement" className="mb-8 sm:mb-10 max-w-2xl">
+      <EditorialHeading size="statement" className="mb-3 max-w-2xl">
         {section.title}
       </EditorialHeading>
+      <p className="editorial-body text-muted-foreground mb-8 sm:mb-10 max-w-xl">{section.subtitle}</p>
 
       <Tabs defaultValue="panels" className="gap-6">
         <TabsList className="h-auto w-full sm:w-auto flex flex-wrap justify-start bg-transparent p-0 gap-2">
           {[
             { value: "panels", label: "Panels" },
             { value: "systems", label: "Solar Systems" },
-            { value: "turnkey", label: "Turnkey Customer Pricing" },
           ].map((tab) => (
             <TabsTrigger
               key={tab.value}
@@ -333,33 +418,18 @@ function PricingSection() {
 
         <TabsContent value="panels" className="mt-2 focus-visible:outline-none">
           <PricingBlockHeader title={section.panel.title} subtitle={section.panel.subtitle} />
-          <div className="rounded-2xl border border-border/60 bg-white p-4 sm:p-6">
-            <PricingTable
-              variant="panel"
-              caption={section.panel.title}
-              rows={section.panel.rows}
-            />
+          <div className="overflow-x-auto">
+            <PricingTable variant="panel" caption={section.panel.title} rows={section.panel.rows} />
           </div>
         </TabsContent>
 
         <TabsContent value="systems" className="mt-2 focus-visible:outline-none">
           <PricingBlockHeader title={section.systems.title} subtitle={section.systems.subtitle} />
-          <div className="rounded-2xl border border-border/60 bg-white p-4 sm:p-6">
+          <div className="overflow-x-auto">
             <PricingTable
               variant="system"
               caption={section.systems.title}
               rows={section.systems.rows}
-            />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="turnkey" className="mt-2 focus-visible:outline-none">
-          <PricingBlockHeader title={section.turnkey.title} subtitle={section.turnkey.subtitle} />
-          <div className="rounded-2xl border border-border/60 bg-[#fafaf8] p-4 sm:p-6">
-            <PricingTable
-              variant="turnkey"
-              caption={section.turnkey.title}
-              rows={section.turnkey.rows}
             />
           </div>
         </TabsContent>
@@ -426,18 +496,19 @@ function SavingsSection() {
 function ComponentsSection() {
   const section = c.components;
   return (
-    <PageSection id={section.id} tone="white" className="scroll-mt-36">
+    <PageSection id={section.id} tone="muted" className="scroll-mt-36">
       <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
-      <EditorialHeading size="statement" className="mb-10 sm:mb-14 max-w-2xl">
+      <EditorialHeading size="statement" className="mb-3 max-w-2xl">
         {section.title}
       </EditorialHeading>
+      <p className="editorial-body text-muted-foreground mb-10 sm:mb-12 max-w-xl">{section.subtitle}</p>
       <div className="divide-y divide-border/70">
         {section.items.map((item) => (
           <div
             key={item.title}
-            className="editorial-list-row grid grid-cols-[56px_1fr] md:grid-cols-[72px_1fr_1fr] gap-3 md:gap-8 py-6 sm:py-8"
+            className="editorial-list-row grid grid-cols-[48px_1fr] md:grid-cols-[64px_220px_1fr] gap-3 md:gap-8 py-6 sm:py-8"
           >
-            <p className="text-sm tabular-nums text-muted-foreground">{item.number}</p>
+            <p className="text-sm tabular-nums text-muted-foreground pt-1">{item.number}</p>
             <h3 className="font-[family-name:var(--font-poppins)] text-lg sm:text-xl font-semibold">
               {item.title}
             </h3>
@@ -452,7 +523,7 @@ function ComponentsSection() {
 function WarrantySection() {
   const section = c.warranty;
   return (
-    <PageSection id={section.id} tone="muted" className="scroll-mt-36">
+    <PageSection id={section.id} tone="white" className="scroll-mt-36">
       <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
       <EditorialHeading size="statement" className="mb-10 sm:mb-14 max-w-2xl">
         {section.title}
@@ -471,21 +542,27 @@ function WarrantySection() {
 function TermsSection() {
   const section = c.terms;
   return (
-    <PageSection id={section.id} tone="white" className="scroll-mt-36">
-      <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
-      <EditorialHeading size="statement" className="mb-8 sm:mb-10 max-w-xl">
-        {section.title}
-      </EditorialHeading>
-      <ol className="divide-y divide-border/70">
+    <PageSection id={section.id} tone="muted" className="scroll-mt-36">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-10 lg:gap-16 items-start mb-4">
+        <div>
+          <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
+          <EditorialHeading size="statement" className="mb-4 max-w-md">
+            {section.title}
+          </EditorialHeading>
+          <p className="editorial-body text-muted-foreground max-w-md">{section.subtitle}</p>
+        </div>
+      </div>
+
+      <ol className="mt-8 sm:mt-10 grid grid-cols-1 md:grid-cols-2 gap-x-10 lg:gap-x-14">
         {section.items.map((term, index) => (
           <li
             key={term}
-            className="editorial-list-row grid grid-cols-[56px_1fr] sm:grid-cols-[72px_1fr] gap-3 sm:gap-6 py-5 sm:py-6"
+            className="grid grid-cols-[40px_1fr] gap-3 py-5 border-t border-border/70"
           >
-            <span className="text-sm tabular-nums text-solar-green font-semibold">
+            <span className="text-sm tabular-nums text-solar-green font-semibold pt-0.5">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <p className="text-sm sm:text-base text-foreground leading-relaxed">{term}</p>
+            <p className="text-sm sm:text-[15px] text-foreground leading-relaxed">{term}</p>
           </li>
         ))}
       </ol>
@@ -527,8 +604,8 @@ function PartnershipCtaSection() {
 function EnquireSection() {
   const section = c.enquire;
   return (
-    <PageSection id={section.id} tone="muted" className="scroll-mt-36">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-14">
+    <PageSection id={section.id} tone="white" className="scroll-mt-36">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10 lg:gap-14">
         <div>
           <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
           <EditorialHeading size="statement" className="mb-3 max-w-xl">
@@ -559,7 +636,7 @@ function EnquireSection() {
             </p>
             <div className="mt-6">
               <ArrowLink route="contact" variant="secondary">
-                Full partnership application
+                Contact our team
               </ArrowLink>
             </div>
           </div>
