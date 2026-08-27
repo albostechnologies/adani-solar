@@ -8,11 +8,9 @@ import { EditorialHeading } from "@/components/editorial/EditorialHeading";
 import { MetricRow } from "@/components/editorial/MetricRow";
 import { ArrowLink } from "@/components/editorial/ArrowLink";
 import { PageSection } from "@/components/editorial/PageSection";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "@/lib/router";
 import { cn } from "@/lib/utils";
 import { PartnershipAnchorNav } from "./PartnershipAnchorNav";
-import { PricingTable } from "./PricingTable";
 import { PartnershipEnquiryForm } from "./PartnershipEnquiryForm";
 
 export function PartnershipCommercialBlock() {
@@ -25,7 +23,6 @@ export function PartnershipCommercialBlock() {
       <SupportSection />
       <InvestmentSection />
       <PaymentSection />
-      <PricingSection />
       <SavingsSection />
       <ComponentsSection />
       <WarrantySection />
@@ -385,67 +382,6 @@ function PaymentSection() {
         </div>
       </div>
     </PageSection>
-  );
-}
-
-function PricingSection() {
-  const section = c.pricing;
-  return (
-    <PageSection id={section.id} tone="white" className="scroll-mt-36">
-      <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
-      <EditorialHeading size="statement" className="mb-3 max-w-2xl">
-        {section.title}
-      </EditorialHeading>
-      <p className="editorial-body text-muted-foreground mb-8 sm:mb-10 max-w-xl">{section.subtitle}</p>
-
-      <Tabs defaultValue="panels" className="gap-6">
-        <TabsList className="h-auto w-full sm:w-auto flex flex-wrap justify-start bg-transparent p-0 gap-2">
-          {[
-            { value: "panels", label: "Panels" },
-            { value: "systems", label: "Solar Systems" },
-          ].map((tab) => (
-            <TabsTrigger
-              key={tab.value}
-              value={tab.value}
-              className={cn(
-                "rounded-full border border-border bg-white px-4 py-2.5 text-sm font-medium data-[state=active]:bg-solar-dark data-[state=active]:text-white data-[state=active]:shadow-none min-h-11"
-              )}
-            >
-              {tab.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        <TabsContent value="panels" className="mt-2 focus-visible:outline-none">
-          <PricingBlockHeader title={section.panel.title} subtitle={section.panel.subtitle} />
-          <div className="overflow-x-auto">
-            <PricingTable variant="panel" caption={section.panel.title} rows={section.panel.rows} />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="systems" className="mt-2 focus-visible:outline-none">
-          <PricingBlockHeader title={section.systems.title} subtitle={section.systems.subtitle} />
-          <div className="overflow-x-auto">
-            <PricingTable
-              variant="system"
-              caption={section.systems.title}
-              rows={section.systems.rows}
-            />
-          </div>
-        </TabsContent>
-      </Tabs>
-    </PageSection>
-  );
-}
-
-function PricingBlockHeader({ title, subtitle }: { title: string; subtitle: string }) {
-  return (
-    <div className="mb-5">
-      <h3 className="font-[family-name:var(--font-poppins)] text-xl sm:text-2xl font-semibold text-foreground">
-        {title}
-      </h3>
-      <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
-    </div>
   );
 }
 

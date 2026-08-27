@@ -155,76 +155,10 @@ export const partnershipContent = {
     note: "Credit and EMI facilities are subject to applicable approval and agreement terms.",
   },
 
-  pricing: {
-    id: "partnership-pricing",
-    eyebrow: "Pricing",
-    number: "13",
-    title: "Transparent partner pricing.",
-    subtitle: "Dealer and distributor panel and system pricing with tax and transportation included.",
-    panel: {
-      title: "DCR Solar Panel Price List",
-      subtitle: "Dealer / Distributor · Tax + Transportation Included",
-      rows: [
-        {
-          power: "350W–400W",
-          technology: "Mono PERC",
-          dealer: "₹6,800–₹8,000",
-          distributor: "₹5,950–₹7,000",
-        },
-        {
-          power: "440W–450W",
-          technology: "Mono PERC Half-Cut",
-          dealer: "₹7,680–₹8,400",
-          distributor: "₹6,720–₹7,350",
-        },
-        {
-          power: "520W–550W",
-          technology: "Mono Bifacial",
-          dealer: "₹8,800–₹10,000",
-          distributor: "₹7,700–₹8,750",
-        },
-        {
-          power: "575W–600W",
-          technology: "N-Type TOPCon",
-          dealer: "₹9,600–₹11,200",
-          distributor: "₹8,400–₹9,800",
-        },
-        {
-          power: "610W–630W",
-          technology: "TOPCon Bifacial",
-          dealer: "₹9,760–₹11,040",
-          distributor: "₹8,540–₹9,660",
-        },
-        {
-          power: "650W+",
-          technology: "TOPCon Latest",
-          dealer: "₹10,920",
-          distributor: "up to ₹9,555",
-        },
-      ],
-    },
-    systems: {
-      title: "Solar System Price List",
-      subtitle: "Dealer / Distributor · Tax + Transportation Included",
-      rows: [
-        { capacity: "1 kW", dealer: "₹50,000", distributor: "₹42,000" },
-        { capacity: "2 kW", dealer: "₹98,000", distributor: "₹84,000" },
-        { capacity: "3 kW", dealer: "₹1,52,000", distributor: "₹1,26,000" },
-        { capacity: "5 kW", dealer: "₹2,10,000", distributor: "₹1,80,000" },
-        { capacity: "6 kW", dealer: "₹2,52,000", distributor: "₹2,16,000" },
-        { capacity: "8 kW", dealer: "₹3,36,000", distributor: "₹2,88,000" },
-        { capacity: "10 kW", dealer: "₹4,06,000", distributor: "₹3,48,000" },
-        { capacity: "15 kW", dealer: "₹5,60,000", distributor: "₹4,80,000" },
-        { capacity: "20 kW", dealer: "₹7,28,000", distributor: "₹6,24,000" },
-        { capacity: "50 kW", dealer: "₹16,20,000", distributor: "₹14,40,000" },
-      ],
-    },
-  },
-
   savings: {
     id: "partnership-savings",
     eyebrow: "Solar Savings",
-    number: "14",
+    number: "13",
     title: "Turn sunlight into long-term savings.",
     highlights: [
       { label: "Government Subsidy", value: "Available" },
@@ -247,7 +181,7 @@ export const partnershipContent = {
   components: {
     id: "partnership-components",
     eyebrow: "Complete Solar System",
-    number: "15",
+    number: "14",
     title: "Everything needed for a reliable installation.",
     subtitle: "Core system components partners supply as part of a complete solar solution.",
     items: [
@@ -287,7 +221,7 @@ export const partnershipContent = {
   warranty: {
     id: "partnership-warranty",
     eyebrow: "Long-Term Assurance",
-    number: "16",
+    number: "15",
     title: "Warranty built for lasting confidence.",
     items: [
       { value: "25–30", unit: "Years", label: "Solar Panel Warranty" },
@@ -299,7 +233,7 @@ export const partnershipContent = {
   terms: {
     id: "partnership-terms",
     eyebrow: "Terms & Conditions",
-    number: "17",
+    number: "16",
     title: "Important partnership information.",
     subtitle: "Key commercial and operational terms for dealership and distributorship partners.",
     items: [
@@ -317,7 +251,7 @@ export const partnershipContent = {
   cta: {
     id: "partnership-cta",
     eyebrow: "Ready to Partner?",
-    number: "18",
+    number: "17",
     title: "Build your solar business with us.",
     subtitle:
       "For dealership, distributorship, custom quotations or onboarding, connect with our team.",
@@ -330,7 +264,7 @@ export const partnershipContent = {
   enquire: {
     id: "partnership-enquire",
     eyebrow: "Partnership Enquiry",
-    number: "18B",
+    number: "17B",
     title: "Submit your partnership application.",
     subtitle: "Share a few details and our team will guide you through the next steps.",
     office: {
@@ -354,7 +288,6 @@ export const partnershipContent = {
     { label: "Requirements", href: "#partnership-requirements" },
     { label: "Support", href: "#partnership-support" },
     { label: "Investment", href: "#partnership-investment" },
-    { label: "Pricing", href: "#partnership-pricing" },
     { label: "Terms", href: "#partnership-terms" },
     { label: "Apply", href: "#partnership-enquire" },
   ],
