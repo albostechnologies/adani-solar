@@ -9,7 +9,7 @@ export function TechnicalResourcesSection() {
   return (
     <section className="editorial-section bg-white">
       <div className="editorial-section-inner">
-        <SectionEyebrow number="19" label="Technical Resources" className="mb-6" />
+        <SectionEyebrow number="17" label="Technical Resources" className="mb-6" />
         <EditorialHeading size="statement" className="max-w-3xl mb-4">
           Documentation for engineers and partners.
         </EditorialHeading>

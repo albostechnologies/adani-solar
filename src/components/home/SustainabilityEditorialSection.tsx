@@ -22,7 +22,7 @@ export function SustainabilityEditorialSection() {
       <div className="absolute inset-0 bg-gradient-to-t from-solar-dark via-solar-dark/55 to-solar-dark/20" />
 
       <div className="editorial-section-inner relative z-10 pb-4">
-        <SectionEyebrow number="18" label="Sustainability" variant="dark" className="mb-6" />
+        <SectionEyebrow number="16" label="Sustainability" variant="dark" className="mb-6" />
         <EditorialHeading size="section" variant="dark" className="max-w-3xl mb-5">
           Powering progress without compromising the future.
         </EditorialHeading>

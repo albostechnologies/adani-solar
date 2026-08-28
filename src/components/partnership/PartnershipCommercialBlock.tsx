@@ -24,7 +24,6 @@ export function PartnershipCommercialBlock() {
       <InvestmentSection />
       <PaymentSection />
       <SavingsSection />
-      <ComponentsSection />
       <WarrantySection />
       <TermsSection />
       <PartnershipCtaSection />
@@ -425,33 +424,6 @@ function SavingsSection() {
         ))}
       </div>
       <p className="mt-8 text-xs sm:text-sm text-white/50 max-w-2xl leading-relaxed">{section.note}</p>
-    </PageSection>
-  );
-}
-
-function ComponentsSection() {
-  const section = c.components;
-  return (
-    <PageSection id={section.id} tone="muted" className="scroll-mt-36">
-      <SectionEyebrow number={section.number} label={section.eyebrow} className="mb-6" />
-      <EditorialHeading size="statement" className="mb-3 max-w-2xl">
-        {section.title}
-      </EditorialHeading>
-      <p className="editorial-body text-muted-foreground mb-10 sm:mb-12 max-w-xl">{section.subtitle}</p>
-      <div className="divide-y divide-border/70">
-        {section.items.map((item) => (
-          <div
-            key={item.title}
-            className="editorial-list-row grid grid-cols-[48px_1fr] md:grid-cols-[64px_220px_1fr] gap-3 md:gap-8 py-6 sm:py-8"
-          >
-            <p className="text-sm tabular-nums text-muted-foreground pt-1">{item.number}</p>
-            <h3 className="font-[family-name:var(--font-poppins)] text-lg sm:text-xl font-semibold">
-              {item.title}
-            </h3>
-            <p className="text-sm text-muted-foreground col-start-2 md:col-start-3">{item.brands}</p>
-          </div>
-        ))}
-      </div>
     </PageSection>
   );
 }

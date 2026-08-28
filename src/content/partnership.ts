@@ -6,7 +6,7 @@ export const partnershipContent = {
   intro: {
     id: "business-partnership",
     eyebrow: "Business Partnership",
-    number: "07",
+    number: "06",
     title: "Build your solar business with confidence.",
     subtitle:
       "Explore dealership and distributorship opportunities with structured investment, product pricing, business support and long-term growth potential.",
@@ -21,7 +21,7 @@ export const partnershipContent = {
   requirements: {
     id: "partnership-requirements",
     eyebrow: "Business Requirements",
-    number: "08",
+    number: "07",
     title: "What you need to get started.",
     subtitle: "Clear space and infrastructure requirements for dealership and distributorship partners.",
     items: [
@@ -55,7 +55,7 @@ export const partnershipContent = {
   registration: {
     id: "partnership-registration",
     eyebrow: "Registration",
-    number: "09",
+    number: "08",
     title: "Simple onboarding. Clear requirements.",
     subtitle: "Registration fees and documents required to begin the partnership process.",
     fees: [
@@ -77,7 +77,7 @@ export const partnershipContent = {
   support: {
     id: "partnership-support",
     eyebrow: "Business Support",
-    number: "10",
+    number: "09",
     title: "Support built around your growth.",
     subtitle: "Staffing, showroom and marketing support designed to help partners scale with confidence.",
     staffing: {
@@ -116,7 +116,7 @@ export const partnershipContent = {
   investment: {
     id: "partnership-investment",
     eyebrow: "Investment & Margin",
-    number: "11",
+    number: "10",
     title: "Structured investment. Clear commercial upside.",
     subtitle: "Investment ranges and expected margins for dealership and distributorship partners.",
     plans: [
@@ -143,7 +143,7 @@ export const partnershipContent = {
   payment: {
     id: "partnership-payment",
     eyebrow: "Payment Terms",
-    number: "12",
+    number: "11",
     title: "Flexible commercial terms.",
     subtitle: "Advance, credit and EMI options subject to agreement and approval.",
     metrics: [
@@ -158,7 +158,7 @@ export const partnershipContent = {
   savings: {
     id: "partnership-savings",
     eyebrow: "Solar Savings",
-    number: "13",
+    number: "12",
     title: "Turn sunlight into long-term savings.",
     highlights: [
       { label: "Government Subsidy", value: "Available" },
@@ -178,50 +178,10 @@ export const partnershipContent = {
       "Actual generation and savings vary by location, system configuration, weather and usage. Government subsidy is subject to eligibility and prevailing scheme guidelines.",
   },
 
-  components: {
-    id: "partnership-components",
-    eyebrow: "Complete Solar System",
-    number: "14",
-    title: "Everything needed for a reliable installation.",
-    subtitle: "Core system components partners supply as part of a complete solar solution.",
-    items: [
-      {
-        number: "01",
-        title: "Solar Panels",
-        brands: "Mono PERC / Bifacial / TOPCon",
-      },
-      {
-        number: "02",
-        title: "Inverters",
-        brands: "Solis / Growatt / GoodWe / Hitachi",
-      },
-      {
-        number: "03",
-        title: "DCDB & ACDB",
-        brands: "System protection boards",
-      },
-      {
-        number: "04",
-        title: "Premium Cables",
-        brands: "Polycab / Havells / Anchor",
-      },
-      {
-        number: "05",
-        title: "Mounting Structure",
-        brands: "Site-ready structural kit",
-      },
-      {
-        number: "06",
-        title: "Earthing & Lightning Protection",
-        brands: "Earthing kit · Lightning arrestor",
-      },
-    ],
-  },
-
   warranty: {
     id: "partnership-warranty",
     eyebrow: "Long-Term Assurance",
-    number: "15",
+    number: "13",
     title: "Warranty built for lasting confidence.",
     items: [
       { value: "25–30", unit: "Years", label: "Solar Panel Warranty" },
@@ -233,7 +193,7 @@ export const partnershipContent = {
   terms: {
     id: "partnership-terms",
     eyebrow: "Terms & Conditions",
-    number: "16",
+    number: "14",
     title: "Important partnership information.",
     subtitle: "Key commercial and operational terms for dealership and distributorship partners.",
     items: [
@@ -251,7 +211,7 @@ export const partnershipContent = {
   cta: {
     id: "partnership-cta",
     eyebrow: "Ready to Partner?",
-    number: "17",
+    number: "15",
     title: "Build your solar business with us.",
     subtitle:
       "For dealership, distributorship, custom quotations or onboarding, connect with our team.",
@@ -264,7 +224,7 @@ export const partnershipContent = {
   enquire: {
     id: "partnership-enquire",
     eyebrow: "Partnership Enquiry",
-    number: "17B",
+    number: "15B",
     title: "Submit your partnership application.",
     subtitle: "Share a few details and our team will guide you through the next steps.",
     office: {
