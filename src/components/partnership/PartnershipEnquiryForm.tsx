@@ -37,6 +37,12 @@ const enquirySchema = z.object({
     .trim()
     .min(1, "Please enter your email.")
     .email("Enter a valid email address."),
+  mobile: z
+    .string()
+    .trim()
+    .min(10, "Please enter a valid mobile number.")
+    .max(15)
+    .regex(/^[6-9]\d{9}$|^[+]?[\d\s()-]{10,15}$/, "Please enter a valid 10-digit Indian mobile number."),
   state: z.string().trim().min(2, "Select your state."),
   district: z.string().trim().min(2, "Please enter your district."),
   pinCode: z
@@ -74,6 +80,7 @@ export function PartnershipEnquiryForm() {
       name: "",
       fatherOrHusbandName: "",
       email: "",
+      mobile: "",
       state: "",
       district: "",
       pinCode: "",
@@ -95,6 +102,7 @@ export function PartnershipEnquiryForm() {
           fullName: data.name.trim(),
           fatherOrHusbandName: data.fatherOrHusbandName?.trim() || undefined,
           email: data.email.trim().toLowerCase(),
+          mobile: data.mobile.trim(),
           state: data.state.trim(),
           district: data.district.trim(),
           pinCode: data.pinCode.trim(),
@@ -127,8 +135,8 @@ export function PartnershipEnquiryForm() {
         <CheckCircle className="w-10 h-10 text-solar-green mb-4" />
         <p className="text-lg font-semibold text-foreground mb-1">Application submitted successfully.</p>
         <p className="text-sm text-muted-foreground mb-6">
-          Please save this number. You can use your application number and registered email to check
-          your application status.
+          Please save this number. Use your application number and registered mobile number as your
+          initial password to check application status.
         </p>
         <div className="bg-white border border-solar-green/30 rounded-xl p-5 mb-5 inline-block">
           <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Application Number</p>
@@ -204,6 +212,22 @@ export function PartnershipEnquiryForm() {
             className={inputClass}
             autoComplete="email"
             aria-invalid={Boolean(errors.email)}
+          />
+        </Field>
+
+        <Field id={`${formId}-mobile`} label="Mobile Number" required error={errors.mobile?.message}>
+          <Input
+            id={`${formId}-mobile`}
+            {...register("mobile")}
+            type="tel"
+            inputMode="numeric"
+            className={inputClass}
+            autoComplete="tel"
+            aria-invalid={Boolean(errors.mobile)}
+            onInput={(e) => {
+              const target = e.currentTarget;
+              target.value = target.value.replace(/[^\d+\s()-]/g, "").slice(0, 15);
+            }}
           />
         </Field>
 
