@@ -16,7 +16,7 @@ interface FooterNavGroup {
 }
 
 /** Pages that start on a light background — header uses solid styling immediately */
-export const LIGHT_HEADER_ROUTES: RouteName[] = ["contact", "privacy", "terms", "check-status"];
+export const LIGHT_HEADER_ROUTES: RouteName[] = ["contact", "privacy", "terms", "check-status", "application-status"];
 
 /** Primary navbar — Home, About, Check Status, Contact Us only */
 export const headerNavItems: NavItem[] = [

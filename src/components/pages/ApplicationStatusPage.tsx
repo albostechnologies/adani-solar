@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { PageHero } from "@/components/editorial/PageHero";
 import { PageSection } from "@/components/editorial/PageSection";
 import { SectionEyebrow } from "@/components/editorial/SectionEyebrow";
-import { EditorialHeading } from "@/components/editorial/EditorialHeading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,6 +25,7 @@ import {
 import { ApplicationDetailsTable } from "@/components/status/ApplicationDetailsTable";
 import { ProcessProgress } from "@/components/status/ProcessProgress";
 import { ApprovedLocationMap } from "@/components/status/ApprovedLocationMap";
+import { CompactStatusHeader } from "@/components/status/CompactStatusHeader";
 
 interface StatusData {
   applicationNumber: string;
@@ -96,12 +95,41 @@ function formatCurrency(amount: number) {
   }).format(amount);
 }
 
-function DetailItem({ label, value }: { label: string; value: string | null | undefined }) {
-  if (!value) return null;
+function CopyField({
+  label,
+  value,
+  mono,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setCopied(false);
+    }
+  };
+
   return (
     <div>
       <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{label}</p>
-      <p className="text-sm text-foreground font-medium">{value}</p>
+      <div className="flex items-center gap-2">
+        <p className={mono ? "font-mono break-all" : "break-words"}>{value}</p>
+        <button
+          type="button"
+          onClick={copy}
+          className="text-muted-foreground hover:text-foreground flex-shrink-0 text-xs"
+          aria-label={copied ? `${label} copied` : `Copy ${label}`}
+        >
+          {copied ? "Copied" : <Copy className="w-3.5 h-3.5" />}
+        </button>
+      </div>
     </div>
   );
 }
@@ -124,6 +152,8 @@ export function ApplicationStatusPage() {
       ifscCode: string;
       branchName: string | null;
       upiId: string | null;
+      hasUpiQr?: boolean;
+      upiQrUrl?: string | null;
     } | null;
   } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -222,10 +252,6 @@ export function ApplicationStatusPage() {
     }
   };
 
-  const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text);
-  };
-
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!paymentProof) {
@@ -284,52 +310,45 @@ export function ApplicationStatusPage() {
   const statusConfig = STATUS_CONFIG[data.status] ?? STATUS_CONFIG.PENDING;
   const isApproved = data.status === "APPROVED";
   const showPayment = isApproved && data.paymentAvailable !== false;
-  const paymentConfigured = Boolean(
-    data.payment?.configured ||
-      data.paymentAmountDue ||
-      paymentDetails?.account
-  );
+  const hasAccount = Boolean(paymentDetails?.account);
+  const hasAmount = Boolean(data.paymentAmountDue);
+  const paymentConfigured = hasAccount || hasAmount;
+  const menuItems = [
+    { id: "application-details", label: "Application Details" },
+    ...(isApproved ? [{ id: "approval-letter", label: "Approval Letter" }] : []),
+    { id: "application-progress", label: "Application Progress" },
+    ...(data.approvedLocation ? [{ id: "approved-location", label: "Approved Location" }] : []),
+    ...(showPayment ? [{ id: "payment", label: "Payment Details" }] : []),
+    ...(showPayment && (data.payment?.history.length ?? 0) > 0
+      ? [{ id: "payment-history", label: "Payment History" }]
+      : []),
+  ];
 
   return (
     <main>
-      <PageHero
-        eyebrow="Application Status"
-        title={data.applicationNumber}
-        subtitle={statusDescription(data)}
-        breadcrumbs={[
-          { label: "Home", route: "home" },
-          { label: "Application Status" },
-        ]}
+      <CompactStatusHeader
+        applicationNumber={data.applicationNumber}
+        statusLabel={data.statusLabel}
+        statusClassName={statusConfig.color}
+        statusIcon={statusConfig.icon}
+        description={statusDescription(data)}
+        menuItems={menuItems}
+        showPaymentShortcut={showPayment}
+        onSignOut={() => {
+          clearApplicantToken();
+          router.push("/check-status");
+        }}
       />
 
       <PageSection>
         <div className="max-w-4xl mx-auto space-y-10">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold ${statusConfig.color}`}
-            >
-              {statusConfig.icon}
-              {data.statusLabel}
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                clearApplicantToken();
-                router.push("/check-status");
-              }}
-              className="text-sm text-muted-foreground hover:text-foreground underline-offset-2 hover:underline"
-            >
-              Sign out
-            </button>
-          </div>
-
-          <section>
+          <section id="application-details" className="scroll-mt-28">
             <SectionEyebrow label="Application details" className="mb-4" />
             <ApplicationDetailsTable data={data} />
           </section>
 
           {isApproved && (
-            <section className="rounded-2xl border border-border p-6 md:p-8">
+            <section id="approval-letter" className="scroll-mt-28 rounded-2xl border border-border p-6 md:p-8">
               <SectionEyebrow label="Approval letter" className="mb-4" />
               {data.hasApprovalLetter || data.approvalLetterAvailable ? (
                 <>
@@ -355,22 +374,24 @@ export function ApplicationStatusPage() {
             </section>
           )}
 
-          <section className="rounded-2xl border border-border p-6 md:p-8">
+          <section id="application-progress" className="scroll-mt-28 rounded-2xl border border-border p-6 md:p-8">
             <SectionEyebrow label="Application progress" className="mb-6" />
             <ProcessProgress currentStage={data.currentProcessStage} />
           </section>
 
           {data.approvedLocation && (
-            <section className="rounded-2xl border border-border p-6 md:p-8">
+            <section id="approved-location" className="scroll-mt-28 rounded-2xl border border-border p-6 md:p-8">
               <SectionEyebrow label="Approved location" className="mb-4" />
               <ApprovedLocationMap address={data.approvedLocation} />
             </section>
           )}
 
           {showPayment && data.payment && (
-            <section className="rounded-2xl border border-border p-6 md:p-8 space-y-6">
-              <SectionEyebrow label="Payment" className="mb-2" />
-              <EditorialHeading size="subsection">Partnership payment</EditorialHeading>
+            <section id="payment" className="scroll-mt-28 rounded-2xl border border-border p-6 md:p-8 space-y-6">
+              <SectionEyebrow label="Payment details" className="mb-2" />
+              <h2 className="font-[family-name:var(--font-poppins)] text-xl font-semibold tracking-tight">
+                Partnership payment
+              </h2>
 
               {!paymentConfigured ? (
                 <p className="text-sm text-muted-foreground">
@@ -378,13 +399,13 @@ export function ApplicationStatusPage() {
                 </p>
               ) : (
                 <>
-                  {data.paymentAmountDue ? (
+                  {hasAmount ? (
                     <p className="text-lg font-semibold">
-                      Amount Payable: {formatCurrency(data.paymentAmountDue)}
+                      Amount Payable: {formatCurrency(data.paymentAmountDue!)}
                     </p>
                   ) : (
                     <p className="text-sm text-muted-foreground">
-                      Payment details are being prepared. Please check again later.
+                      Payment amount will be provided by our team.
                     </p>
                   )}
 
@@ -401,61 +422,30 @@ export function ApplicationStatusPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                       <div className="space-y-3">
                         <p className="font-semibold text-foreground">Bank Transfer</p>
-                        <DetailItem label="Bank Name" value={paymentDetails.account.bankName} />
-                        <DetailItem label="Account Name" value={paymentDetails.account.accountName} />
-                        <div>
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-                            Account Number
-                          </p>
-                          <div className="flex items-center gap-2">
-                            <p className="font-mono">{paymentDetails.account.accountNumber}</p>
-                            <button
-                              type="button"
-                              onClick={() => handleCopy(paymentDetails.account!.accountNumber)}
-                              className="text-muted-foreground hover:text-foreground"
-                              aria-label="Copy account number"
-                            >
-                              <Copy className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-                            IFSC Code
-                          </p>
-                          <div className="flex items-center gap-2">
-                            <p className="font-mono">{paymentDetails.account.ifscCode}</p>
-                            <button
-                              type="button"
-                              onClick={() => handleCopy(paymentDetails.account!.ifscCode)}
-                              className="text-muted-foreground hover:text-foreground"
-                              aria-label="Copy IFSC code"
-                            >
-                              <Copy className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </div>
-                        <DetailItem label="Branch" value={paymentDetails.account.branchName} />
+                        <CopyField label="Account Holder Name" value={paymentDetails.account.accountName} />
+                        <CopyField label="Bank Name" value={paymentDetails.account.bankName} />
+                        <CopyField label="Account Number" value={paymentDetails.account.accountNumber} mono />
+                        <CopyField label="IFSC Code" value={paymentDetails.account.ifscCode} mono />
+                        {paymentDetails.account.branchName && (
+                          <CopyField label="Branch" value={paymentDetails.account.branchName} />
+                        )}
                       </div>
-                      {paymentDetails.account.upiId && (
+                      {(paymentDetails.account.upiId || paymentDetails.account.upiQrUrl) && (
                         <div className="space-y-3">
                           <p className="font-semibold text-foreground">UPI</p>
-                          <div>
-                            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-                              UPI ID
-                            </p>
-                            <div className="flex items-center gap-2">
-                              <p>{paymentDetails.account.upiId}</p>
-                              <button
-                                type="button"
-                                onClick={() => handleCopy(paymentDetails.account!.upiId!)}
-                                className="text-muted-foreground hover:text-foreground"
-                                aria-label="Copy UPI ID"
-                              >
-                                <Copy className="w-3.5 h-3.5" />
-                              </button>
+                          {paymentDetails.account.upiId && (
+                            <CopyField label="UPI ID" value={paymentDetails.account.upiId} />
+                          )}
+                          {paymentDetails.account.upiQrUrl && (
+                            <div>
+                              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">UPI QR</p>
+                              <img
+                                src={paymentDetails.account.upiQrUrl}
+                                alt="UPI QR code for payment"
+                                className="w-44 h-44 object-contain border border-border rounded-lg bg-white p-2"
+                              />
                             </div>
-                          </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -550,7 +540,7 @@ export function ApplicationStatusPage() {
               )}
 
               {data.payment.history.length > 0 && (
-                <div className="pt-6 border-t border-border">
+                <div id="payment-history" className="scroll-mt-28 pt-6 border-t border-border">
                   <p className="font-semibold text-sm mb-4">Payment History</p>
                   <div className="space-y-3 md:hidden">
                     {data.payment.history.map((p) => (

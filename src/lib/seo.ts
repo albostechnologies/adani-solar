@@ -89,6 +89,10 @@ export const PAGE_SEO: Record<RouteName, PageSeo> = {
     description:
       "Track the status of your Adani Solar enquiry or application using your reference number and email address.",
   },
+  "application-status": {
+    title: "Application Status | Adani Solar",
+    description: "View your Adani Solar partnership application status, approval letter, and payment details.",
+  },
 };
 
 export function buildMetadata(route: RouteName): Metadata {
