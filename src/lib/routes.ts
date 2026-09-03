@@ -58,6 +58,9 @@ export const LEGACY_HASH_PATH_MAP: Record<string, string> = {
 };
 
 export function pathToRoute(pathname: string): RouteName {
+  if (pathname === "/application-status" || pathname.startsWith("/application-status/")) {
+    return "application-status";
+  }
   const map = Object.fromEntries(
     Object.entries(ROUTE_PATH_MAP).map(([route, path]) => [path, route])
   ) as Record<string, RouteName>;

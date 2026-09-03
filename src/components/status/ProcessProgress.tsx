@@ -2,9 +2,16 @@
 
 import { PROCESS_STAGES, PROCESS_STAGE_LABELS, stageIndex } from "@/lib/processStages";
 
+function progressPercent(currentIdx: number) {
+  if (PROCESS_STAGES.length === 0) return 0;
+  const idx = Math.min(Math.max(currentIdx, 0), PROCESS_STAGES.length - 1);
+  return Math.round(((idx + 1) / PROCESS_STAGES.length) * 100);
+}
+
 export function ProcessProgress({ currentStage }: { currentStage: string }) {
   const currentIdx = Math.max(0, stageIndex(currentStage));
   const completedRatio = currentIdx / (PROCESS_STAGES.length - 1);
+  const percent = progressPercent(currentIdx);
 
   return (
     <section aria-label="Application progress">
@@ -56,7 +63,7 @@ export function ProcessProgress({ currentStage }: { currentStage: string }) {
             <li key={key} className="flex gap-3">
               <div className="flex flex-col items-center">
                 <span
-                  className={`relative z-10 mt-0.5 flex h-3.5 w-3.5 flex-shrink-0 rounded-full border-2 ${
+                  className={`relative z-10 mt-0.5 flex h-3.5 w-3.5 shrink-0 rounded-full border-2 ${
                     completed ? "border-solar-green bg-solar-green" : "border-border bg-white"
                   } ${current ? "ring-4 ring-solar-green/20" : ""}`}
                   aria-hidden
@@ -76,6 +83,22 @@ export function ProcessProgress({ currentStage }: { currentStage: string }) {
           );
         })}
       </ol>
+
+      <div className="mt-2 md:mt-0" aria-label={`Progress ${percent} percent`}>
+        <div className="flex items-center justify-between gap-3 mb-2">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Overall progress</p>
+          <p className="text-sm font-semibold text-foreground tabular-nums">{percent}%</p>
+        </div>
+        <div className="h-2.5 w-full rounded-full bg-border/80 overflow-hidden">
+          <div
+            className="h-full rounded-full bg-solar-green transition-[width] duration-500 ease-out"
+            style={{ width: `${percent}%` }}
+          />
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Step {currentIdx + 1} of {PROCESS_STAGES.length}: {PROCESS_STAGE_LABELS[PROCESS_STAGES[currentIdx]]}
+        </p>
+      </div>
     </section>
   );
 }

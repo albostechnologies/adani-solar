@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 export interface StatusMenuItem {
   id: string;
   label: string;
+  href?: string;
 }
 
 export function CompactStatusHeader({
@@ -27,6 +29,7 @@ export function CompactStatusHeader({
   onSignOut: () => void;
   showPaymentShortcut?: boolean;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -49,9 +52,13 @@ export function CompactStatusHeader({
     };
   }, [open]);
 
-  const jumpTo = (id: string) => {
+  const goToItem = (item: StatusMenuItem) => {
     setOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (item.href) {
+      router.push(item.href);
+      return;
+    }
+    document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
@@ -77,7 +84,7 @@ export function CompactStatusHeader({
               {showPaymentShortcut && (
                 <button
                   type="button"
-                  onClick={() => jumpTo("payment")}
+                  onClick={() => router.push("/application-status/payment")}
                   className="h-10 px-3 rounded-lg border border-border bg-white text-sm text-foreground hover:bg-[#f7f7f5]"
                 >
                   Payment
@@ -111,7 +118,7 @@ export function CompactStatusHeader({
                     <button
                       key={item.id}
                       type="button"
-                      onClick={() => jumpTo(item.id)}
+                      onClick={() => goToItem(item)}
                       className="block w-full px-4 py-2.5 text-left text-sm text-foreground hover:bg-[#f7f7f5]"
                     >
                       {item.label}
