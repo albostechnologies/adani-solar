@@ -24,6 +24,9 @@ import {
   clearApplicantToken,
   getApplicantToken,
 } from "@/lib/applicantSession";
+import { ApplicationDetailsTable } from "@/components/status/ApplicationDetailsTable";
+import { ProcessProgress } from "@/components/status/ProcessProgress";
+import { ApprovedLocationMap } from "@/components/status/ApprovedLocationMap";
 
 interface StatusData {
   applicationNumber: string;
@@ -41,9 +44,12 @@ interface StatusData {
   approvedLocation: string | null;
   paymentAmountDue: number | null;
   hasApprovalLetter: boolean;
-  processStages: { key: string; label: string; completed: boolean; current: boolean }[];
+  approvalLetterAvailable?: boolean;
+  paymentAvailable?: boolean;
+  currentProcessStage: string;
   payment: {
     amountDue: number | null;
+    configured?: boolean;
     publicStatus: string;
     publicStatusLabel: string;
     publicMessage: string | null;
@@ -100,6 +106,12 @@ function DetailItem({ label, value }: { label: string; value: string | null | un
   );
 }
 
+function statusDescription(data: StatusData) {
+  if (data.publicMessage) return data.publicMessage;
+  if (data.status === "APPROVED") return "Your partnership application has been approved.";
+  return "Track your application progress below.";
+}
+
 export function ApplicationStatusPage() {
   const router = useRouter();
   const [data, setData] = useState<StatusData | null>(null);
@@ -127,12 +139,12 @@ export function ApplicationStatusPage() {
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
   const [paymentMessage, setPaymentMessage] = useState("");
 
-  const load = async () => {
+  const load = async (isRefresh = false) => {
     if (!getApplicantToken()) {
       router.replace("/check-status");
       return;
     }
-    setLoading(true);
+    if (isRefresh) setLoading(true);
     setError("");
     try {
       const res = await applicantFetch<{ success: boolean; data: StatusData }>(
@@ -144,11 +156,14 @@ export function ApplicationStatusPage() {
         return;
       }
       setData(res.body.data);
-      if (res.body.data.status === "APPROVED") {
+      const approved = res.body.data.status === "APPROVED" && res.body.data.paymentAvailable !== false;
+      if (approved) {
         const payRes = await applicantFetch<{ success: boolean; data: typeof paymentDetails }>(
           "/api/v1/partners/me/payment-details"
         );
         if (payRes.ok) setPaymentDetails(payRes.body.data);
+      } else {
+        setPaymentDetails(null);
       }
     } catch {
       setError("Unable to load application status.");
@@ -158,8 +173,40 @@ export function ApplicationStatusPage() {
   };
 
   useEffect(() => {
-    load();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    let cancelled = false;
+    (async () => {
+      if (!getApplicantToken()) {
+        router.replace("/check-status");
+        return;
+      }
+      try {
+        const res = await applicantFetch<{ success: boolean; data: StatusData }>(
+          "/api/v1/partners/me/status"
+        );
+        if (cancelled) return;
+        if (!res.ok) {
+          clearApplicantToken();
+          router.replace("/check-status");
+          return;
+        }
+        setData(res.body.data);
+        const approved = res.body.data.status === "APPROVED" && res.body.data.paymentAvailable !== false;
+        if (approved) {
+          const payRes = await applicantFetch<{ success: boolean; data: typeof paymentDetails }>(
+            "/api/v1/partners/me/payment-details"
+          );
+          if (!cancelled && payRes.ok) setPaymentDetails(payRes.body.data);
+        }
+      } catch {
+        if (!cancelled) setError("Unable to load application status.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   const handleDownloadLetter = async () => {
     setDownloadingLetter(true);
@@ -203,7 +250,7 @@ export function ApplicationStatusPage() {
         setPaymentMessage(res.body.data?.message ?? "Payment proof submitted successfully.");
         setPaymentForm({ amountPaid: "", paymentMethod: "UPI", utrTransactionId: "", paymentDate: "" });
         setPaymentProof(null);
-        await load();
+        await load(true);
       } else {
         setPaymentMessage(
           (res.body as { error?: { message?: string } })?.error?.message ??
@@ -235,17 +282,20 @@ export function ApplicationStatusPage() {
   }
 
   const statusConfig = STATUS_CONFIG[data.status] ?? STATUS_CONFIG.PENDING;
+  const isApproved = data.status === "APPROVED";
+  const showPayment = isApproved && data.paymentAvailable !== false;
+  const paymentConfigured = Boolean(
+    data.payment?.configured ||
+      data.paymentAmountDue ||
+      paymentDetails?.account
+  );
 
   return (
     <main>
       <PageHero
         eyebrow="Application Status"
         title={data.applicationNumber}
-        subtitle={
-          data.status === "APPROVED"
-            ? "Your partnership request has been approved."
-            : data.publicMessage ?? "Track your application progress below."
-        }
+        subtitle={statusDescription(data)}
         breadcrumbs={[
           { label: "Home", route: "home" },
           { label: "Application Status" },
@@ -254,7 +304,7 @@ export function ApplicationStatusPage() {
 
       <PageSection>
         <div className="max-w-4xl mx-auto space-y-10">
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold ${statusConfig.color}`}
             >
@@ -273,84 +323,21 @@ export function ApplicationStatusPage() {
             </button>
           </div>
 
-          {/* Application Details */}
-          <section className="rounded-2xl border border-border bg-[#f7f7f5] p-6 md:p-8">
+          <section>
             <SectionEyebrow label="Application details" className="mb-4" />
-            <EditorialHeading size="subsection" className="mb-6">
-              Your application information
-            </EditorialHeading>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <DetailItem label="Application No." value={data.applicationNumber} />
-              <DetailItem label="Document No." value={data.documentNumber} />
-              <DetailItem label="Application Name" value={data.applicationName} />
-              <DetailItem label="Father / Husband Name" value={data.fatherOrHusbandName} />
-              <DetailItem label="Email" value={data.email} />
-              <DetailItem label="Mobile" value={data.mobile} />
-              <DetailItem label="PIN Code" value={data.pinCode} />
-              <DetailItem label="State" value={data.state} />
-              <DetailItem label="Interested In" value={data.interestedInLabel} />
-              <DetailItem label="Status" value={data.statusLabel} />
-            </div>
+            <ApplicationDetailsTable data={data} />
           </section>
 
-          {data.approvedLocation && (
-            <section className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-6 md:p-8">
-              <SectionEyebrow label="Approved location" className="mb-4" />
-              <p className="text-sm text-foreground whitespace-pre-line">{data.approvedLocation}</p>
-            </section>
-          )}
-
-          {/* Process Timeline */}
-          <section className="rounded-2xl border border-border p-6 md:p-8">
-            <SectionEyebrow label="Application progress" className="mb-6" />
-            <div className="hidden md:flex items-center justify-between gap-2">
-              {data.processStages.map((stage, i) => (
-                <div key={stage.key} className="flex items-center flex-1 min-w-0">
-                  <div className="flex flex-col items-center flex-shrink-0">
-                    <div
-                      className={`w-3 h-3 rounded-full ${stage.completed ? "bg-solar-green" : "bg-border"}`}
-                    />
-                    <span className="text-[10px] text-muted-foreground mt-2 text-center leading-tight">
-                      {stage.label}
-                    </span>
-                  </div>
-                  {i < data.processStages.length - 1 && (
-                    <div
-                      className={`h-px flex-1 mx-1 mb-6 ${stage.completed ? "bg-solar-green" : "bg-border"}`}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="md:hidden space-y-4">
-              {data.processStages.map((stage) => (
-                <div key={stage.key} className="flex items-center gap-3">
-                  <div
-                    className={`w-3 h-3 rounded-full flex-shrink-0 ${stage.completed ? "bg-solar-green" : "bg-border"}`}
-                  />
-                  <span
-                    className={`text-sm ${stage.current ? "font-semibold text-foreground" : "text-muted-foreground"}`}
-                  >
-                    {stage.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Approval Letter */}
-          {data.status === "APPROVED" && (
+          {isApproved && (
             <section className="rounded-2xl border border-border p-6 md:p-8">
               <SectionEyebrow label="Approval letter" className="mb-4" />
-              {data.hasApprovalLetter ? (
+              {data.hasApprovalLetter || data.approvalLetterAvailable ? (
                 <>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Your approval letter is available for download.
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-4">Your approval letter is ready.</p>
                   <Button
                     onClick={handleDownloadLetter}
                     disabled={downloadingLetter}
-                    className="rounded-full bg-solar-green hover:bg-solar-green-dark text-white"
+                    className="rounded-full w-full sm:w-auto bg-solar-green hover:bg-solar-green-dark text-white"
                   >
                     {downloadingLetter ? (
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -362,182 +349,204 @@ export function ApplicationStatusPage() {
                 </>
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  Your approval letter is being prepared. Please check again later.
+                  Approval letter is being prepared. Please check again later.
                 </p>
               )}
             </section>
           )}
 
-          {/* Payment */}
-          {data.status === "APPROVED" && data.payment && (
+          <section className="rounded-2xl border border-border p-6 md:p-8">
+            <SectionEyebrow label="Application progress" className="mb-6" />
+            <ProcessProgress currentStage={data.currentProcessStage} />
+          </section>
+
+          {data.approvedLocation && (
+            <section className="rounded-2xl border border-border p-6 md:p-8">
+              <SectionEyebrow label="Approved location" className="mb-4" />
+              <ApprovedLocationMap address={data.approvedLocation} />
+            </section>
+          )}
+
+          {showPayment && data.payment && (
             <section className="rounded-2xl border border-border p-6 md:p-8 space-y-6">
               <SectionEyebrow label="Payment" className="mb-2" />
               <EditorialHeading size="subsection">Partnership payment</EditorialHeading>
 
-              {data.paymentAmountDue ? (
-                <p className="text-lg font-semibold">
-                  Amount Payable: {formatCurrency(data.paymentAmountDue)}
+              {!paymentConfigured ? (
+                <p className="text-sm text-muted-foreground">
+                  Payment details are being prepared. Please check again later.
                 </p>
               ) : (
-                <p className="text-sm text-muted-foreground">
-                  Payment amount will be provided by our team.
-                </p>
-              )}
-
-              {data.payment.publicStatus !== "NOT_SUBMITTED" && (
-                <div className="rounded-xl border border-border bg-[#f7f7f5] p-4 text-sm">
-                  <p className="font-semibold">{data.payment.publicStatusLabel}</p>
-                  {data.payment.publicMessage && (
-                    <p className="text-muted-foreground mt-1">{data.payment.publicMessage}</p>
+                <>
+                  {data.paymentAmountDue ? (
+                    <p className="text-lg font-semibold">
+                      Amount Payable: {formatCurrency(data.paymentAmountDue)}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Payment details are being prepared. Please check again later.
+                    </p>
                   )}
-                </div>
-              )}
 
-              {paymentDetails?.account && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-                  <div className="space-y-3">
-                    <p className="font-semibold text-foreground">Bank Transfer</p>
-                    <DetailItem label="Bank Name" value={paymentDetails.account.bankName} />
-                    <DetailItem label="Account Name" value={paymentDetails.account.accountName} />
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-                        Account Number
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <p className="font-mono">{paymentDetails.account.accountNumber}</p>
-                        <button
-                          type="button"
-                          onClick={() => handleCopy(paymentDetails.account!.accountNumber)}
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          <Copy className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
+                  {data.payment.publicStatus !== "NOT_SUBMITTED" && (
+                    <div className="rounded-xl border border-border bg-[#f7f7f5] p-4 text-sm">
+                      <p className="font-semibold">{data.payment.publicStatusLabel}</p>
+                      {data.payment.publicMessage && (
+                        <p className="text-muted-foreground mt-1">{data.payment.publicMessage}</p>
+                      )}
                     </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-                        IFSC Code
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <p className="font-mono">{paymentDetails.account.ifscCode}</p>
-                        <button
-                          type="button"
-                          onClick={() => handleCopy(paymentDetails.account!.ifscCode)}
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          <Copy className="w-3.5 h-3.5" />
-                        </button>
+                  )}
+
+                  {paymentDetails?.account && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                      <div className="space-y-3">
+                        <p className="font-semibold text-foreground">Bank Transfer</p>
+                        <DetailItem label="Bank Name" value={paymentDetails.account.bankName} />
+                        <DetailItem label="Account Name" value={paymentDetails.account.accountName} />
+                        <div>
+                          <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                            Account Number
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-mono">{paymentDetails.account.accountNumber}</p>
+                            <button
+                              type="button"
+                              onClick={() => handleCopy(paymentDetails.account!.accountNumber)}
+                              className="text-muted-foreground hover:text-foreground"
+                              aria-label="Copy account number"
+                            >
+                              <Copy className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                            IFSC Code
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-mono">{paymentDetails.account.ifscCode}</p>
+                            <button
+                              type="button"
+                              onClick={() => handleCopy(paymentDetails.account!.ifscCode)}
+                              className="text-muted-foreground hover:text-foreground"
+                              aria-label="Copy IFSC code"
+                            >
+                              <Copy className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                        <DetailItem label="Branch" value={paymentDetails.account.branchName} />
                       </div>
+                      {paymentDetails.account.upiId && (
+                        <div className="space-y-3">
+                          <p className="font-semibold text-foreground">UPI</p>
+                          <div>
+                            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                              UPI ID
+                            </p>
+                            <div className="flex items-center gap-2">
+                              <p>{paymentDetails.account.upiId}</p>
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(paymentDetails.account!.upiId!)}
+                                className="text-muted-foreground hover:text-foreground"
+                                aria-label="Copy UPI ID"
+                              >
+                                <Copy className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <DetailItem label="Branch" value={paymentDetails.account.branchName} />
-                  </div>
-                  {paymentDetails.account.upiId && (
-                    <div className="space-y-3">
-                      <p className="font-semibold text-foreground">UPI</p>
-                      <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-                          UPI ID
-                        </p>
-                        <div className="flex items-center gap-2">
-                          <p>{paymentDetails.account.upiId}</p>
-                          <button
-                            type="button"
-                            onClick={() => handleCopy(paymentDetails.account!.upiId!)}
-                            className="text-muted-foreground hover:text-foreground"
+                  )}
+
+                  {data.payment.canSubmit && (
+                    <form onSubmit={handlePaymentSubmit} className="space-y-4 pt-4 border-t border-border">
+                      <p className="font-medium text-sm">Submit Payment Details</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="amountPaid">Payment Amount</Label>
+                          <Input
+                            id="amountPaid"
+                            type="number"
+                            required
+                            value={paymentForm.amountPaid}
+                            onChange={(e) =>
+                              setPaymentForm((f) => ({ ...f, amountPaid: e.target.value }))
+                            }
+                            className="h-11"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="paymentMethod">Payment Method</Label>
+                          <select
+                            id="paymentMethod"
+                            value={paymentForm.paymentMethod}
+                            onChange={(e) =>
+                              setPaymentForm((f) => ({
+                                ...f,
+                                paymentMethod: e.target.value as "UPI" | "BANK_TRANSFER",
+                              }))
+                            }
+                            className="w-full h-11 rounded-lg border border-border bg-white px-3 text-sm"
                           >
-                            <Copy className="w-3.5 h-3.5" />
-                          </button>
+                            <option value="UPI">UPI</option>
+                            <option value="BANK_TRANSFER">Bank Transfer</option>
+                          </select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="utr">Transaction ID / UTR</Label>
+                          <Input
+                            id="utr"
+                            required
+                            value={paymentForm.utrTransactionId}
+                            onChange={(e) =>
+                              setPaymentForm((f) => ({ ...f, utrTransactionId: e.target.value }))
+                            }
+                            className="h-11"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="paymentDate">Payment Date</Label>
+                          <Input
+                            id="paymentDate"
+                            type="date"
+                            required
+                            value={paymentForm.paymentDate}
+                            onChange={(e) =>
+                              setPaymentForm((f) => ({ ...f, paymentDate: e.target.value }))
+                            }
+                            className="h-11"
+                          />
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {data.payment.canSubmit && (
-                <form onSubmit={handlePaymentSubmit} className="space-y-4 pt-4 border-t border-border">
-                  <p className="font-medium text-sm">Submit Payment Details</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="amountPaid">Payment Amount</Label>
-                      <Input
-                        id="amountPaid"
-                        type="number"
-                        required
-                        value={paymentForm.amountPaid}
-                        onChange={(e) =>
-                          setPaymentForm((f) => ({ ...f, amountPaid: e.target.value }))
-                        }
-                        className="h-11"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="paymentMethod">Payment Method</Label>
-                      <select
-                        id="paymentMethod"
-                        value={paymentForm.paymentMethod}
-                        onChange={(e) =>
-                          setPaymentForm((f) => ({
-                            ...f,
-                            paymentMethod: e.target.value as "UPI" | "BANK_TRANSFER",
-                          }))
-                        }
-                        className="w-full h-11 rounded-lg border border-border bg-white px-3 text-sm"
+                      <div className="space-y-2">
+                        <Label htmlFor="proof">Upload Payment Proof (PDF, JPG, PNG — max 5 MB)</Label>
+                        <Input
+                          id="proof"
+                          type="file"
+                          accept=".pdf,.jpg,.jpeg,.png"
+                          onChange={(e) => setPaymentProof(e.target.files?.[0] ?? null)}
+                          className="h-11"
+                        />
+                      </div>
+                      {paymentMessage && (
+                        <p className="text-sm text-muted-foreground">{paymentMessage}</p>
+                      )}
+                      <Button
+                        type="submit"
+                        disabled={submittingPayment}
+                        className="rounded-full w-full sm:w-auto bg-solar-green hover:bg-solar-green-dark text-white"
                       >
-                        <option value="UPI">UPI</option>
-                        <option value="BANK_TRANSFER">Bank Transfer</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="utr">Transaction ID / UTR</Label>
-                      <Input
-                        id="utr"
-                        required
-                        value={paymentForm.utrTransactionId}
-                        onChange={(e) =>
-                          setPaymentForm((f) => ({ ...f, utrTransactionId: e.target.value }))
-                        }
-                        className="h-11"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="paymentDate">Payment Date</Label>
-                      <Input
-                        id="paymentDate"
-                        type="date"
-                        required
-                        value={paymentForm.paymentDate}
-                        onChange={(e) =>
-                          setPaymentForm((f) => ({ ...f, paymentDate: e.target.value }))
-                        }
-                        className="h-11"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="proof">Upload Payment Proof (PDF, JPG, PNG — max 5 MB)</Label>
-                    <Input
-                      id="proof"
-                      type="file"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={(e) => setPaymentProof(e.target.files?.[0] ?? null)}
-                      className="h-11"
-                    />
-                  </div>
-                  {paymentMessage && (
-                    <p className="text-sm text-muted-foreground">{paymentMessage}</p>
+                        {submittingPayment ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : null}
+                        Submit Payment Proof
+                      </Button>
+                    </form>
                   )}
-                  <Button
-                    type="submit"
-                    disabled={submittingPayment}
-                    className="rounded-full bg-solar-green hover:bg-solar-green-dark text-white"
-                  >
-                    {submittingPayment ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    ) : null}
-                    Submit Payment Proof
-                  </Button>
-                </form>
+                </>
               )}
 
               {data.payment.history.length > 0 && (

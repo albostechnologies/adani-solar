@@ -13,7 +13,7 @@ import { AlertCircle, Loader2, Eye, EyeOff } from "lucide-react";
 import { saveApplicantToken } from "@/lib/applicantSession";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
-const APP_NUMBER_REGEX = /^(ASP-\d{4}-\d{6}|VL\/\d{4}\/\d+)$/i;
+const APP_NUMBER_REGEX = /^(ASP-\d{4}-\d{6}|VL\/\d{4}\/\d+|ASP\/\d{4}\/\d+)$/i;
 
 export function CheckStatusPage() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export function CheckStatusPage() {
 
     const normalizedApp = applicationNumber.trim();
     if (!APP_NUMBER_REGEX.test(normalizedApp)) {
-      setError("Please enter a valid application number (e.g. VL/2026/3506055 or ASP-2026-000001)");
+      setError("Please enter a valid application number (e.g. ASP/2026/3506055)");
       return;
     }
 
@@ -91,7 +91,7 @@ export function CheckStatusPage() {
                 id="app-number"
                 value={applicationNumber}
                 onChange={(e) => setApplicationNumber(e.target.value)}
-                placeholder="VL/2026/3506055"
+                placeholder="ASP/2026/3506055"
                 required
                 className="h-11 rounded-lg border-border bg-white font-mono"
               />
