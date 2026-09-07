@@ -28,59 +28,64 @@ function display(value: string | null | undefined) {
   return value?.trim() ? value : "—";
 }
 
+function Field({
+  label,
+  value,
+  valueClassName,
+  className,
+}: {
+  label: string;
+  value: string;
+  valueClassName?: string;
+  className?: string;
+}) {
+  return (
+    <div className={`px-4 py-3.5 sm:px-6 sm:py-4 ${className ?? ""}`}>
+      <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">
+        {label}
+      </p>
+      <p className={`text-xs sm:text-sm font-medium break-words ${valueClassName ?? "text-foreground"}`}>
+        {value}
+      </p>
+    </div>
+  );
+}
+
 export function ApplicationDetailsTable({ data }: { data: Details }) {
   const statusClass = STATUS_CELL[data.status] ?? "text-foreground";
-  const pairs = [
+  const pairs: Array<[string, string, string, string, string?]> = [
     ["Application No.", display(data.applicationNumber), "Document No.", display(data.documentNumber)],
-    ["Application Name", display(data.applicationName), "Father / Husband Name", display(data.fatherOrHusbandName)],
+    [
+      "Application Name",
+      display(data.applicationName),
+      "Father / Husband Name",
+      display(data.fatherOrHusbandName),
+    ],
     ["Email", display(data.email), "Mobile", display(data.mobile)],
     ["PIN Code", display(data.pinCode), "State", display(data.state)],
-    ["Interested In", display(data.interestedInLabel), "Status", display(data.statusLabel)],
-  ] as const;
+    [
+      "Interested In",
+      display(data.interestedInLabel),
+      "Status",
+      display(data.statusLabel),
+      statusClass,
+    ],
+  ];
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border bg-white">
-      <table className="w-full min-w-[640px] border-collapse">
-        <caption className="sr-only">Application details</caption>
-        <tbody>
-          {pairs.map(([leftLabel, leftValue, rightLabel, rightValue]) => (
-            <tr key={leftLabel} className="border-b border-border last:border-b-0">
-              <th
-                scope="row"
-                className="w-[18%] py-3.5 pl-6 pr-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground align-top"
-              >
-                {leftLabel}
-              </th>
-              <td className="w-[32%] py-3.5 pr-6 text-sm font-medium text-foreground align-top break-words">
-                {leftValue}
-              </td>
-              <th className="w-[18%] py-3.5 pr-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground align-top">
-                {rightLabel}
-              </th>
-              <td
-                className={`w-[32%] py-3.5 pr-6 text-sm font-medium align-top break-words ${
-                  rightLabel === "Status" ? statusClass : "text-foreground"
-                }`}
-              >
-                {rightValue}
-              </td>
-            </tr>
-          ))}
-          {data.approvedLocation ? (
-            <tr>
-              <th
-                scope="row"
-                className="py-3.5 pl-6 pr-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground align-top"
-              >
-                Approved Location
-              </th>
-              <td colSpan={3} className="py-3.5 pr-6 text-sm font-medium text-foreground whitespace-pre-line">
-                {data.approvedLocation}
-              </td>
-            </tr>
-          ) : null}
-        </tbody>
-      </table>
+    <div className="rounded-2xl border border-border bg-white overflow-hidden">
+      {pairs.map(([leftLabel, leftValue, rightLabel, rightValue, rightValueClass], index) => (
+        <div
+          key={leftLabel}
+          className={`grid grid-cols-2 ${index < pairs.length - 1 || data.approvedLocation ? "border-b border-border" : ""}`}
+        >
+          <Field label={leftLabel} value={leftValue} className="border-r border-border" />
+          <Field label={rightLabel} value={rightValue} valueClassName={rightValueClass} />
+        </div>
+      ))}
+      {data.approvedLocation ? (
+        <Field label="Approved Location" value={data.approvedLocation} />
+      ) : null}
     </div>
   );
 }

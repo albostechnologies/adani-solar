@@ -35,7 +35,7 @@ function CopyButton({ label, value }: { label: string; value: string }) {
     <button
       type="button"
       onClick={copy}
-      className="ml-2 inline-flex items-center text-muted-foreground hover:text-foreground text-xs shrink-0 align-middle"
+      className="ml-1.5 inline-flex items-center text-muted-foreground hover:text-foreground text-xs shrink-0 align-middle"
       aria-label={copied ? `${label} copied` : `Copy ${label}`}
     >
       {copied ? "Copied" : <Copy className="w-3.5 h-3.5" />}
@@ -43,22 +43,29 @@ function CopyButton({ label, value }: { label: string; value: string }) {
   );
 }
 
-function ValueCell({
+function Field({
   label,
   value,
   mono,
   copyable,
+  className,
 }: {
   label: string;
   value: string;
   mono?: boolean;
   copyable?: boolean;
+  className?: string;
 }) {
   return (
-    <span className={`inline-flex items-start gap-1 ${mono ? "font-mono" : ""} break-all`}>
-      <span>{value}</span>
-      {copyable ? <CopyButton label={label} value={value} /> : null}
-    </span>
+    <div className={`px-4 py-3.5 sm:px-6 sm:py-4 ${className ?? ""}`}>
+      <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">
+        {label}
+      </p>
+      <p className={`text-xs sm:text-sm font-medium text-foreground break-all ${mono ? "font-mono" : ""}`}>
+        <span>{value}</span>
+        {copyable ? <CopyButton label={label} value={value} /> : null}
+      </p>
+    </div>
   );
 }
 
@@ -120,41 +127,27 @@ export function PaymentDetailsTable({
 
   return (
     <div className="space-y-4">
-      <div className="overflow-x-auto rounded-2xl border border-border bg-white">
-        <table className="w-full min-w-[640px] border-collapse">
-          <caption className="sr-only">Payment account details</caption>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.leftLabel} className="border-b border-border last:border-b-0">
-                <th
-                  scope="row"
-                  className="w-[18%] py-3.5 pl-6 pr-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground align-top"
-                >
-                  {row.leftLabel}
-                </th>
-                <td className="w-[32%] py-3.5 pr-6 text-sm font-medium text-foreground align-top">
-                  <ValueCell
-                    label={row.leftLabel}
-                    value={row.leftValue}
-                    mono={row.leftMono}
-                    copyable={row.leftCopy}
-                  />
-                </td>
-                <th className="w-[18%] py-3.5 pr-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground align-top">
-                  {row.rightLabel}
-                </th>
-                <td className="w-[32%] py-3.5 pr-6 text-sm font-medium text-foreground align-top">
-                  <ValueCell
-                    label={row.rightLabel}
-                    value={row.rightValue}
-                    mono={row.rightMono}
-                    copyable={row.rightCopy}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="rounded-2xl border border-border bg-white overflow-hidden">
+        {rows.map((row, index) => (
+          <div
+            key={row.leftLabel}
+            className={`grid grid-cols-2 ${index < rows.length - 1 ? "border-b border-border" : ""}`}
+          >
+            <Field
+              label={row.leftLabel}
+              value={row.leftValue}
+              mono={row.leftMono}
+              copyable={row.leftCopy}
+              className="border-r border-border"
+            />
+            <Field
+              label={row.rightLabel}
+              value={row.rightValue}
+              mono={row.rightMono}
+              copyable={row.rightCopy}
+            />
+          </div>
+        ))}
       </div>
 
       {account?.upiQrUrl ? (

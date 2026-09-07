@@ -374,27 +374,27 @@ export function ApplicantPaymentPage() {
           {data.payment && data.payment.history.length > 0 && (
             <section className="rounded-2xl border border-border bg-white p-8">
               <SectionEyebrow label="Payment history" className="mb-4" />
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[640px] text-sm">
+              <div>
+                <table className="w-full table-fixed text-xs sm:text-sm">
                   <thead>
                     <tr className="text-left text-muted-foreground border-b border-border">
-                      <th className="pb-2 pr-4">Reference</th>
-                      <th className="pb-2 pr-4">Amount</th>
-                      <th className="pb-2 pr-4">UTR</th>
-                      <th className="pb-2 pr-4">Method</th>
-                      <th className="pb-2 pr-4">Submitted</th>
-                      <th className="pb-2">Status</th>
+                      <th className="pb-2 pr-2 font-medium">Reference</th>
+                      <th className="pb-2 pr-2 font-medium">Amount</th>
+                      <th className="pb-2 pr-2 font-medium">UTR</th>
+                      <th className="pb-2 pr-2 font-medium hidden sm:table-cell">Method</th>
+                      <th className="pb-2 pr-2 font-medium hidden sm:table-cell">Submitted</th>
+                      <th className="pb-2 font-medium">Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.payment.history.map((p) => (
                       <tr key={p.paymentReference} className="border-b border-border/50">
-                        <td className="py-3 pr-4 font-mono text-xs">{p.paymentReference}</td>
-                        <td className="py-3 pr-4">{formatCurrency(p.amountPaid)}</td>
-                        <td className="py-3 pr-4">{p.utrTransactionId}</td>
-                        <td className="py-3 pr-4">{p.paymentMethod}</td>
-                        <td className="py-3 pr-4">{formatDate(p.submittedAt)}</td>
-                        <td className="py-3">{p.statusLabel}</td>
+                        <td className="py-3 pr-2 font-mono text-[10px] sm:text-xs break-all">{p.paymentReference}</td>
+                        <td className="py-3 pr-2 break-words">{formatCurrency(p.amountPaid)}</td>
+                        <td className="py-3 pr-2 break-all">{p.utrTransactionId}</td>
+                        <td className="py-3 pr-2 hidden sm:table-cell">{p.paymentMethod}</td>
+                        <td className="py-3 pr-2 hidden sm:table-cell">{formatDate(p.submittedAt)}</td>
+                        <td className="py-3 break-words">{p.statusLabel}</td>
                       </tr>
                     ))}
                   </tbody>

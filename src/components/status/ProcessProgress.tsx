@@ -10,46 +10,42 @@ function progressPercent(currentIdx: number) {
 
 export function ProcessProgress({ currentStage }: { currentStage: string }) {
   const currentIdx = Math.max(0, stageIndex(currentStage));
-  const completedRatio = currentIdx / (PROCESS_STAGES.length - 1);
+  const completedRatio = currentIdx / Math.max(PROCESS_STAGES.length - 1, 1);
   const percent = progressPercent(currentIdx);
 
   return (
     <section aria-label="Application progress">
-      {/* Same horizontal desktop track on all viewports */}
-      <div className="overflow-x-auto">
-        <div className="relative px-6 pt-2 pb-16 min-w-[640px]">
-          <div className="absolute left-6 right-6 top-[13px] h-px bg-border" aria-hidden />
-          <div
-            className="absolute left-6 top-[13px] h-px bg-solar-green"
-            style={{ width: `calc((100% - 3rem) * ${completedRatio})` }}
-            aria-hidden
-          />
-          <ol className="relative flex justify-between">
-            {PROCESS_STAGES.map((key, index) => {
-              const completed = index <= currentIdx;
-              const current = index === currentIdx;
-              const state = current ? "current" : completed ? "completed" : "upcoming";
-              return (
-                <li key={key} className="flex flex-col items-center w-24">
-                  <span
-                    className={`relative z-10 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 ${
-                      completed
-                        ? "border-solar-green bg-solar-green"
-                        : "border-border bg-white"
-                    } ${current ? "ring-4 ring-solar-green/20" : ""}`}
-                    aria-hidden
-                  />
-                  <span className="absolute top-7 w-28 text-center text-[11px] leading-snug text-muted-foreground">
-                    <span className={current ? "font-semibold text-foreground" : ""}>
-                      {PROCESS_STAGE_LABELS[key]}
-                    </span>
-                    <span className="sr-only"> — {state}</span>
+      {/* Desktop-style horizontal track, scaled to fit mobile width */}
+      <div className="relative px-1 sm:px-6 pt-2 pb-14 sm:pb-16">
+        <div className="absolute left-1 right-1 sm:left-6 sm:right-6 top-[13px] h-px bg-border" aria-hidden />
+        <div
+          className="absolute left-1 sm:left-6 top-[13px] h-px bg-solar-green"
+          style={{ width: `calc((100% - 0.5rem) * ${completedRatio})` }}
+          aria-hidden
+        />
+        <ol className="relative flex justify-between gap-0">
+          {PROCESS_STAGES.map((key, index) => {
+            const completed = index <= currentIdx;
+            const current = index === currentIdx;
+            const state = current ? "current" : completed ? "completed" : "upcoming";
+            return (
+              <li key={key} className="flex flex-col items-center flex-1 min-w-0">
+                <span
+                  className={`relative z-10 flex h-3 w-3 sm:h-3.5 sm:w-3.5 items-center justify-center rounded-full border-2 ${
+                    completed ? "border-solar-green bg-solar-green" : "border-border bg-white"
+                  } ${current ? "ring-4 ring-solar-green/20" : ""}`}
+                  aria-hidden
+                />
+                <span className="mt-3 w-full px-0.5 text-center text-[9px] sm:text-[11px] leading-snug text-muted-foreground">
+                  <span className={current ? "font-semibold text-foreground" : ""}>
+                    {PROCESS_STAGE_LABELS[key]}
                   </span>
-                </li>
-              );
-            })}
-          </ol>
-        </div>
+                  <span className="sr-only"> — {state}</span>
+                </span>
+              </li>
+            );
+          })}
+        </ol>
       </div>
 
       <div aria-label={`Progress ${percent} percent`}>
