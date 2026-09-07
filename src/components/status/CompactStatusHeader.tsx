@@ -66,8 +66,9 @@ export function CompactStatusHeader({
       <div className="editorial-section-inner">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Application Status</p>
+
           <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <h1 className="font-mono text-lg sm:text-xl font-semibold text-foreground tracking-wide truncate">
                 {applicationNumber}
               </h1>
@@ -77,10 +78,9 @@ export function CompactStatusHeader({
                 {statusIcon}
                 {statusLabel}
               </div>
-              <p className="mt-3 text-sm text-muted-foreground max-w-xl">{description}</p>
             </div>
 
-            <div className="relative flex items-center gap-2 shrink-0 flex-wrap justify-end" ref={panelRef}>
+            <div className="relative flex items-center gap-2 shrink-0" ref={panelRef}>
               {showPaymentShortcut && (
                 <button
                   type="button"
@@ -128,6 +128,11 @@ export function CompactStatusHeader({
               )}
             </div>
           </div>
+
+          {/* Full-width status message — not squeezed by action buttons */}
+          {description ? (
+            <p className="mt-4 w-full text-sm text-muted-foreground leading-relaxed">{description}</p>
+          ) : null}
         </div>
       </div>
     </div>
