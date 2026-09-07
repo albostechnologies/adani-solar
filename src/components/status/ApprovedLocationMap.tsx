@@ -15,7 +15,7 @@ export function ApprovedLocationMap({ address }: { address: string }) {
         <iframe
           title="Approved business location"
           src={embedSrc}
-          className="w-full h-[280px] md:h-[420px] border-0"
+          className="w-full h-[420px] border-0"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
           allowFullScreen

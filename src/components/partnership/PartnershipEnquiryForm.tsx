@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -28,6 +28,10 @@ const INTEREST_MAP = {
   Dealership: "DEALERSHIP",
   Distributorship: "DISTRIBUTORSHIP",
 } as const;
+
+const PASSPORT_MAX_BYTES = 2 * 1024 * 1024;
+const PASSPORT_ACCEPT = "image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp";
+const PASSPORT_MIME = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
 
 const enquirySchema = z.object({
   name: z.string().trim().min(2, "Please enter your name."),
@@ -62,10 +66,20 @@ type EnquiryFormData = z.infer<typeof enquirySchema>;
 const inputClass =
   "h-11 rounded-lg border-border bg-white focus:border-solar-green focus:ring-solar-green/20";
 
+function isAllowedPassportFile(file: File) {
+  const mimeOk = PASSPORT_MIME.has(file.type.toLowerCase());
+  const extOk = /\.(jpe?g|png|webp)$/i.test(file.name);
+  return (mimeOk || extOk) && file.size <= PASSPORT_MAX_BYTES;
+}
+
 export function PartnershipEnquiryForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [applicationNumber, setApplicationNumber] = useState("");
   const [copied, setCopied] = useState(false);
+  const [passportPhoto, setPassportPhoto] = useState<File | null>(null);
+  const [passportPreview, setPassportPreview] = useState<string | null>(null);
+  const [passportError, setPassportError] = useState("");
+  const passportInputRef = useRef<HTMLInputElement>(null);
   const formId = useId();
 
   const {
@@ -92,23 +106,54 @@ export function PartnershipEnquiryForm() {
   const [businessType, setBusinessType] = useState<EnquiryFormData["businessType"] | undefined>();
   const [interestedIn, setInterestedIn] = useState<EnquiryFormData["interestedIn"] | undefined>();
 
+  const clearPassport = () => {
+    if (passportPreview) URL.revokeObjectURL(passportPreview);
+    setPassportPhoto(null);
+    setPassportPreview(null);
+    if (passportInputRef.current) passportInputRef.current.value = "";
+  };
+
+  const handlePassportChange = (file: File | undefined) => {
+    if (!file) return;
+    if (!isAllowedPassportFile(file)) {
+      setPassportError(
+        file.size > PASSPORT_MAX_BYTES
+          ? "Photo must be 2 MB or smaller."
+          : "Upload a JPG, JPEG, PNG, or WEBP image."
+      );
+      clearPassport();
+      return;
+    }
+    if (passportPreview) URL.revokeObjectURL(passportPreview);
+    setPassportError("");
+    setPassportPhoto(file);
+    setPassportPreview(URL.createObjectURL(file));
+  };
+
   const onSubmit = async (data: EnquiryFormData) => {
+    if (!passportPhoto) {
+      setPassportError("Passport-size photo is required.");
+      return;
+    }
     setStatus("submitting");
     try {
+      const formData = new FormData();
+      formData.append("fullName", data.name.trim());
+      if (data.fatherOrHusbandName?.trim()) {
+        formData.append("fatherOrHusbandName", data.fatherOrHusbandName.trim());
+      }
+      formData.append("email", data.email.trim().toLowerCase());
+      formData.append("mobile", data.mobile.trim());
+      formData.append("state", data.state.trim());
+      formData.append("district", data.district.trim());
+      formData.append("pinCode", data.pinCode.trim());
+      formData.append("businessType", BUSINESS_TYPE_MAP[data.businessType]);
+      formData.append("interestedIn", INTEREST_MAP[data.interestedIn]);
+      formData.append("passportPhoto", passportPhoto);
+
       const response = await fetch(`${API_URL}/api/v1/partners`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: data.name.trim(),
-          fatherOrHusbandName: data.fatherOrHusbandName?.trim() || undefined,
-          email: data.email.trim().toLowerCase(),
-          mobile: data.mobile.trim(),
-          state: data.state.trim(),
-          district: data.district.trim(),
-          pinCode: data.pinCode.trim(),
-          businessType: BUSINESS_TYPE_MAP[data.businessType],
-          interestedIn: INTEREST_MAP[data.interestedIn],
-        }),
+        body: formData,
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result?.error?.message ?? "Failed");
@@ -116,6 +161,7 @@ export function PartnershipEnquiryForm() {
       setStatus("success");
       setBusinessType(undefined);
       setInterestedIn(undefined);
+      clearPassport();
       reset();
     } catch {
       setStatus("error");
@@ -229,6 +275,53 @@ export function PartnershipEnquiryForm() {
               target.value = target.value.replace(/[^\d+\s()-]/g, "").slice(0, 15);
             }}
           />
+        </Field>
+
+        <Field
+          id={`${formId}-passport`}
+          label="Passport Size Photo"
+          required
+          error={passportError}
+          className="sm:col-span-2"
+        >
+          <input
+            ref={passportInputRef}
+            id={`${formId}-passport`}
+            type="file"
+            accept={PASSPORT_ACCEPT}
+            className="hidden"
+            onChange={(e) => handlePassportChange(e.target.files?.[0])}
+          />
+          {passportPreview ? (
+            <div className="flex flex-wrap items-end gap-4">
+              <div className="w-24 aspect-[3/4] overflow-hidden rounded-lg border border-border bg-muted">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={passportPreview}
+                  alt="Passport photo preview"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => passportInputRef.current?.click()}
+                className="h-11 px-5 rounded-full border border-border text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Replace Photo
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => passportInputRef.current?.click()}
+              className="h-11 px-5 rounded-lg border border-dashed border-border bg-white text-sm text-muted-foreground hover:border-solar-green hover:text-foreground transition-colors w-full sm:w-auto"
+            >
+              Choose Photo
+            </button>
+          )}
+          <p className="text-xs text-muted-foreground mt-2">
+            Upload a clear passport-size photograph.
+          </p>
         </Field>
 
         <Field id={`${formId}-state`} label="State" required error={errors.state?.message}>

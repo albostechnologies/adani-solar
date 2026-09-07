@@ -28,23 +28,6 @@ function display(value: string | null | undefined) {
   return value?.trim() ? value : "—";
 }
 
-function StackedField({
-  label,
-  value,
-  className,
-}: {
-  label: string;
-  value: string;
-  className?: string;
-}) {
-  return (
-    <div className="py-4 border-b border-border last:border-b-0">
-      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">{label}</dt>
-      <dd className={`text-sm font-medium break-words ${className ?? "text-foreground"}`}>{value}</dd>
-    </div>
-  );
-}
-
 export function ApplicationDetailsTable({ data }: { data: Details }) {
   const statusClass = STATUS_CELL[data.status] ?? "text-foreground";
   const pairs = [
@@ -56,8 +39,8 @@ export function ApplicationDetailsTable({ data }: { data: Details }) {
   ] as const;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-white">
-      <table className="hidden md:table w-full border-collapse">
+    <div className="overflow-x-auto rounded-2xl border border-border bg-white">
+      <table className="w-full min-w-[640px] border-collapse">
         <caption className="sr-only">Application details</caption>
         <tbody>
           {pairs.map(([leftLabel, leftValue, rightLabel, rightValue]) => (
@@ -98,22 +81,6 @@ export function ApplicationDetailsTable({ data }: { data: Details }) {
           ) : null}
         </tbody>
       </table>
-
-      <dl className="md:hidden px-5">
-        <StackedField label="Application No." value={display(data.applicationNumber)} />
-        <StackedField label="Document No." value={display(data.documentNumber)} />
-        <StackedField label="Application Name" value={display(data.applicationName)} />
-        <StackedField label="Father / Husband Name" value={display(data.fatherOrHusbandName)} />
-        <StackedField label="Email" value={display(data.email)} />
-        <StackedField label="Mobile" value={display(data.mobile)} />
-        <StackedField label="PIN Code" value={display(data.pinCode)} />
-        <StackedField label="State" value={display(data.state)} />
-        <StackedField label="Interested In" value={display(data.interestedInLabel)} />
-        <StackedField label="Status" value={display(data.statusLabel)} className={statusClass} />
-        {data.approvedLocation ? (
-          <StackedField label="Approved Location" value={data.approvedLocation} />
-        ) : null}
-      </dl>
     </div>
   );
 }

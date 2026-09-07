@@ -116,7 +116,7 @@ export function CompactStatusHeader({
                 >
                   {menuItems.map((item) => (
                     <button
-                      key={item.id}
+                      key={`${item.id}-${item.label}`}
                       type="button"
                       onClick={() => goToItem(item)}
                       className="block w-full px-4 py-2.5 text-left text-sm text-foreground hover:bg-[#f7f7f5]"

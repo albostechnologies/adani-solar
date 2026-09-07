@@ -286,10 +286,10 @@ export function ApplicantPaymentPage() {
           </section>
 
           {data.payment?.canSubmit && paymentConfigured && (
-            <section className="rounded-2xl border border-border bg-white p-6 md:p-8">
+            <section className="rounded-2xl border border-border bg-white p-8">
               <SectionEyebrow label="Submit payment proof" className="mb-4" />
               <form onSubmit={handlePaymentSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="amountPaid">Payment Amount</Label>
                     <Input
@@ -362,7 +362,7 @@ export function ApplicantPaymentPage() {
                 <Button
                   type="submit"
                   disabled={submittingPayment}
-                  className="rounded-full w-full sm:w-auto bg-solar-green hover:bg-solar-green-dark text-white"
+                  className="rounded-full bg-solar-green hover:bg-solar-green-dark text-white"
                 >
                   {submittingPayment ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
                   Submit Payment Proof
@@ -372,21 +372,10 @@ export function ApplicantPaymentPage() {
           )}
 
           {data.payment && data.payment.history.length > 0 && (
-            <section className="rounded-2xl border border-border bg-white p-6 md:p-8">
+            <section className="rounded-2xl border border-border bg-white p-8">
               <SectionEyebrow label="Payment history" className="mb-4" />
-              <div className="space-y-3 md:hidden">
-                {data.payment.history.map((p) => (
-                  <div key={p.paymentReference} className="rounded-lg border border-border p-4 text-sm">
-                    <p className="font-mono text-xs text-muted-foreground">{p.paymentReference}</p>
-                    <p className="font-medium mt-1">{formatCurrency(p.amountPaid)}</p>
-                    <p className="text-muted-foreground">{p.utrTransactionId}</p>
-                    <p className="text-muted-foreground">{formatDate(p.submittedAt)}</p>
-                    <p className="mt-1 font-medium">{p.statusLabel}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="hidden md:block overflow-x-auto">
-                <table className="w-full text-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[640px] text-sm">
                   <thead>
                     <tr className="text-left text-muted-foreground border-b border-border">
                       <th className="pb-2 pr-4">Reference</th>

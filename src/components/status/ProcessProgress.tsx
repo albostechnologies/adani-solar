@@ -15,9 +15,9 @@ export function ProcessProgress({ currentStage }: { currentStage: string }) {
 
   return (
     <section aria-label="Application progress">
-      {/* Desktop: horizontal track */}
-      <div className="hidden md:block">
-        <div className="relative px-6 pt-2 pb-16">
+      {/* Same horizontal desktop track on all viewports */}
+      <div className="overflow-x-auto">
+        <div className="relative px-6 pt-2 pb-16 min-w-[640px]">
           <div className="absolute left-6 right-6 top-[13px] h-px bg-border" aria-hidden />
           <div
             className="absolute left-6 top-[13px] h-px bg-solar-green"
@@ -52,39 +52,7 @@ export function ProcessProgress({ currentStage }: { currentStage: string }) {
         </div>
       </div>
 
-      {/* Mobile: vertical line */}
-      <ol className="md:hidden space-y-0">
-        {PROCESS_STAGES.map((key, index) => {
-          const completed = index <= currentIdx;
-          const current = index === currentIdx;
-          const last = index === PROCESS_STAGES.length - 1;
-          const state = current ? "current" : completed ? "completed" : "upcoming";
-          return (
-            <li key={key} className="flex gap-3">
-              <div className="flex flex-col items-center">
-                <span
-                  className={`relative z-10 mt-0.5 flex h-3.5 w-3.5 shrink-0 rounded-full border-2 ${
-                    completed ? "border-solar-green bg-solar-green" : "border-border bg-white"
-                  } ${current ? "ring-4 ring-solar-green/20" : ""}`}
-                  aria-hidden
-                />
-                {!last && (
-                  <span
-                    className={`w-px flex-1 min-h-[22px] ${index < currentIdx ? "bg-solar-green" : "bg-border"}`}
-                    aria-hidden
-                  />
-                )}
-              </div>
-              <p className={`pb-5 text-sm ${current ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
-                {PROCESS_STAGE_LABELS[key]}
-                <span className="sr-only"> — {state}</span>
-              </p>
-            </li>
-          );
-        })}
-      </ol>
-
-      <div className="mt-2 md:mt-0" aria-label={`Progress ${percent} percent`}>
+      <div aria-label={`Progress ${percent} percent`}>
         <div className="flex items-center justify-between gap-3 mb-2">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Overall progress</p>
           <p className="text-sm font-semibold text-foreground tabular-nums">{percent}%</p>

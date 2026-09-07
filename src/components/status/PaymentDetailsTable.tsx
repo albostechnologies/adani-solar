@@ -62,27 +62,6 @@ function ValueCell({
   );
 }
 
-function StackedField({
-  label,
-  value,
-  mono,
-  copyable,
-}: {
-  label: string;
-  value: string;
-  mono?: boolean;
-  copyable?: boolean;
-}) {
-  return (
-    <div className="py-4 border-b border-border last:border-b-0">
-      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1">{label}</dt>
-      <dd className="text-sm font-medium text-foreground">
-        <ValueCell label={label} value={value} mono={mono} copyable={copyable} />
-      </dd>
-    </div>
-  );
-}
-
 export function PaymentDetailsTable({
   account,
   amountPayable,
@@ -141,8 +120,8 @@ export function PaymentDetailsTable({
 
   return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-2xl border border-border bg-white">
-        <table className="hidden md:table w-full border-collapse">
+      <div className="overflow-x-auto rounded-2xl border border-border bg-white">
+        <table className="w-full min-w-[640px] border-collapse">
           <caption className="sr-only">Payment account details</caption>
           <tbody>
             {rows.map((row) => (
@@ -176,25 +155,6 @@ export function PaymentDetailsTable({
             ))}
           </tbody>
         </table>
-
-        <dl className="md:hidden px-5">
-          {rows.map((row) => (
-            <div key={row.leftLabel}>
-              <StackedField
-                label={row.leftLabel}
-                value={row.leftValue}
-                mono={row.leftMono}
-                copyable={row.leftCopy}
-              />
-              <StackedField
-                label={row.rightLabel}
-                value={row.rightValue}
-                mono={row.rightMono}
-                copyable={row.rightCopy}
-              />
-            </div>
-          ))}
-        </dl>
       </div>
 
       {account?.upiQrUrl ? (

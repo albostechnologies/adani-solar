@@ -39,7 +39,10 @@ interface StatusData {
   publicMessage: string | null;
   approvedLocation: string | null;
   hasApprovalLetter: boolean;
+  hasConfirmationLetter?: boolean;
   approvalLetterAvailable?: boolean;
+  confirmationLetterAvailable?: boolean;
+  taxInvoiceAvailable?: boolean;
   paymentAvailable?: boolean;
   currentProcessStage: string;
 }
@@ -65,6 +68,7 @@ export function ApplicationStatusPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [downloadingLetter, setDownloadingLetter] = useState(false);
+  const [downloadingInvoice, setDownloadingInvoice] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -95,17 +99,42 @@ export function ApplicationStatusPage() {
     };
   }, [router]);
 
-  const handleDownloadLetter = async () => {
+  const confirmationAvailable =
+    Boolean(data?.confirmationLetterAvailable) ||
+    Boolean(data?.approvalLetterAvailable) ||
+    Boolean(data?.hasConfirmationLetter) ||
+    Boolean(data?.hasApprovalLetter);
+
+  const handleDownloadConfirmationLetter = async () => {
     setDownloadingLetter(true);
     try {
-      const res = await applicantFetch<{ success: boolean; data: { url: string } }>(
-        "/api/v1/partners/me/approval-letter"
+      let res = await applicantFetch<{ success: boolean; data: { url: string } }>(
+        "/api/v1/partners/me/confirmation-letter"
       );
+      if (!res.ok) {
+        res = await applicantFetch<{ success: boolean; data: { url: string } }>(
+          "/api/v1/partners/me/approval-letter"
+        );
+      }
       if (res.ok && res.body.data?.url) {
         window.open(res.body.data.url, "_blank", "noopener,noreferrer");
       }
     } finally {
       setDownloadingLetter(false);
+    }
+  };
+
+  const handleDownloadTaxInvoice = async () => {
+    setDownloadingInvoice(true);
+    try {
+      const res = await applicantFetch<{ success: boolean; data: { url: string } }>(
+        "/api/v1/partners/me/invoice"
+      );
+      if (res.ok && res.body.data?.url) {
+        window.open(res.body.data.url, "_blank", "noopener,noreferrer");
+      }
+    } finally {
+      setDownloadingInvoice(false);
     }
   };
 
@@ -129,9 +158,13 @@ export function ApplicationStatusPage() {
   const statusConfig = STATUS_CONFIG[data.status] ?? STATUS_CONFIG.PENDING;
   const isApproved = data.status === "APPROVED";
   const showPayment = isApproved && data.paymentAvailable !== false;
+  const showTaxInvoice = Boolean(data.taxInvoiceAvailable);
+  const showDocuments = isApproved;
+
   const menuItems = [
     { id: "application-details", label: "Application Details" },
-    ...(isApproved ? [{ id: "approval-letter", label: "Approval Letter" }] : []),
+    ...(showDocuments ? [{ id: "documents", label: "Confirmation Letter" }] : []),
+    ...(showTaxInvoice ? [{ id: "documents", label: "Payment Invoice" }] : []),
     { id: "application-progress", label: "Application Progress" },
     ...(data.approvedLocation ? [{ id: "approved-location", label: "Approved Location" }] : []),
     ...(showPayment
@@ -162,40 +195,66 @@ export function ApplicationStatusPage() {
             <ApplicationDetailsTable data={data} />
           </section>
 
-          {isApproved && (
-            <section id="approval-letter" className="scroll-mt-28 rounded-2xl border border-border p-6 md:p-8">
-              <SectionEyebrow label="Approval letter" className="mb-4" />
-              {data.hasApprovalLetter || data.approvalLetterAvailable ? (
-                <>
-                  <p className="text-sm text-muted-foreground mb-4">Your approval letter is ready.</p>
-                  <Button
-                    onClick={handleDownloadLetter}
-                    disabled={downloadingLetter}
-                    className="rounded-full w-full sm:w-auto bg-solar-green hover:bg-solar-green-dark text-white"
-                  >
-                    {downloadingLetter ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    ) : (
-                      <Download className="w-4 h-4 mr-2" />
-                    )}
-                    Download Approval Letter
-                  </Button>
-                </>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Approval letter is being prepared. Please check again later.
-                </p>
-              )}
+          {showDocuments && (
+            <section id="documents" className="scroll-mt-28 rounded-2xl border border-border p-8">
+              <SectionEyebrow label="Documents" className="mb-6" />
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground mb-2">Confirmation Letter</h3>
+                  {confirmationAvailable ? (
+                    <>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Your confirmation letter is ready.
+                      </p>
+                      <Button
+                        onClick={handleDownloadConfirmationLetter}
+                        disabled={downloadingLetter}
+                        className="rounded-full bg-solar-green hover:bg-solar-green-dark text-white"
+                      >
+                        {downloadingLetter ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <Download className="w-4 h-4 mr-2" />
+                        )}
+                        Download Confirmation Letter
+                      </Button>
+                    </>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Confirmation letter is being prepared. Please check again later.
+                    </p>
+                  )}
+                </div>
+
+                {showTaxInvoice && (
+                  <div className="pt-6 border-t border-border">
+                    <h3 className="text-sm font-semibold text-foreground mb-2">Payment Invoice</h3>
+                    <p className="text-sm text-muted-foreground mb-4">Your payment invoice is ready.</p>
+                    <Button
+                      onClick={handleDownloadTaxInvoice}
+                      disabled={downloadingInvoice}
+                      className="rounded-full bg-solar-green hover:bg-solar-green-dark text-white"
+                    >
+                      {downloadingInvoice ? (
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <Download className="w-4 h-4 mr-2" />
+                      )}
+                      Download Payment Invoice
+                    </Button>
+                  </div>
+                )}
+              </div>
             </section>
           )}
 
-          <section id="application-progress" className="scroll-mt-28 rounded-2xl border border-border p-6 md:p-8">
+          <section id="application-progress" className="scroll-mt-28 rounded-2xl border border-border p-8">
             <SectionEyebrow label="Application progress" className="mb-6" />
             <ProcessProgress currentStage={data.currentProcessStage} />
           </section>
 
           {data.approvedLocation && (
-            <section id="approved-location" className="scroll-mt-28 rounded-2xl border border-border p-6 md:p-8">
+            <section id="approved-location" className="scroll-mt-28 rounded-2xl border border-border p-8">
               <SectionEyebrow label="Approved location" className="mb-4" />
               <ApprovedLocationMap address={data.approvedLocation} />
             </section>
