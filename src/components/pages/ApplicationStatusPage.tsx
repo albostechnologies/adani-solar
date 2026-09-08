@@ -59,6 +59,11 @@ const STATUS_CONFIG: Record<string, { icon: React.ReactNode; color: string }> = 
 function statusDescription(data: StatusData) {
   if (data.publicMessage) return data.publicMessage;
   if (data.status === "APPROVED") return "Your partnership application has been approved.";
+  if (data.status === "PENDING") return "Your application has been received and is awaiting review.";
+  if (data.status === "UNDER_REVIEW") return "Your application is currently under review.";
+  if (data.status === "NEEDS_INFORMATION") return "Additional information is required for your application.";
+  if (data.status === "DECLINED") return "Your partnership application was not approved.";
+  if (data.status === "CANCELLED") return "Your application has been cancelled.";
   return "Track your application progress below.";
 }
 
