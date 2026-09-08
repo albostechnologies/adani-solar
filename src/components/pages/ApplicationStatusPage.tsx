@@ -42,7 +42,6 @@ interface StatusData {
   hasConfirmationLetter?: boolean;
   approvalLetterAvailable?: boolean;
   confirmationLetterAvailable?: boolean;
-  taxInvoiceAvailable?: boolean;
   paymentAvailable?: boolean;
   currentProcessStage: string;
 }
@@ -73,7 +72,6 @@ export function ApplicationStatusPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [downloadingLetter, setDownloadingLetter] = useState(false);
-  const [downloadingInvoice, setDownloadingInvoice] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -129,20 +127,6 @@ export function ApplicationStatusPage() {
     }
   };
 
-  const handleDownloadTaxInvoice = async () => {
-    setDownloadingInvoice(true);
-    try {
-      const res = await applicantFetch<{ success: boolean; data: { url: string } }>(
-        "/api/v1/partners/me/invoice"
-      );
-      if (res.ok && res.body.data?.url) {
-        window.open(res.body.data.url, "_blank", "noopener,noreferrer");
-      }
-    } finally {
-      setDownloadingInvoice(false);
-    }
-  };
-
   if (loading) {
     return (
       <main className="flex items-center justify-center min-h-[50vh]">
@@ -163,13 +147,11 @@ export function ApplicationStatusPage() {
   const statusConfig = STATUS_CONFIG[data.status] ?? STATUS_CONFIG.PENDING;
   const isApproved = data.status === "APPROVED";
   const showPayment = isApproved && data.paymentAvailable !== false;
-  const showTaxInvoice = Boolean(data.taxInvoiceAvailable);
   const showDocuments = isApproved;
 
   const menuItems = [
     { id: "application-details", label: "Application Details" },
     ...(showDocuments ? [{ id: "documents", label: "Confirmation Letter" }] : []),
-    ...(showTaxInvoice ? [{ id: "documents", label: "Payment Invoice" }] : []),
     { id: "application-progress", label: "Application Progress" },
     ...(data.approvedLocation ? [{ id: "approved-location", label: "Approved Location" }] : []),
     ...(showPayment
@@ -230,35 +212,6 @@ export function ApplicationStatusPage() {
                     </p>
                   )}
                 </div>
-
-                {showTaxInvoice && (
-                  <div className="pt-6 border-t border-border">
-                    <h3 className="text-sm font-semibold text-foreground mb-2">Payment Invoice</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Your payment invoice is ready. For multiple payments, download each invoice from{" "}
-                      <button
-                        type="button"
-                        className="text-solar-green underline underline-offset-2"
-                        onClick={() => router.push("/application-status/payment")}
-                      >
-                        Payment history
-                      </button>
-                      .
-                    </p>
-                    <Button
-                      onClick={handleDownloadTaxInvoice}
-                      disabled={downloadingInvoice}
-                      className="rounded-full bg-solar-green hover:bg-solar-green-dark text-white"
-                    >
-                      {downloadingInvoice ? (
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      ) : (
-                        <Download className="w-4 h-4 mr-2" />
-                      )}
-                      Download Latest Payment Invoice
-                    </Button>
-                  </div>
-                )}
               </div>
             </section>
           )}
