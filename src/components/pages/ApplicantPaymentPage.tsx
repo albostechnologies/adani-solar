@@ -7,7 +7,7 @@ import { SectionEyebrow } from "@/components/editorial/SectionEyebrow";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Download, Loader2 } from "lucide-react";
 import {
   applicantFetch,
   clearApplicantToken,
@@ -22,23 +22,33 @@ interface StatusData {
   paymentAvailable?: boolean;
   payment: {
     amountDue: number | null;
+    totalDue: number | null;
+    amountPaidVerified: number;
+    remainingAmount: number | null;
     publicStatus: string;
     publicStatusLabel: string;
     publicMessage: string | null;
     canSubmit: boolean;
     history: {
+      id: string;
       paymentReference: string;
       amountPaid: number;
       utrTransactionId: string;
       paymentMethod: string;
       submittedAt: string;
+      status: string;
       statusLabel: string;
+      invoiceAvailable?: boolean;
+      publicRejectionMessage?: string | null;
     }[];
   } | null;
 }
 
 interface PaymentDetailsData {
   amountDue: number | null;
+  totalDue: number | null;
+  amountPaidVerified: number;
+  remainingAmount: number | null;
   account: {
     accountName: string;
     bankName: string;
@@ -77,6 +87,7 @@ export function ApplicantPaymentPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [submittingPayment, setSubmittingPayment] = useState(false);
+  const [downloadingInvoiceId, setDownloadingInvoiceId] = useState<string | null>(null);
   const [paymentForm, setPaymentForm] = useState({
     amountPaid: "",
     paymentMethod: "UPI" as "UPI" | "BANK_TRANSFER",
@@ -192,6 +203,20 @@ export function ApplicantPaymentPage() {
     }
   };
 
+  const handleDownloadInvoice = async (paymentId: string) => {
+    setDownloadingInvoiceId(paymentId);
+    try {
+      const res = await applicantFetch<{ success: boolean; data: { url: string } }>(
+        `/api/v1/partners/me/payments/${paymentId}/invoice`
+      );
+      if (res.ok && res.body.data?.url) {
+        window.open(res.body.data.url, "_blank", "noopener,noreferrer");
+      }
+    } finally {
+      setDownloadingInvoiceId(null);
+    }
+  };
+
   if (loading) {
     return (
       <main className="flex items-center justify-center min-h-[50vh]">
@@ -209,10 +234,22 @@ export function ApplicantPaymentPage() {
     );
   }
 
-  const amountDue = paymentDetails?.amountDue ?? data.paymentAmountDue;
+  const totalDue =
+    paymentDetails?.totalDue ??
+    data.payment?.totalDue ??
+    paymentDetails?.amountDue ??
+    data.paymentAmountDue;
+  const amountPaid =
+    paymentDetails?.amountPaidVerified ?? data.payment?.amountPaidVerified ?? 0;
+  const remaining =
+    paymentDetails?.remainingAmount ??
+    data.payment?.remainingAmount ??
+    (totalDue != null ? Math.max(Number(totalDue) - amountPaid, 0) : null);
   const hasAccount = Boolean(paymentDetails?.account);
-  const hasAmount = Boolean(amountDue);
+  const hasAmount = Boolean(totalDue);
   const paymentConfigured = hasAccount || hasAmount;
+  const isRejected = data.payment?.publicStatus === "REJECTED";
+  const isPartial = data.payment?.publicStatus === "PARTIALLY_PAID";
 
   return (
     <main>
@@ -262,17 +299,35 @@ export function ApplicantPaymentPage() {
             ) : (
               <div className="space-y-6">
                 {data.payment && data.payment.publicStatus !== "NOT_SUBMITTED" && (
-                  <div className="rounded-2xl border border-border bg-white p-4 text-sm">
+                  <div
+                    className={`rounded-2xl border p-4 text-sm ${
+                      isRejected
+                        ? "border-red-200 bg-red-50 text-red-900"
+                        : isPartial
+                          ? "border-amber-200 bg-amber-50 text-amber-950"
+                          : "border-border bg-white"
+                    }`}
+                  >
                     <p className="font-semibold">{data.payment.publicStatusLabel}</p>
                     {data.payment.publicMessage && (
-                      <p className="text-muted-foreground mt-1">{data.payment.publicMessage}</p>
+                      <p className="mt-1 opacity-90">{data.payment.publicMessage}</p>
+                    )}
+                    {isRejected && data.payment.canSubmit && (
+                      <p className="mt-2 text-sm">
+                        Please submit a new payment proof below to continue.
+                      </p>
                     )}
                   </div>
                 )}
 
                 <PaymentDetailsTable
                   account={paymentDetails?.account ?? null}
-                  amountPayable={hasAmount ? formatCurrency(amountDue!) : null}
+                  amountPayable={hasAmount ? formatCurrency(totalDue!) : null}
+                  totalDue={hasAmount ? formatCurrency(totalDue!) : null}
+                  amountPaid={hasAmount ? formatCurrency(amountPaid) : null}
+                  remainingAmount={
+                    remaining != null && hasAmount ? formatCurrency(remaining) : null
+                  }
                   paymentStatusLabel={data.payment?.publicStatusLabel ?? null}
                 />
 
@@ -288,6 +343,15 @@ export function ApplicantPaymentPage() {
           {data.payment?.canSubmit && paymentConfigured && (
             <section className="rounded-2xl border border-border bg-white p-8">
               <SectionEyebrow label="Submit payment proof" className="mb-4" />
+              {remaining != null && remaining > 0 && (
+                <p className="text-sm text-muted-foreground mb-4">
+                  Remaining balance to pay:{" "}
+                  <span className="font-semibold text-foreground">{formatCurrency(remaining)}</span>
+                  {isPartial
+                    ? " You can pay this in one or more additional payments."
+                    : null}
+                </p>
+              )}
               <form onSubmit={handlePaymentSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -296,6 +360,8 @@ export function ApplicantPaymentPage() {
                       id="amountPaid"
                       type="number"
                       required
+                      min={1}
+                      max={remaining ?? undefined}
                       value={paymentForm.amountPaid}
                       onChange={(e) =>
                         setPaymentForm((f) => ({ ...f, amountPaid: e.target.value }))
@@ -365,7 +431,7 @@ export function ApplicantPaymentPage() {
                   className="rounded-full bg-solar-green hover:bg-solar-green-dark text-white"
                 >
                   {submittingPayment ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                  Submit Payment Proof
+                  {isRejected ? "Resubmit Payment Proof" : "Submit Payment Proof"}
                 </Button>
               </form>
             </section>
@@ -374,8 +440,8 @@ export function ApplicantPaymentPage() {
           {data.payment && data.payment.history.length > 0 && (
             <section className="rounded-2xl border border-border bg-white p-8">
               <SectionEyebrow label="Payment history" className="mb-4" />
-              <div>
-                <table className="w-full table-fixed text-xs sm:text-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full table-fixed text-xs sm:text-sm min-w-[640px]">
                   <thead>
                     <tr className="text-left text-muted-foreground border-b border-border">
                       <th className="pb-2 pr-2 font-medium">Reference</th>
@@ -383,18 +449,51 @@ export function ApplicantPaymentPage() {
                       <th className="pb-2 pr-2 font-medium">UTR</th>
                       <th className="pb-2 pr-2 font-medium hidden sm:table-cell">Method</th>
                       <th className="pb-2 pr-2 font-medium hidden sm:table-cell">Submitted</th>
-                      <th className="pb-2 font-medium">Status</th>
+                      <th className="pb-2 pr-2 font-medium">Status</th>
+                      <th className="pb-2 font-medium">Invoice</th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.payment.history.map((p) => (
-                      <tr key={p.paymentReference} className="border-b border-border/50">
-                        <td className="py-3 pr-2 font-mono text-[10px] sm:text-xs break-all">{p.paymentReference}</td>
+                      <tr key={p.id || p.paymentReference} className="border-b border-border/50 align-top">
+                        <td className="py-3 pr-2 font-mono text-[10px] sm:text-xs break-all">
+                          {p.paymentReference}
+                        </td>
                         <td className="py-3 pr-2 break-words">{formatCurrency(p.amountPaid)}</td>
                         <td className="py-3 pr-2 break-all">{p.utrTransactionId}</td>
                         <td className="py-3 pr-2 hidden sm:table-cell">{p.paymentMethod}</td>
                         <td className="py-3 pr-2 hidden sm:table-cell">{formatDate(p.submittedAt)}</td>
-                        <td className="py-3 break-words">{p.statusLabel}</td>
+                        <td className="py-3 pr-2 break-words">
+                          <span>{p.statusLabel}</span>
+                          {p.status === "REJECTED" && p.publicRejectionMessage ? (
+                            <span className="block text-[11px] text-red-700 mt-1">
+                              {p.publicRejectionMessage}
+                            </span>
+                          ) : null}
+                        </td>
+                        <td className="py-3">
+                          {p.invoiceAvailable ? (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="h-8 px-2 text-xs"
+                              disabled={downloadingInvoiceId === p.id}
+                              onClick={() => handleDownloadInvoice(p.id)}
+                            >
+                              {downloadingInvoiceId === p.id ? (
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              ) : (
+                                <>
+                                  <Download className="w-3.5 h-3.5 mr-1" />
+                                  Download
+                                </>
+                              )}
+                            </Button>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

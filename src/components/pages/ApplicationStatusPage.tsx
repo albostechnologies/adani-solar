@@ -229,7 +229,17 @@ export function ApplicationStatusPage() {
                 {showTaxInvoice && (
                   <div className="pt-6 border-t border-border">
                     <h3 className="text-sm font-semibold text-foreground mb-2">Payment Invoice</h3>
-                    <p className="text-sm text-muted-foreground mb-4">Your payment invoice is ready.</p>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Your payment invoice is ready. For multiple payments, download each invoice from{" "}
+                      <button
+                        type="button"
+                        className="text-solar-green underline underline-offset-2"
+                        onClick={() => router.push("/application-status/payment")}
+                      >
+                        Payment history
+                      </button>
+                      .
+                    </p>
                     <Button
                       onClick={handleDownloadTaxInvoice}
                       disabled={downloadingInvoice}
@@ -240,7 +250,7 @@ export function ApplicationStatusPage() {
                       ) : (
                         <Download className="w-4 h-4 mr-2" />
                       )}
-                      Download Payment Invoice
+                      Download Latest Payment Invoice
                     </Button>
                   </div>
                 )}

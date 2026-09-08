@@ -72,10 +72,16 @@ function Field({
 export function PaymentDetailsTable({
   account,
   amountPayable,
+  totalDue,
+  amountPaid,
+  remainingAmount,
   paymentStatusLabel,
 }: {
   account: PaymentAccountFields | null;
   amountPayable?: string | null;
+  totalDue?: string | null;
+  amountPaid?: string | null;
+  remainingAmount?: string | null;
   paymentStatusLabel?: string | null;
 }) {
   const rows: {
@@ -116,13 +122,22 @@ export function PaymentDetailsTable({
     },
   ];
 
-  if (amountPayable || paymentStatusLabel) {
+  const showBalance = Boolean(totalDue || amountPaid || remainingAmount || amountPayable || paymentStatusLabel);
+  if (showBalance) {
     rows.push({
-      leftLabel: "Amount Payable",
-      leftValue: display(amountPayable),
+      leftLabel: "Total Amount Due",
+      leftValue: display(totalDue ?? amountPayable),
       rightLabel: "Payment Status",
       rightValue: display(paymentStatusLabel),
     });
+    if (amountPaid || remainingAmount) {
+      rows.push({
+        leftLabel: "Amount Verified",
+        leftValue: display(amountPaid),
+        rightLabel: "Remaining Balance",
+        rightValue: display(remainingAmount),
+      });
+    }
   }
 
   return (
@@ -130,7 +145,7 @@ export function PaymentDetailsTable({
       <div className="rounded-2xl border border-border bg-white overflow-hidden">
         {rows.map((row, index) => (
           <div
-            key={row.leftLabel}
+            key={`${row.leftLabel}-${row.rightLabel}`}
             className={`grid grid-cols-2 ${index < rows.length - 1 ? "border-b border-border" : ""}`}
           >
             <Field
@@ -163,3 +178,4 @@ export function PaymentDetailsTable({
     </div>
   );
 }
+
